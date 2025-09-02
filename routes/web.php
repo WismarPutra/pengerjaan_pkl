@@ -110,6 +110,7 @@ Route::post('/recruitment', [RecruitmentController::class, 'store'])->name('recr
 Route::post('/recruitment/save-step', [RecruitmentController::class, 'saveStep'])->name('recruitment.saveStep');
 Route::post('/recruitment/submit', [RecruitmentController::class, 'submit'])->name('recruitment.submit');
 Route::post('/recruitment/next-step', [RecruitmentController::class, 'nextStep'])->name('recruitment.nextStep');
+Route::post('/recruitment/previous-step', [RecruitmentController::class, 'previousStep'])->name('recruitment.previousStep');
 
 /* DASHBOARD OUTSOURCE */
 

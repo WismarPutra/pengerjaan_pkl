@@ -1010,8 +1010,8 @@ textarea.form-control {
                           <label class="bintang">*</label>
                       </div>
                       <div class="file-input">
-                          <input type="file" name="nde" id="ndeFile" hidden>
-                          <input type="text" class="file-text" id="ndeFile" placeholder="Tambahkan file" readonly>
+                          <input type="file" name="nde" id="ndeFile" required hidden>
+                          <input type="text" class="file-text" id="ndeFileText" placeholder="Tambahkan file" readonly>
                           <label for="ndeFile" class="file-btn">Select File</label>
                           <small class="file-preview text-muted"></small>
                       </div>
@@ -1019,17 +1019,17 @@ textarea.form-control {
 
               </div>
 
-              <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; flex-wrap: wrap;">
-                  <div class="right-section2">
-                      <a href="{{ route('recruitment.index') }}" class="batal-btn">Batal</a>
-                      <button type="button" onclick="nextStep(1)" class="btn selanjutnya-btn">Selanjutnya</button>
+                <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; flex-wrap: wrap;">
+                    <div class="right-section2">
+                        <a href="{{ route('recruitment.index') }}" class="batal-btn">Batal</a>
+                        <button type="button" onclick="nextStep(1)" class="btn selanjutnya-btn">Selanjutnya</button>
 
-                      <!--
-                      <button type="button" id="nextBtn" onclick="nextStep()" class="btn selanjutnya-btn" >Selanjutnya</button>
-                      -->
-                  </div>
+                        <!--
+                        <button type="button" id="nextBtn" onclick="nextStep()" class="btn selanjutnya-btn" >Selanjutnya</button>
+                        -->
+                    </div>
+                </div>
               </div>
-            </div>
 
             <div class="step-content d-none" id="step-content-2">
               <div class="alert-danger">
@@ -1242,25 +1242,59 @@ function nextStep(currentStep) {
     let currentStepContent = document.getElementById("step-content-" + currentStep);
     let inputs = currentStepContent.querySelectorAll("input[required], select[required], textarea[required]");
     let valid = true;
+    let firstInvalid = null;
 
     inputs.forEach(function(input) {
-        if (!input.value.trim()) {
-            input.classList.add("is-invalid");
-            valid = false;
-        } else {
-            input.classList.remove("is-invalid");
+        let errorMsg = input.parentElement.querySelector(".error-msg");
+
+        // 🔹 Validasi khusus file input
+        if (input.type === "file") {
+            if (input.files.length === 0) {
+                input.classList.add("is-invalid");
+                if (!errorMsg) {
+                    let small = document.createElement("small");
+                    small.classList.add("error-msg", "text-danger");
+                    small.innerText = "File wajib diunggah";
+                    input.parentElement.appendChild(small);
+                }
+                valid = false;
+                if (!firstInvalid) firstInvalid = input;
+            } else {
+                input.classList.remove("is-invalid");
+                if (errorMsg) errorMsg.remove();
+            }
+        } 
+        // 🔹 Validasi untuk input teks, select, textarea
+        else {
+            if (!input.value.trim()) {
+                input.classList.add("is-invalid");
+                if (!errorMsg) {
+                    let small = document.createElement("small");
+                    small.classList.add("error-msg", "text-danger");
+                    small.innerText = "Field ini wajib diisi";
+                    input.parentElement.appendChild(small);
+                }
+                valid = false;
+                if (!firstInvalid) firstInvalid = input;
+            } else {
+                input.classList.remove("is-invalid");
+                if (errorMsg) errorMsg.remove();
+            }
         }
     });
 
     if (!valid) {
-        alert("⚠ Lengkapi semua field wajib di step " + currentStep + " sebelum lanjut!");
-        return;
+        // fokus ke field pertama yang error
+        if (firstInvalid) {
+            firstInvalid.scrollIntoView({ behavior: "smooth", block: "center" });
+            firstInvalid.focus();
+        }
+        return; 
     }
 
-    // Sembunyikan step sekarang
+    // 🔹 Jika semua valid, lanjut step
     currentStepContent.classList.add("d-none");
 
-    // Tampilkan step berikutnya
     let nextStepContent = document.getElementById("step-content-" + (currentStep + 1));
     if (nextStepContent) {
         nextStepContent.classList.remove("d-none");
@@ -1273,7 +1307,11 @@ function nextStep(currentStep) {
     border: 2px solid red !important;
     background-color: #ffe6e6 !important;
 }
+.error-msg {
+    font-size: 0.85rem;
+}
 </style>
+
 
 @endsection
 
