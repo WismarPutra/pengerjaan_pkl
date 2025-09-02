@@ -1237,6 +1237,44 @@ textarea.form-control {
 
      
 </div>
+<script>
+function nextStep(currentStep) {
+    let currentStepContent = document.getElementById("step-content-" + currentStep);
+    let inputs = currentStepContent.querySelectorAll("input[required], select[required], textarea[required]");
+    let valid = true;
+
+    inputs.forEach(function(input) {
+        if (!input.value.trim()) {
+            input.classList.add("is-invalid");
+            valid = false;
+        } else {
+            input.classList.remove("is-invalid");
+        }
+    });
+
+    if (!valid) {
+        alert("⚠ Lengkapi semua field wajib di step " + currentStep + " sebelum lanjut!");
+        return;
+    }
+
+    // Sembunyikan step sekarang
+    currentStepContent.classList.add("d-none");
+
+    // Tampilkan step berikutnya
+    let nextStepContent = document.getElementById("step-content-" + (currentStep + 1));
+    if (nextStepContent) {
+        nextStepContent.classList.remove("d-none");
+    }
+}
+</script>
+
+<style>
+.is-invalid {
+    border: 2px solid red !important;
+    background-color: #ffe6e6 !important;
+}
+</style>
+
 @endsection
 
 <script>
