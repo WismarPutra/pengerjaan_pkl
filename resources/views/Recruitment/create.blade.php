@@ -1244,17 +1244,27 @@ function nextStep(currentStep) {
     let valid = true;
 
     inputs.forEach(function(input) {
+        let errorMsg = input.parentElement.querySelector(".error-msg");
+
         if (!input.value.trim()) {
             input.classList.add("is-invalid");
+            if (!errorMsg) {
+                let small = document.createElement("small");
+                small.classList.add("error-msg", "text-danger");
+                small.innerText = "Field ini wajib diisi";
+                input.parentElement.appendChild(small);
+            }
             valid = false;
         } else {
             input.classList.remove("is-invalid");
+            if (errorMsg) {
+                errorMsg.remove();
+            }
         }
     });
 
     if (!valid) {
-        alert("⚠ Lengkapi semua field wajib di step " + currentStep + " sebelum lanjut!");
-        return;
+        return; // hentikan kalau masih ada yang kosong
     }
 
     // Sembunyikan step sekarang
@@ -1268,10 +1278,14 @@ function nextStep(currentStep) {
 }
 </script>
 
+
 <style>
 .is-invalid {
     border: 2px solid red !important;
     background-color: #ffe6e6 !important;
+}
+.error-msg{
+    font-size: 0.875rem;
 }
 </style>
 
