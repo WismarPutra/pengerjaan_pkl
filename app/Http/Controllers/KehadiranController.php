@@ -10,7 +10,7 @@ class KehadiranController extends Controller
 {
     public function store(Request $request) {
         Kehadiran::create([
-            'q1' => $request->q1,
+            'q0' => $request->q1,
             'q2' => $request->q2,
             'q3' => $request->q3,
             'q4' => $request->q4,
