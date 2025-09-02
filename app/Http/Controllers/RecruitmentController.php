@@ -13,7 +13,8 @@ class RecruitmentController extends Controller
     }
 
     public function create() {
-        return view('recruitment.create');
+        $currentStep = session('currentStep', 1);
+    return view('recruitment.create', compact('currentStep'));
     }
 
     public function store(Request $request) {
@@ -113,13 +114,45 @@ class RecruitmentController extends Controller
         ]);
     }
 
-    public function nextStep(Request $request) {
-        $currentStep = $request->input('step', 1);
 
-        session(['currentStep' => $currentStep]);
+public function nextStep(Request $request) 
+{
+    // Step sekarang dari request
+    $step = $request->input('step', 1);
 
-        return redirect()->back();
+    // Validasi sesuai step
+    if ($step == 1) {
+        $request->validate([
+            'namaPosisi' => 'required|string|max:255',
+            'regionalDirektorat' => 'required|string',
+            'unitSub' => 'required|string',
+            'band_posisi' => 'required|string',
+            'status_kepegawaian' => 'required|string',
+            'lokasi_pekerjaan' => 'required|string',
+            'medis_non_medis' => 'required|string',
+            'jumlah_lowongan' => 'required|string',
+            'target_tanggal' => 'required|date',
+            'hiring_manager' => 'required|string',
+            'nde' => 'required|file|mimes:pdf,doc,docx|max:2048',
+            'pendidikan_terakhir' => 'nullable|string',
+            'jurusan_relevan' => 'nullable|string',
+            'pengalaman_minimum' => 'nullable|string',
+            'domisili_preferensi' => 'nullable|string',
+            'jenis_kelamin' => 'nullable|string',
+            'batasan_usia' => 'nullable|string',
+        ]);
     }
+
+    // Simpan data step sekarang ke session
+    session()->put("recruitment.step{$step}", $request->except('_token','step'));
+
+    // Naik ke step berikutnya
+    $nextStep = $step + 1;
+    session(['currentStep' => $nextStep]);
+
+    return redirect()->route('recruitment.create');
+}
+
 
     public function submit(Request $request)
     {
