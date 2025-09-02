@@ -9,12 +9,19 @@ use App\Models\CareerActivity;
 
 class TMController extends Controller
 {
-    public function index() {
-        $employees = Employee::all();
-        $totalKaryawan = Employee::count(); // ambil jumlah total
+    public function index(Request $request) {
+    // Ambil parameter dari URL, misalnya ?sort_by=nama&sort_order=asc
+    $sortBy = $request->get('sort_by', 'nik'); // default urut berdasarkan NIK
+    $sortOrder = $request->get('sort_order', 'asc'); // default ASC
 
-        return view('employee.index', compact('employees', 'totalKaryawan'));
-    }
+    // Ambil data dengan orderBy
+    $employees = Employee::orderBy($sortBy, $sortOrder)->paginate(10);
+     $totalKaryawan = Employee::count(); // ambil jumlah total
+
+
+    return view('employee.index', compact('employees', 'totalKaryawan',  'sortBy', 'sortOrder'));
+}
+
 
 
     public function show(Employee $employee) {

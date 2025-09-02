@@ -766,18 +766,84 @@ ul li a:hover:not(.active) {
 </div>
 
   <table id="customers" style="margin-top: 10px;">
-    <tr>
-        <th>No</th>
-        <th>NIK</th>
-        <th>Nama</th>
-        <th>Tanggal Lahir</th>
-        <th>Nama Posisi</th>
-        <th>Email</th>
-        <th>Regional/Direktorat</th>
-        <th>Nama Posisi</th>
-        <th>Actions</th>
-    </tr>
-    @foreach($employees as $employee)
+  <tr>
+    <th>No</th>
+
+<th>
+  <a href="{{ route('employees.index', [
+          'sort_by' => 'nik',
+          'sort_order' => ($sortBy == 'nik' && $sortOrder == 'asc') ? 'desc' : 'asc'
+      ]) }}">
+      Nik
+      {!! $sortBy == 'nik' ? ($sortOrder == 'asc' ? '⇅' : '⇅') : '⇅' !!}
+  </a>
+</th>
+
+<th>
+  <a href="{{ route('employees.index', [
+          'sort_by' => 'name',
+          'sort_order' => ($sortBy == 'name' && $sortOrder == 'asc') ? 'desc' : 'asc'
+      ]) }}">
+      Nama
+      {!! $sortBy == 'name' ? ($sortOrder == 'asc' ? '⇅' : '⇅') : '⇅' !!}
+  </a>
+</th>
+
+
+<th>
+  <a href="{{ route('employees.index', [
+          'sort_by' => 'tanggal_lahir',
+          'sort_order' => ($sortBy == 'tanggal_lahir' && $sortOrder == 'asc') ? 'desc' : 'asc'
+      ]) }}">
+      Tanggal Lahir
+      {!! $sortBy == 'tanggal_lahir' ? ($sortOrder == 'asc' ? '⇅' : '⇅') : '⇅' !!}
+  </a>
+</th>
+
+<th>
+  <a href="{{ route('employees.index', [
+          'sort_by' => 'posisi',
+          'sort_order' => ($sortBy == 'posisi' && $sortOrder == 'asc') ? 'desc' : 'asc'
+      ]) }}">
+      Nama Posisi
+      {!! $sortBy == 'posisi' ? ($sortOrder == 'asc' ? '⇅' : '⇅') : '⇅' !!}
+  </a>
+</th>
+
+
+<th>
+  <a href="{{ route('employees.index', [
+          'sort_by' => 'email',
+          'sort_order' => ($sortBy == 'email' && $sortOrder == 'asc') ? 'desc' : 'asc'
+      ]) }}">
+      Email
+      {!! $sortBy == 'email' ? ($sortOrder == 'asc' ? '⇅' : '⇅') : '⇅' !!}
+  </a>
+</th>
+
+
+<th>
+  <a href="{{ route('employees.index', [
+          'sort_by' => 'direktorat',
+          'sort_order' => ($sortBy == 'direktorat' && $sortOrder == 'asc') ? 'desc' : 'asc'
+      ]) }}">
+      Regional/Direktorat
+      {!! $sortBy == 'direktorat' ? ($sortOrder == 'asc' ? '⇅' : '⇅') : '⇅' !!}
+  </a>
+</th>
+<th>
+  <a href="{{ route('employees.index', [
+          'sort_by' => 'status_karyawan',
+          'sort_order' => ($sortBy == 'status_karyawan' && $sortOrder == 'asc') ? 'desc' : 'asc'
+      ]) }}">
+      Status Pegawai
+      {!! $sortBy == 'status_karyawan' ? ($sortOrder == 'asc' ? '⇅' : '⇅') : '⇅' !!}
+  </a>
+</th>
+
+
+    <th>Actions</th>
+  </tr> @foreach($employees as $employee)
     <tr>
       <td>{{ $loop->iteration }}</td>
       <td>{{ $employee->nik }}</td>
