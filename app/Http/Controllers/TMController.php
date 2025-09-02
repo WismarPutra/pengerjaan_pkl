@@ -16,7 +16,7 @@ class TMController extends Controller
 
     // Ambil data dengan orderBy
     $employees = Employee::orderBy($sortBy, $sortOrder)->paginate(10);
-     $totalKaryawan = Employee::count(); // ambil jumlah total
+    $totalKaryawan = Employee::count(); // ambil jumlah total
 
 
     return view('employee.index', compact('employees', 'totalKaryawan',  'sortBy', 'sortOrder'));
