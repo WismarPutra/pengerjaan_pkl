@@ -28,7 +28,7 @@ class RecruitmentController extends Controller
             'jumlah_lowongan' => 'required|string',
             'target_tanggal' => 'required|date',
             'hiring_manager' => 'required|string',
-            'nde' => 'required|string',
+            'nde' => 'required|file|mimes:pdf,doc,docx|max:2048',
             'pendidikan_terakhir' => 'nullable|string',
             'jurusan_relevan' => 'nullable|string',
             'pengalaman_minimum' => 'nullable|string',
@@ -37,10 +37,17 @@ class RecruitmentController extends Controller
             'batasan_usia' => 'nullable|string'
         ]);
 
-        $recruitment->created_by_role = auth()->user()->role;
 
+        $data = $request->all();
+        $data['created_by_role'] = auth()->user()->role;
 
-        Recruitment::create($request->all());
+        //handle file upload
+        if ($request->hasFile('nde')) {
+            $data['nde'] = $request->file('nde')->store('uploads','public');
+        }
+
+        
+        Recruitment::create($data);
         return redirect()->route('recruitment.index')->with('success', 'Posisi berhasil ditambahkan');
     }
 
@@ -66,7 +73,7 @@ class RecruitmentController extends Controller
             'jumlah_lowongan' => 'required|string',
             'target_tanggal' => 'required|date',
             'hiring_manager' => 'required|string',
-            'nde' => 'required|string',
+            'nde' => 'required|file|mimes:pdf,doc,docx|max:2048',
             'pendidikan_terakhir' => 'nullable|string',
             'jurusan_relevan' => 'nullable|string',
             'pengalaman_minimum' => 'nullable|string',
@@ -76,7 +83,12 @@ class RecruitmentController extends Controller
         ]);
 
         $recruitments = Recruitment::findOrFail($id);
-        $recruitments->update($request->all());
+        $data = $request->all();
+
+        if ($request->hasFile('nde')){
+            $data['nde'] = $request->file('nde')->store('uploads', 'public');
+        }
+        $recruitments->update($data);
 
         return redirect()->route('recruitment.index')->with('success', 'Posisi berhasil diperbarui');
     }
