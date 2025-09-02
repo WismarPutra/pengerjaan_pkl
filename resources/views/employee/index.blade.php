@@ -843,7 +843,8 @@ ul li a:hover:not(.active) {
 
 
     <th>Actions</th>
-  </tr> @foreach($employees as $employee)
+    </tr>
+    @foreach($employees as $employee)
     <tr>
       <td>{{ $loop->iteration }}</td>
       <td>{{ $employee->nik }}</td>
