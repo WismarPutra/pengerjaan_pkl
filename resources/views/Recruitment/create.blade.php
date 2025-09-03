@@ -1012,12 +1012,14 @@ textarea.form-control {
                       <div class="file-input">
                           <input type="file" name="nde" id="ndeFile" required hidden>
                           <input type="text" class="file-text" id="ndeFileText" placeholder="Tambahkan file" readonly>
+
                           <label for="ndeFile" class="file-btn">Select File</label>
                           <small class="file-preview text-muted"></small>
                       </div>
                   </div>
 
               </div>
+
 
                 <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; flex-wrap: wrap;">
                     <div class="right-section2">
@@ -1030,6 +1032,7 @@ textarea.form-control {
                     </div>
                 </div>
               </div>
+
 
             <div class="step-content d-none" id="step-content-2">
               <div class="alert-danger">
@@ -1111,6 +1114,7 @@ textarea.form-control {
                   <div class="right-section2">
                       <button type="button" onclick="prevStep(2)" class="kembali-btn">Kembali</button>
                       <button type="button" onclick="nextStep(2)" class="btn selanjutnya-btn">Selanjutnya</button>
+
                       <!--
                       <button type="button" class="kembali-btn" onclick="prevStep()">Kembali</button>
                       <button type="button" id="nextBtn" onclick="nextStep()" class="btn selanjutnya-btn">Selanjutnya</button>
@@ -1237,6 +1241,7 @@ textarea.form-control {
 
      
 </div>
+
 <script>
 function nextStep(currentStep) {
     let currentStepContent = document.getElementById("step-content-" + currentStep);
@@ -1311,6 +1316,7 @@ function nextStep(currentStep) {
     font-size: 0.85rem;
 }
 </style>
+
 
 
 @endsection
