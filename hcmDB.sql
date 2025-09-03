@@ -2,10 +2,10 @@
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Host: localhost:8889
--- Generation Time: Aug 29, 2025 at 08:40 AM
--- Server version: 8.0.40
--- PHP Version: 8.3.14
+-- Host: 127.0.0.1
+-- Generation Time: Sep 03, 2025 at 04:08 AM
+-- Server version: 10.4.32-MariaDB
+-- PHP Version: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `hcmDB`
+-- Database: `hcmdb`
 --
 
 -- --------------------------------------------------------
@@ -28,9 +28,9 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `cache` (
-  `key` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `value` mediumtext COLLATE utf8mb4_unicode_ci NOT NULL,
-  `expiration` int NOT NULL
+  `key` varchar(255) NOT NULL,
+  `value` mediumtext NOT NULL,
+  `expiration` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -40,9 +40,9 @@ CREATE TABLE `cache` (
 --
 
 CREATE TABLE `cache_locks` (
-  `key` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `owner` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `expiration` int NOT NULL
+  `key` varchar(255) NOT NULL,
+  `owner` varchar(255) NOT NULL,
+  `expiration` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -52,36 +52,29 @@ CREATE TABLE `cache_locks` (
 --
 
 CREATE TABLE `career_activities` (
-  `id` bigint UNSIGNED NOT NULL,
-  `employee_id` bigint UNSIGNED NOT NULL,
-  `nama_role` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `unitSub` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `regional_direktorat` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `band_posisi` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `deskripsi` text COLLATE utf8mb4_unicode_ci,
-  `statusPJ` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `tanggalKDMP` varchar(7) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `tanggalBand` varchar(7) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `tanggalTKWT` varchar(7) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `tanggal_akhirTKWT` varchar(7) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `tanggal_mutasi` varchar(7) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `tanggalPJ` varchar(7) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `tanggal_lepasPJ` varchar(7) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `tanggal_pensiun` varchar(7) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `tanggal_akhir_kontrak` varchar(7) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `employee_id` bigint(20) UNSIGNED NOT NULL,
+  `nama_role` varchar(255) NOT NULL,
+  `unitSub` varchar(255) DEFAULT NULL,
+  `regional_direktorat` varchar(255) DEFAULT NULL,
+  `band_posisi` varchar(255) DEFAULT NULL,
+  `deskripsi` text DEFAULT NULL,
+  `statusPJ` varchar(255) DEFAULT NULL,
+  `tanggalKDMP` date DEFAULT NULL,
+  `tanggalBand` date DEFAULT NULL,
+  `tanggalTKWT` date DEFAULT NULL,
+  `tanggal_akhirTKWT` date DEFAULT NULL,
+  `tanggal_mutasi` date DEFAULT NULL,
+  `tanggalPJ` date DEFAULT NULL,
+  `tanggal_lepasPJ` date DEFAULT NULL,
+  `tanggal_pensiun` date DEFAULT NULL,
+  `tanggal_akhir_kontrak` date DEFAULT NULL,
+  `dokumen_nota_dinas` varchar(255) DEFAULT NULL,
+  `dokumen_lainnya` varchar(255) DEFAULT NULL,
+  `dokumenSK` varchar(255) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  `dokumenSK` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `dokumen_nota_dinas` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `dokumen_lainnya` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL
+  `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `career_activities`
---
-
-INSERT INTO `career_activities` (`id`, `employee_id`, `nama_role`, `unitSub`, `regional_direktorat`, `band_posisi`, `deskripsi`, `statusPJ`, `tanggalKDMP`, `tanggalBand`, `tanggalTKWT`, `tanggal_akhirTKWT`, `tanggal_mutasi`, `tanggalPJ`, `tanggal_lepasPJ`, `tanggal_pensiun`, `tanggal_akhir_kontrak`, `created_at`, `updated_at`, `dokumenSK`, `dokumen_nota_dinas`, `dokumen_lainnya`) VALUES
-(1, 1, 'Nama Role Sekarang', 'claclacla', 'blablabla', 'band level V', 'Deskripsi singkat aktivitas karir', 'dladladla', '2023-03', '2025-08', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2025-08-26 03:41:55', '2025-08-26 03:41:55', 'dokumen_sk/eYkzsKsQ7ZHgkTblTCkzu8Zw6zAS0rg8AfU6EHXH.pdf', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -90,9 +83,9 @@ INSERT INTO `career_activities` (`id`, `employee_id`, `nama_role`, `unitSub`, `r
 --
 
 CREATE TABLE `djm_files` (
-  `id` bigint UNSIGNED NOT NULL,
-  `filename` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `path` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `filename` varchar(255) NOT NULL,
+  `path` varchar(255) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -104,18 +97,18 @@ CREATE TABLE `djm_files` (
 --
 
 CREATE TABLE `d_j_m_s` (
-  `id` bigint UNSIGNED NOT NULL,
-  `kode_djm` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `namaPosisi` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `regionalDirektorat` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `posisi` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `unitSub` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `job` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `atasanLangsung` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `position_specification` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `position_objective` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `responsibilities` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `success_indicators` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `kode_djm` varchar(20) NOT NULL,
+  `namaPosisi` varchar(255) NOT NULL,
+  `regionalDirektorat` varchar(255) NOT NULL,
+  `posisi` varchar(255) NOT NULL,
+  `unitSub` varchar(255) NOT NULL,
+  `job` varchar(255) NOT NULL,
+  `atasanLangsung` varchar(255) NOT NULL,
+  `position_specification` longtext NOT NULL,
+  `position_objective` longtext NOT NULL,
+  `responsibilities` longtext NOT NULL,
+  `success_indicators` longtext NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -134,28 +127,28 @@ INSERT INTO `d_j_m_s` (`id`, `kode_djm`, `namaPosisi`, `regionalDirektorat`, `po
 --
 
 CREATE TABLE `employees` (
-  `id` bigint UNSIGNED NOT NULL,
-  `nik` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `nik` varchar(255) NOT NULL,
+  `name` varchar(255) NOT NULL,
   `tanggal_lahir` date NOT NULL,
-  `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `posisi` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `direktorat` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `status_karyawan` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `no_ktp` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `jenis_kelamin` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `ttl` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `alamat_ktp` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `alamat_domisili` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `no_npwp` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `agama` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `status_perkawinan` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `no_telepon` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `level_pendidikan` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `jurusan` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `institusi_pendidikan` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `tahun_lulus` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `payslip_file` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `email` varchar(255) NOT NULL,
+  `posisi` varchar(255) NOT NULL,
+  `direktorat` varchar(255) NOT NULL,
+  `status_karyawan` varchar(255) NOT NULL,
+  `no_ktp` varchar(255) NOT NULL,
+  `jenis_kelamin` varchar(255) NOT NULL,
+  `ttl` varchar(255) NOT NULL,
+  `alamat_ktp` varchar(255) NOT NULL,
+  `alamat_domisili` varchar(255) NOT NULL,
+  `no_npwp` varchar(255) NOT NULL,
+  `agama` varchar(255) NOT NULL,
+  `status_perkawinan` varchar(255) NOT NULL,
+  `no_telepon` varchar(255) NOT NULL,
+  `level_pendidikan` varchar(255) NOT NULL,
+  `jurusan` varchar(255) NOT NULL,
+  `institusi_pendidikan` varchar(255) NOT NULL,
+  `tahun_lulus` varchar(255) NOT NULL,
+  `payslip_file` varchar(255) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -170,17 +163,38 @@ INSERT INTO `employees` (`id`, `nik`, `name`, `tanggal_lahir`, `email`, `posisi`
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `employee_families`
+--
+
+CREATE TABLE `employee_families` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `employee_id` bigint(20) UNSIGNED NOT NULL,
+  `nama_lengkap` varchar(255) NOT NULL,
+  `jenis_kelamin` enum('Laki-Laki','Perempuan') NOT NULL,
+  `tempat_lahir` varchar(255) DEFAULT NULL,
+  `tanggal_lahir` date DEFAULT NULL,
+  `pendidikan` varchar(255) DEFAULT NULL,
+  `status_anak` varchar(255) DEFAULT NULL,
+  `urutan_anak` varchar(255) DEFAULT NULL,
+  `keterangan` varchar(255) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `failed_jobs`
 --
 
 CREATE TABLE `failed_jobs` (
-  `id` bigint UNSIGNED NOT NULL,
-  `uuid` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `connection` text COLLATE utf8mb4_unicode_ci NOT NULL,
-  `queue` text COLLATE utf8mb4_unicode_ci NOT NULL,
-  `payload` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
-  `exception` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
-  `failed_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `uuid` varchar(255) NOT NULL,
+  `connection` text NOT NULL,
+  `queue` text NOT NULL,
+  `payload` longtext NOT NULL,
+  `exception` longtext NOT NULL,
+  `failed_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -190,13 +204,13 @@ CREATE TABLE `failed_jobs` (
 --
 
 CREATE TABLE `feedback` (
-  `id` bigint UNSIGNED NOT NULL,
-  `q1` tinyint NOT NULL,
-  `q2` tinyint NOT NULL,
-  `q3` tinyint NOT NULL,
-  `q4` tinyint NOT NULL,
-  `q5` tinyint NOT NULL,
-  `saran` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `q1` tinyint(4) NOT NULL,
+  `q2` tinyint(4) NOT NULL,
+  `q3` tinyint(4) NOT NULL,
+  `q4` tinyint(4) NOT NULL,
+  `q5` tinyint(4) NOT NULL,
+  `saran` text NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -208,13 +222,13 @@ CREATE TABLE `feedback` (
 --
 
 CREATE TABLE `jobs` (
-  `id` bigint UNSIGNED NOT NULL,
-  `queue` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `payload` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
-  `attempts` tinyint UNSIGNED NOT NULL,
-  `reserved_at` int UNSIGNED DEFAULT NULL,
-  `available_at` int UNSIGNED NOT NULL,
-  `created_at` int UNSIGNED NOT NULL
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `queue` varchar(255) NOT NULL,
+  `payload` longtext NOT NULL,
+  `attempts` tinyint(3) UNSIGNED NOT NULL,
+  `reserved_at` int(10) UNSIGNED DEFAULT NULL,
+  `available_at` int(10) UNSIGNED NOT NULL,
+  `created_at` int(10) UNSIGNED NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -224,16 +238,16 @@ CREATE TABLE `jobs` (
 --
 
 CREATE TABLE `job_batches` (
-  `id` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `total_jobs` int NOT NULL,
-  `pending_jobs` int NOT NULL,
-  `failed_jobs` int NOT NULL,
-  `failed_job_ids` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
-  `options` mediumtext COLLATE utf8mb4_unicode_ci,
-  `cancelled_at` int DEFAULT NULL,
-  `created_at` int NOT NULL,
-  `finished_at` int DEFAULT NULL
+  `id` varchar(255) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `total_jobs` int(11) NOT NULL,
+  `pending_jobs` int(11) NOT NULL,
+  `failed_jobs` int(11) NOT NULL,
+  `failed_job_ids` longtext NOT NULL,
+  `options` mediumtext DEFAULT NULL,
+  `cancelled_at` int(11) DEFAULT NULL,
+  `created_at` int(11) NOT NULL,
+  `finished_at` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -243,13 +257,13 @@ CREATE TABLE `job_batches` (
 --
 
 CREATE TABLE `kehadiran` (
-  `id` bigint UNSIGNED NOT NULL,
-  `q1` tinyint NOT NULL,
-  `q2` tinyint NOT NULL,
-  `q3` tinyint NOT NULL,
-  `q4` tinyint NOT NULL,
-  `q5` tinyint NOT NULL,
-  `saran` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `q1` tinyint(4) NOT NULL,
+  `q2` tinyint(4) NOT NULL,
+  `q3` tinyint(4) NOT NULL,
+  `q4` tinyint(4) NOT NULL,
+  `q5` tinyint(4) NOT NULL,
+  `saran` text NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -261,9 +275,9 @@ CREATE TABLE `kehadiran` (
 --
 
 CREATE TABLE `migrations` (
-  `id` int UNSIGNED NOT NULL,
-  `migration` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `batch` int NOT NULL
+  `id` int(10) UNSIGNED NOT NULL,
+  `migration` varchar(255) NOT NULL,
+  `batch` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
@@ -288,11 +302,12 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (15, '2025_07_25_110247_create_kehadiran_table', 10),
 (16, '2025_08_01_142700_create_djm_files_table', 10),
 (17, '2025_08_08_022614_create_position_table', 11),
-(19, '2025_08_14_143630_create_career_activities_table', 12),
 (20, '2025_08_26_094314_add_dokumen_to_career_activities_table', 13),
 (21, '2025_08_27_141312_recruitment', 14),
 (22, '2025_08_28_145501_alter_recruitment_make_pendidikan_nullable', 15),
-(23, '2025_08_28_160440_add_created_by_to_recruitment_table', 16);
+(23, '2025_08_28_160440_add_created_by_to_recruitment_table', 16),
+(24, '2025_09_02_204427_create_employee_families_table', 17),
+(25, '2025_08_14_143630_create_career_activities_table', 18);
 
 -- --------------------------------------------------------
 
@@ -301,8 +316,8 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 --
 
 CREATE TABLE `password_reset_tokens` (
-  `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `token` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `token` varchar(255) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -313,13 +328,13 @@ CREATE TABLE `password_reset_tokens` (
 --
 
 CREATE TABLE `positions` (
-  `id` bigint UNSIGNED NOT NULL,
-  `title` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `is_medical` tinyint(1) NOT NULL DEFAULT '0',
-  `employment_status` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `directorate` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `vacancy_count` int NOT NULL DEFAULT '1',
-  `progress` tinyint NOT NULL DEFAULT '0',
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `title` varchar(255) NOT NULL,
+  `is_medical` tinyint(1) NOT NULL DEFAULT 0,
+  `employment_status` varchar(255) DEFAULT NULL,
+  `directorate` varchar(255) DEFAULT NULL,
+  `vacancy_count` int(11) NOT NULL DEFAULT 1,
+  `progress` tinyint(4) NOT NULL DEFAULT 0,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -331,28 +346,28 @@ CREATE TABLE `positions` (
 --
 
 CREATE TABLE `recruitment` (
-  `id` bigint UNSIGNED NOT NULL,
-  `namaPosisi` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `regionalDirektorat` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `unitSub` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `band_posisi` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `status_kepegawaian` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `lokasi_pekerjaan` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `medis_non_medis` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `jumlah_lowongan` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `namaPosisi` varchar(255) NOT NULL,
+  `regionalDirektorat` varchar(255) NOT NULL,
+  `unitSub` varchar(255) NOT NULL,
+  `band_posisi` varchar(255) NOT NULL,
+  `status_kepegawaian` varchar(255) NOT NULL,
+  `lokasi_pekerjaan` varchar(255) NOT NULL,
+  `medis_non_medis` varchar(255) NOT NULL,
+  `jumlah_lowongan` varchar(255) NOT NULL,
   `target_tanggal` date NOT NULL,
-  `hiring_manager` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `nde` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `pendidikan_terakhir` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `jurusan_relevan` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `pengalaman_minimum` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `domisili_preferensi` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `jenis_kelamin` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `batasan_usia` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `hiring_manager` varchar(255) NOT NULL,
+  `nde` varchar(255) NOT NULL,
+  `pendidikan_terakhir` varchar(255) DEFAULT NULL,
+  `jurusan_relevan` varchar(255) DEFAULT NULL,
+  `pengalaman_minimum` varchar(255) DEFAULT NULL,
+  `domisili_preferensi` varchar(255) DEFAULT NULL,
+  `jenis_kelamin` varchar(255) DEFAULT NULL,
+  `batasan_usia` varchar(255) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
-  `created_by` bigint UNSIGNED DEFAULT NULL,
-  `created_by_role` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL
+  `created_by` bigint(20) UNSIGNED DEFAULT NULL,
+  `created_by_role` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -362,12 +377,12 @@ CREATE TABLE `recruitment` (
 --
 
 CREATE TABLE `sessions` (
-  `id` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `user_id` bigint UNSIGNED DEFAULT NULL,
-  `ip_address` varchar(45) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `user_agent` text COLLATE utf8mb4_unicode_ci,
-  `payload` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
-  `last_activity` int NOT NULL
+  `id` varchar(255) NOT NULL,
+  `user_id` bigint(20) UNSIGNED DEFAULT NULL,
+  `ip_address` varchar(45) DEFAULT NULL,
+  `user_agent` text DEFAULT NULL,
+  `payload` longtext NOT NULL,
+  `last_activity` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
@@ -375,8 +390,8 @@ CREATE TABLE `sessions` (
 --
 
 INSERT INTO `sessions` (`id`, `user_id`, `ip_address`, `user_agent`, `payload`, `last_activity`) VALUES
-('gtef3f3ArxDPEZjrqFCHZQY9R2qSEgpoZLLakofh', NULL, '127.0.0.1', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36', 'YTo1OntzOjY6Il90b2tlbiI7czo0MDoiTlFCS1VJNVpDNDdRR3RlM1RLUVlDanhsSFZkNVpqZmtkeUZXM05QaSI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MjE6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMCI7fXM6NTA6ImxvZ2luX3dlYl81OWJhMzZhZGRjMmIyZjk0MDE1ODBmMDE0YzdmNThlYTRlMzA5ODlkIjtOO3M6MzoidXJsIjthOjE6e3M6ODoiaW50ZW5kZWQiO3M6MjY6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMC9ob21lIjt9fQ==', 1751622939),
-('Nq7szBM6iT6rwBybUwqa19U7zrCM73myx3w2GsE4', NULL, '127.0.0.1', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36', 'YTo1OntzOjY6Il90b2tlbiI7czo0MDoiYW9tQXJJVTBPTHFiSEl0NHFMTDVYQzNiR3dWSmp6c3dWU2hCNHRUdiI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MjE6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMCI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fXM6NTA6ImxvZ2luX3dlYl81OWJhMzZhZGRjMmIyZjk0MDE1ODBmMDE0YzdmNThlYTRlMzA5ODlkIjtOO3M6MzoidXJsIjthOjE6e3M6ODoiaW50ZW5kZWQiO3M6MjY6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMC9ob21lIjt9fQ==', 1751858124);
+('DaCBTbKZDDyRjDsqYiTARU44jjhTaL8aASpc5Is3', NULL, '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36 Edg/140.0.0.0', 'YTo0OntzOjY6Il90b2tlbiI7czo0MDoibFM0TVpCNWFGTEk3QkNUSk9aWXpYNHVaalFMcU9ZdDdVVUxXVFNVRSI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6Mzc6Imh0dHA6Ly9sb2NhbGhvc3QveWFrZXNIQ00tbWFpbi9wdWJsaWMiO31zOjY6Il9mbGFzaCI7YToyOntzOjM6Im9sZCI7YTowOnt9czozOiJuZXciO2E6MDp7fX1zOjUwOiJsb2dpbl93ZWJfNTliYTM2YWRkYzJiMmY5NDAxNTgwZjAxNGM3ZjU4ZWE0ZTMwOTg5ZCI7Tjt9', 1756863217),
+('tnbawyaIq4kNA9RXmWceoNUQ93Hi3E0OJdpgavil', NULL, '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36 Edg/140.0.0.0', 'YTo0OntzOjY6Il90b2tlbiI7czo0MDoiUXpuQXUzamdQcXI3MTRBcXpObmJuUHFqbXI4N1NDamV1cVQwSlczVSI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6NTY6Imh0dHA6Ly9sb2NhbGhvc3QveWFrZXNIQ00tbWFpbi9wdWJsaWMvcmVjcnVpdG1lbnQvY3JlYXRlIjt9czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czo1MDoibG9naW5fd2ViXzU5YmEzNmFkZGMyYjJmOTQwMTU4MGYwMTRjN2Y1OGVhNGUzMDk4OWQiO047fQ==', 1756824079);
 
 -- --------------------------------------------------------
 
@@ -385,25 +400,25 @@ INSERT INTO `sessions` (`id`, `user_id`, `ip_address`, `user_agent`, `payload`, 
 --
 
 CREATE TABLE `trainings` (
-  `id` bigint UNSIGNED NOT NULL,
-  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-  `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-  `id_training` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `nama_training` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `deskripsi_training` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `tipe_training` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `sertifikat_partisipasi` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `sertifikat_pelatihan` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `penyelenggara` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `durasi` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `created_at` timestamp NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NULL DEFAULT current_timestamp(),
+  `id_training` varchar(255) NOT NULL,
+  `nama_training` varchar(255) NOT NULL,
+  `deskripsi_training` varchar(255) NOT NULL,
+  `tipe_training` varchar(255) NOT NULL,
+  `sertifikat_partisipasi` varchar(255) NOT NULL,
+  `sertifikat_pelatihan` varchar(255) NOT NULL,
+  `penyelenggara` varchar(255) NOT NULL,
+  `durasi` varchar(255) NOT NULL,
   `tanggal_mulai` datetime NOT NULL,
   `tanggal_selesai` datetime NOT NULL,
-  `lokasi` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `metode_pelatihan` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `partisipan` int NOT NULL,
-  `status` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `biaya` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `total_biaya` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL
+  `lokasi` varchar(255) NOT NULL,
+  `metode_pelatihan` varchar(255) NOT NULL,
+  `partisipan` int(11) NOT NULL,
+  `status` varchar(255) NOT NULL,
+  `biaya` varchar(255) NOT NULL,
+  `total_biaya` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
@@ -416,42 +431,17 @@ INSERT INTO `trainings` (`id`, `created_at`, `updated_at`, `id_training`, `nama_
 -- --------------------------------------------------------
 
 --
--- Table structure for table `training_history`
---
-
-CREATE TABLE `training_history` (
-  `id` bigint NOT NULL,
-  `nama_training` text NOT NULL,
-  `nama_pelaksana` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-  `tanggal_mulai` date NOT NULL,
-  `tanggal_akhir` date NOT NULL,
-  `status` text NOT NULL,
-  `sertifikat` text NOT NULL,
-  `actions` text NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
---
--- Dumping data for table `training_history`
---
-
-INSERT INTO `training_history` (`id`, `nama_training`, `nama_pelaksana`, `tanggal_mulai`, `tanggal_akhir`, `status`, `sertifikat`, `actions`) VALUES
-(1, 'Effective Communication Skills', 'Learning Centre', '2025-06-29', '2025-06-29', 'selesai', '', ''),
-(1, 'Effective Communication Skills', 'Learning Centre', '2025-06-29', '2025-06-29', 'selesai', '', '');
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `users`
 --
 
 CREATE TABLE `users` (
-  `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `username` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `password` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `role` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `active` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `email` varchar(255) NOT NULL,
+  `username` varchar(255) DEFAULT NULL,
+  `password` varchar(255) DEFAULT NULL,
+  `role` varchar(255) DEFAULT NULL,
+  `active` varchar(255) DEFAULT NULL,
   `email_verified_at` timestamp NULL DEFAULT NULL,
-  `remember_token` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `remember_token` varchar(100) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -506,6 +496,13 @@ ALTER TABLE `employees`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `employees_nik_unique` (`nik`),
   ADD UNIQUE KEY `employees_email_unique` (`email`);
+
+--
+-- Indexes for table `employee_families`
+--
+ALTER TABLE `employee_families`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `employee_families_employee_id_foreign` (`employee_id`);
 
 --
 -- Indexes for table `failed_jobs`
@@ -578,13 +575,6 @@ ALTER TABLE `trainings`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `users`
---
-ALTER TABLE `users`
-  ADD UNIQUE KEY `users_email_unique` (`email`),
-  ADD UNIQUE KEY `users_username_unique` (`username`);
-
---
 -- AUTO_INCREMENT for dumped tables
 --
 
@@ -592,73 +582,19 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `career_activities`
 --
 ALTER TABLE `career_activities`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `djm_files`
+-- AUTO_INCREMENT for table `employee_families`
 --
-ALTER TABLE `djm_files`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `d_j_m_s`
---
-ALTER TABLE `d_j_m_s`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
-
---
--- AUTO_INCREMENT for table `employees`
---
-ALTER TABLE `employees`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
-
---
--- AUTO_INCREMENT for table `failed_jobs`
---
-ALTER TABLE `failed_jobs`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `feedback`
---
-ALTER TABLE `feedback`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `jobs`
---
-ALTER TABLE `jobs`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `kehadiran`
---
-ALTER TABLE `kehadiran`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
+ALTER TABLE `employee_families`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
-
---
--- AUTO_INCREMENT for table `positions`
---
-ALTER TABLE `positions`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `recruitment`
---
-ALTER TABLE `recruitment`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
-
---
--- AUTO_INCREMENT for table `trainings`
---
-ALTER TABLE `trainings`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 
 --
 -- Constraints for dumped tables
@@ -669,6 +605,12 @@ ALTER TABLE `trainings`
 --
 ALTER TABLE `career_activities`
   ADD CONSTRAINT `career_activities_employee_id_foreign` FOREIGN KEY (`employee_id`) REFERENCES `employees` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `employee_families`
+--
+ALTER TABLE `employee_families`
+  ADD CONSTRAINT `employee_families_employee_id_foreign` FOREIGN KEY (`employee_id`) REFERENCES `employees` (`id`) ON DELETE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
