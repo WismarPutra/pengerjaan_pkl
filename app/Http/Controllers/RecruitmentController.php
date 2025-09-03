@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Recruitment;
+use Illuminate\Support\Facades\Auth;
 
 class RecruitmentController extends Controller
 {
@@ -13,22 +14,23 @@ class RecruitmentController extends Controller
     }
 
     public function create() {
-        return view('recruitment.create');
+        $currentStep = session('currentStep', 1);
+    return view('recruitment.create', compact('currentStep'));
     }
 
     public function store(Request $request) {
         $request->validate([
             'namaPosisi' => 'required|string|max:255',
             'regionalDirektorat' => 'required|string',
-            'unitSub' => 'nullable|string',
-            'band_posisi' => 'nullable|string',
-            'status_kepegawaian' => 'nullable|string',
-            'lokasi_pekerjaan' => 'nullable|string',
-            'medis_non_medis' => 'nullable|string',
-            'jumlah_lowongan' => 'nullable|string',
-            'target_tanggal' => 'nullable|date',
-            'hiring_manager' => 'nullable|string',
-            'nde' => 'nullable|string',
+            'unitSub' => 'required|string',
+            'band_posisi' => 'required|string',
+            'status_kepegawaian' => 'required|string',
+            'lokasi_pekerjaan' => 'required|string',
+            'medis_non_medis' => 'required|string',
+            'jumlah_lowongan' => 'required|string',
+            'target_tanggal' => 'required|date',
+            'hiring_manager' => 'required|string',
+            'nde' => 'required|file|mimes:pdf,doc,docx|max:2048',
             'pendidikan_terakhir' => 'nullable|string',
             'jurusan_relevan' => 'nullable|string',
             'pengalaman_minimum' => 'nullable|string',
@@ -37,10 +39,17 @@ class RecruitmentController extends Controller
             'batasan_usia' => 'nullable|string'
         ]);
 
-        $recruitment->created_by_role = auth()->user()->role;
 
+        $data = $request->all();
+        $data['created_by_role'] = Auth::user()->role;
 
-        Recruitment::create($request->all());
+        //handle file upload
+        if ($request->hasFile('nde')) {
+            $data['nde'] = $request->file('nde')->store('uploads','public');
+        }
+
+        
+        Recruitment::create($data);
         return redirect()->route('recruitment.index')->with('success', 'Posisi berhasil ditambahkan');
     }
 
@@ -58,15 +67,15 @@ class RecruitmentController extends Controller
         $request->validate([
             'namaPosisi' => 'required|string|max:255',
             'regionalDirektorat' => 'required|string',
-            'unitSub' => 'nullable|string',
-            'band_posisi' => 'nullable|string',
-            'status_kepegawaian' => 'nullable|string',
-            'lokasi_pekerjaan' => 'nullable|string',
-            'medis_non_medis' => 'nullable|string',
-            'jumlah_lowongan' => 'nullable|string',
-            'target_tanggal' => 'nullable|date',
-            'hiring_manager' => 'nullable|string',
-            'nde' => 'nullable|string',
+            'unitSub' => 'required|string',
+            'band_posisi' => 'required|string',
+            'status_kepegawaian' => 'required|string',
+            'lokasi_pekerjaan' => 'required|string',
+            'medis_non_medis' => 'required|string',
+            'jumlah_lowongan' => 'required|string',
+            'target_tanggal' => 'required|date',
+            'hiring_manager' => 'required|string',
+            'nde' => 'required|file|mimes:pdf,doc,docx|max:2048',
             'pendidikan_terakhir' => 'nullable|string',
             'jurusan_relevan' => 'nullable|string',
             'pengalaman_minimum' => 'nullable|string',
@@ -76,7 +85,12 @@ class RecruitmentController extends Controller
         ]);
 
         $recruitments = Recruitment::findOrFail($id);
-        $recruitments->update($request->all());
+        $data = $request->all();
+
+        if ($request->hasFile('nde')){
+            $data['nde'] = $request->file('nde')->store('uploads', 'public');
+        }
+        $recruitments->update($data);
 
         return redirect()->route('recruitment.index')->with('success', 'Posisi berhasil diperbarui');
     }
@@ -101,13 +115,45 @@ class RecruitmentController extends Controller
         ]);
     }
 
-    public function nextStep(Request $request) {
-        $currentStep = $request->input('step', 1);
 
-        session(['currentStep' => $currentStep]);
+public function nextStep(Request $request) 
+{
+    // Step sekarang dari request
+    $step = $request->input('step', 1);
 
-        return redirect()->back();
+    // Validasi sesuai step
+    if ($step == 1) {
+        $request->validate([
+            'namaPosisi' => 'required|string|max:255',
+            'regionalDirektorat' => 'required|string',
+            'unitSub' => 'required|string',
+            'band_posisi' => 'required|string',
+            'status_kepegawaian' => 'required|string',
+            'lokasi_pekerjaan' => 'required|string',
+            'medis_non_medis' => 'required|string',
+            'jumlah_lowongan' => 'required|string',
+            'target_tanggal' => 'required|date',
+            'hiring_manager' => 'required|string',
+            'nde' => 'required|file|mimes:pdf,doc,docx|max:2048',
+            'pendidikan_terakhir' => 'nullable|string',
+            'jurusan_relevan' => 'nullable|string',
+            'pengalaman_minimum' => 'nullable|string',
+            'domisili_preferensi' => 'nullable|string',
+            'jenis_kelamin' => 'nullable|string',
+            'batasan_usia' => 'nullable|string',
+        ]);
     }
+
+    // Simpan data step sekarang ke session
+    session()->put("recruitment.step{$step}", $request->except('_token','step'));
+
+    // Naik ke step berikutnya
+    $nextStep = $step + 1;
+    session(['currentStep' => $nextStep]);
+
+    return redirect()->route('recruitment.create');
+}
+
 
     public function submit(Request $request)
     {

@@ -17,7 +17,7 @@ class Recruitment extends Model
         'lokasi_pekerjaan',
         'medis_non_medis',
         'jumlah_lowongan',
-        'target_tanggal',
+        'tanggal_target',
         'hiring_manager',
         'nde',
         'pendidikan_terakhir',

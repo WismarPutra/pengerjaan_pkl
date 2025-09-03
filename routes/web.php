@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\DJMController;
+use App\Http\Controllers\FamilyController;
 use App\Http\Controllers\TMController;
 use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\TrainingController;
@@ -32,7 +33,6 @@ use App\Http\Controllers\DashboardController;
 /* LOGIN */
 
 Route::get('/', [LoginController::class, 'login'])->name('login');
-Route::post('actionlogin', [LoginController::class, 'actionlogin'])->name('actionlogin');
 Route::post('/actionlogin', [LoginController::class, 'actionlogin'])->name('actionlogin');
 
 Route::get('actionlogout', [LoginController::class, 'actionlogout'])->name('actionlogout')->middleware('auth');
@@ -110,6 +110,7 @@ Route::post('/recruitment', [RecruitmentController::class, 'store'])->name('recr
 Route::post('/recruitment/save-step', [RecruitmentController::class, 'saveStep'])->name('recruitment.saveStep');
 Route::post('/recruitment/submit', [RecruitmentController::class, 'submit'])->name('recruitment.submit');
 Route::post('/recruitment/next-step', [RecruitmentController::class, 'nextStep'])->name('recruitment.nextStep');
+Route::post('/recruitment/previous-step', [RecruitmentController::class, 'previousStep'])->name('recruitment.previousStep');
 
 /* DASHBOARD OUTSOURCE */
 
