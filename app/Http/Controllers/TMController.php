@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Employee;
 use App\Models\CareerActivity;
+use App\Models\TalentCluster;
 
 
 class TMController extends Controller
@@ -27,31 +28,40 @@ class TMController extends Controller
 
 
     public function show(Employee $employee)
-    {
-        $payslips = [
-            ['filename' => '2024-Jan.pdf', 'date' => '28 Januari 2024'],
-            ['filename' => '2024-Feb.pdf', 'date' => '28 Februari 2024'],
-            ['filename' => '2024-Mar.pdf', 'date' => '28 Maret 2024'],
-            ['filename' => '2024-Apr.pdf', 'date' => '28 April 2024'],
-            ['filename' => '2024-May.pdf', 'date' => '28 Mei 2024'],
-            ['filename' => '2024-Jun.pdf', 'date' => '28 Juni 2024'],
-            ['filename' => '2024-Jul.pdf', 'date' => '28 Juli 2024'],
-            ['filename' => '2024-Aug.pdf', 'date' => '28 Agustus 2024'],
-            ['filename' => '2024-Sep.pdf', 'date' => '28 September 2024'],
-            ['filename' => '2024-Oct.pdf', 'date' => '28 Oktober 2024'],
-            ['filename' => '2024-Nov.pdf', 'date' => '28 November 2024'],
-            ['filename' => '2024-Dec.pdf', 'date' => '28 Desember 2024'],
-        ];
+{
+    $payslips = [
+        ['filename' => '2024-Jan.pdf', 'date' => '28 Januari 2024'],
+        ['filename' => '2024-Feb.pdf', 'date' => '28 Februari 2024'],
+        ['filename' => '2024-Mar.pdf', 'date' => '28 Maret 2024'],
+        ['filename' => '2024-Apr.pdf', 'date' => '28 April 2024'],
+        ['filename' => '2024-May.pdf', 'date' => '28 Mei 2024'],
+        ['filename' => '2024-Jun.pdf', 'date' => '28 Juni 2024'],
+        ['filename' => '2024-Jul.pdf', 'date' => '28 Juli 2024'],
+        ['filename' => '2024-Aug.pdf', 'date' => '28 Agustus 2024'],
+        ['filename' => '2024-Sep.pdf', 'date' => '28 September 2024'],
+        ['filename' => '2024-Oct.pdf', 'date' => '28 Oktober 2024'],
+        ['filename' => '2024-Nov.pdf', 'date' => '28 November 2024'],
+        ['filename' => '2024-Dec.pdf', 'date' => '28 Desember 2024'],
+    ];
 
+    // Ambil CareerActivity (lama)
+    $clusters = CareerActivity::where('employee_id', $employee->id)
+        ->selectRaw('
+            MONTHNAME(tanggalKDMP) as periode,
+            YEAR(tanggalKDMP) as year,
+            unitSub as cluster
+        ')
+        ->orderBy('year', 'desc')
+        ->orderByRaw('MONTH(tanggalKDMP) desc')
+        ->get();
 
+    // Ambil TalentCluster (baru)
+    $talentClusters = TalentCluster::where('employee_id', $employee->id)
+        ->orderBy('tahunCluster', 'desc')
+        ->get();
 
-        $career = CareerActivity::where('employee_id', $employee->id)
-            ->orderByRaw('YEAR(tanggalKDMP) DESC')
-            ->get();
-
-
-        return view('employee.show', compact('employee', 'payslips'));
-    }
+    return view('employee.show', compact('employee', 'payslips', 'clusters', 'talentClusters'));
+}
 
     public function edit($id)
     {

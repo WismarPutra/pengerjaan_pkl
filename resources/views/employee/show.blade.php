@@ -1874,14 +1874,28 @@ label {
         <button class="plus-btn1" onclick="openAddClusterModal()"><i class="fas fa-plus"></i>Tambah</button>
       </div>
     </div>
-    <table id="customers1" style="margin-top: 10px;">
+    <table id="customers1">
+    <thead>
       <tr>
         <th>No</th>
-        <th>Periode</th>
-        <th>Year</th>
-        <th>Cluster</th>
+        <th onclick="sortTable(1, this)">Period <span class="sort-icon">⇅</span></th>
+        <th onclick="sortTable(2, this)">Year <span class="sort-icon">⇅</span></th>
+        <th onclick="sortTable(3, this)">Cluster <span class="sort-icon">⇅</span></th>
       </tr>
-    </table>
+    </thead>
+    <tbody>
+      @foreach($employee->talentClusters as $index => $cluster)
+        <tr>
+            <td>{{ $index + 1 }}</td>
+            <td>{{ $cluster->periodeCluster }}</td>
+            <td>{{ $cluster->tahunCluster }}</td>
+            <td>{{ $cluster->talentCluster }}</td>
+        </tr>
+    @endforeach
+    </tbody>
+  </table>
+
+
   </div>
 
   <div class="tab-content" id="pelatihan" style="display: none;">
@@ -2126,51 +2140,49 @@ label {
         </div>
       </div>
       <div class="full-width">
-        <form action="{{ route('employees.update', $employee->id) }}" method="POST">
-          @csrf
-          @method('PUT')
-          <div class="form-grid1">
-            <div class="form-group2">
-              <div class="label-group">
-                <label>Periode</label>
-              </div>
-              <select name="periodeCluster" class="form-control1"  required>
-                <option disabled selected value=""></option>
-                <option value="Q1">Q1</option>
-                <option value="Q2">Q2</option>
-                <option value="Q3">Q3</option>
-                <option value="Q4">Q4</option>
-              </select>
-            </div>
-
-            <div class="form-group3">
-              <div class="label-group">
-                <label>Tahun</label>
-              </div>
-              <input type="month" name="tahunCluster" class="form-control" /><br><br>
-            </div>
-
-            <div class="form-group2 fully-width">
-              <div class="label-group">
-                <label>Talent Cluster</label>
-                <label class="bintang">*</label>
-              </div>
-              <select name="talentCluster" class="form-control1" required>
-                <option disabled selected value=""></option>
-                <option value="Potential Employee">Potential Employee</option>
-                <option value="Promotable Employee">Promotable Employee</option>
-              </select>
-            </div>
-          </div>
-        </form>
+        <div class="full-width">
+  <form action="{{ route('talent-cluster.store', $employee->id) }}" method="POST">
+    @csrf
+    <div class="form-grid1">
+      <div class="form-group2">
+        <div class="label-group">
+          <label>Periode</label>
+        </div>
+        <select name="periodeCluster" class="form-control1" required>
+          <option disabled selected value=""></option>
+          <option value="Q1">Q1</option>
+          <option value="Q2">Q2</option>
+          <option value="Q3">Q3</option>
+          <option value="Q4">Q4</option>
+        </select>
       </div>
-      
-      <div class="form-buttons">
-          <button type="button" class="cancel" onclick="closeAddClusterModal()">Cancel</button>
-          <button type="submit" class="submit">Tambah</button>
+
+      <div class="form-group3">
+        <div class="label-group">
+          <label>Tahun</label>
+        </div>
+        <input type="month" name="tahunCluster" class="form-control" />
+      </div>
+
+      <div class="form-group2 fully-width">
+        <div class="label-group">
+          <label>Talent Cluster</label>
+          <label class="bintang">*</label>
+        </div>
+        <select name="talentCluster" class="form-control1" required>
+          <option disabled selected value=""></option>
+          <option value="Potential Employee">Potential Employee</option>
+          <option value="Promotable Employee">Promotable Employee</option>
+        </select>
       </div>
     </div>
-  </div>
+    <div class="form-buttons">
+      <button type="button" class="cancel" onclick="closeAddClusterModal()">Cancel</button>
+      <button type="submit" class="submit">Tambah</button>
+    </div>
+  </form>
+</div>
+
   
   <div class="modal fade" id="feedbackModal" tabindex="-1" aria-labelledby="feedbackModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg">
