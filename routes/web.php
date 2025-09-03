@@ -1,8 +1,3 @@
-<<<<<<< HEAD
-
-
-=======
->>>>>>> main
 <?php
 
 use App\Http\Middleware\CheckRole;
