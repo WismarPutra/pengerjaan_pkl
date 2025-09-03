@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\DJMController;
+use App\Http\Controllers\FamilyController;
 use App\Http\Controllers\TMController;
 use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\TrainingController;
@@ -32,7 +33,6 @@ use App\Http\Controllers\DashboardController;
 /* LOGIN */
 
 Route::get('/', [LoginController::class, 'login'])->name('login');
-Route::post('actionlogin', [LoginController::class, 'actionlogin'])->name('actionlogin');
 Route::post('/actionlogin', [LoginController::class, 'actionlogin'])->name('actionlogin');
 
 Route::get('actionlogout', [LoginController::class, 'actionlogout'])->name('actionlogout')->middleware('auth');
