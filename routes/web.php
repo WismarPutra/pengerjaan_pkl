@@ -13,6 +13,7 @@ use App\Http\Controllers\KehadiranController;
 use App\Http\Controllers\RecruitmentController;
 use App\Http\Controllers\WorkforceController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\TalentClusterController;
 
 
 
@@ -120,3 +121,7 @@ Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard
 /* WORKFORCE PERFORMANCE */
 
 Route::get('/workforce', [WorkforceController::class, 'index'])->name('workforce.index');
+
+/* TALENT CLUSTER */
+Route::post('/employees/{employee}/talent-clusters', [TalentClusterController::class, 'store'])
+    ->name('talent-cluster.store');
