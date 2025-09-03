@@ -1824,37 +1824,41 @@ label {
 
     <hr class="divider">
 
-    <table id="customers" style="margin-top: 10px;">
-      <tr>
-        <th>No</th>
-        <th>Nama Lengkap</th>
-        <th>Jenis Kelamin</th>
-        <th>Tempat, Tanggal Lahir</th>
-        <th>Pendidikan Saat Ini</th>
-        <th>Status Anak</th>
-        <th>Urutan Anak</th>
-        <th>Keterangan</th>
-      </tr>
-      <tr>
-        <td>1</td>
-        <td>Rayan Arka</td>
-        <td>Laki-Laki</td>
-        <td>Jakarta, 18 Agustus 2009</td>
-        <td>SD</td>
-        <td>Kandung</td>
-        <td>Anak ke-1</td>
-        <td>Ditanggung</td>
-      </tr>
-      <tr>
-        <td>2</td>
-        <td>Aurelia Zahra</td>
-        <td>Perempuan</td>
-        <td>Jakarta, 2 Juli 2013</td>
-        <td>SD</td>
-        <td>Kandung</td>
-        <td>Anak ke-2</td>
-        <td>Ditanggung</td>
-      </tr>
+    <table id="myTable" class="min-w-full text-sm text-left text-gray-700">
+      <thead class="bg-gray-100 text-gray-600">
+        <tr>
+          <th class="px-4 py-2">No</th>
+          <th class="px-4 py-2" onclick="sortTable(1)">Nama Lengkap <span class="sort-icon">⇅</span></th>
+          <th class="px-4 py-2" onclick="sortTable(2)">Jenis Kelamin <span class="sort-icon">⇅</span></th>
+          <th class="px-4 py-2" onclick="sortTable(3)">Tempat, Tanggal Lahir <span class="sort-icon">⇅</span></th>
+          <th class="px-4 py-2" onclick="sortTable(4)">Pendidikan Saat Ini <span class="sort-icon">⇅</span></th>
+          <th class="px-4 py-2" onclick="sortTable(5)">Status Anak <span class="sort-icon">⇅</span></th>
+          <th class="px-4 py-2" onclick="sortTable(6)">Urutan Anak <span class="sort-icon">⇅</span></th>
+          <th class="px-4 py-2" onclick="sortTable(7)">Keterangan <span class="sort-icon">⇅</span></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-t">
+          <td class="px-4 py-2">1</td>
+          <td class="px-4 py-2">Rayan Arka</td>
+          <td class="px-4 py-2">Laki-laki</td>
+          <td class="px-4 py-2">Jakarta, 18 Agustus 2009</td>
+          <td class="px-4 py-2">SD</td>
+          <td class="px-4 py-2">Kandung</td>
+          <td class="px-4 py-2">Anak ke-1</td>
+          <td class="px-4 py-2">Ditanggung</td>
+        </tr>
+        <tr class="border-t">
+          <td class="px-4 py-2">2</td>
+          <td class="px-4 py-2">Aurelia Zahra</td>
+          <td class="px-4 py-2">Perempuan</td>
+          <td class="px-4 py-2">Jakarta, 2 Juli 2013</td>
+          <td class="px-4 py-2">SD</td>
+          <td class="px-4 py-2">Kandung</td>
+          <td class="px-4 py-2">Anak ke-2</td>
+          <td class="px-4 py-2">Ditanggung</td>
+        </tr>
+      </tbody>
     </table>
   </div>
 
