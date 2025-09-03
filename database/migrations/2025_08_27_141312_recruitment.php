@@ -31,6 +31,7 @@ return new class extends Migration
             $table->string('jenis_kelamin')->nullable();
             $table->string('batasan_usia')->nullable();
             $table->timestamps();
+            $table->string('created_by_role')->nullable();
         });
     }
 

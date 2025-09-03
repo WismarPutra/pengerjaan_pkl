@@ -27,7 +27,7 @@ class TMController extends Controller
 
 
 
-    public function show(Employee $employee)
+    public function show(Request $request, Employee $employee)
 {
     $payslips = [
         ['filename' => '2024-Jan.pdf', 'date' => '28 Januari 2024'],
@@ -44,7 +44,20 @@ class TMController extends Controller
         ['filename' => '2024-Dec.pdf', 'date' => '28 Desember 2024'],
     ];
 
-    // Ambil CareerActivity (lama)
+    // 🔹 ambil parameter sorting dari URL
+    $sortBy = $request->get('sort_by', 'tahunCluster');   // default sort kolom tahunCluster
+    $sortOrder = $request->get('sort_order', 'desc');     // default desc
+    
+    
+
+    // whitelist biar aman
+    $allowed = ['periodeCluster', 'tahunCluster', 'talentCluster'];
+    if (!in_array($sortBy, $allowed)) {
+        $sortBy = 'tahunCluster';
+    }
+    $sortOrder = $sortOrder === 'asc' ? 'asc' : 'desc';
+
+    // CareerActivity (lama)
     $clusters = CareerActivity::where('employee_id', $employee->id)
         ->selectRaw('
             MONTHNAME(tanggalKDMP) as periode,
@@ -55,13 +68,14 @@ class TMController extends Controller
         ->orderByRaw('MONTH(tanggalKDMP) desc')
         ->get();
 
-    // Ambil TalentCluster (baru)
+    // TalentCluster (baru) + sorting dinamis
     $talentClusters = TalentCluster::where('employee_id', $employee->id)
-        ->orderBy('tahunCluster', 'desc')
+        ->orderBy($sortBy, $sortOrder)
         ->get();
 
-    return view('employee.show', compact('employee', 'payslips', 'clusters', 'talentClusters'));
+    return view('employee.show', compact('employee', 'payslips', 'clusters', 'talentClusters', 'sortBy', 'sortOrder'));
 }
+
 
     public function edit($id)
     {

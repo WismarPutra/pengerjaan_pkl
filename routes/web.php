@@ -112,7 +112,6 @@ Route::post('/recruitment/next-step', [RecruitmentController::class, 'nextStep']
 Route::post('/recruitment/previous-step', [RecruitmentController::class, 'previousStep'])->name('recruitment.previousStep');
 
 
-
 /* DASHBOARD OUTSOURCE */
 
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
@@ -125,3 +124,6 @@ Route::get('/workforce', [WorkforceController::class, 'index'])->name('workforce
 /* TALENT CLUSTER */
 Route::post('/employees/{employee}/talent-clusters', [TalentClusterController::class, 'store'])
     ->name('talent-cluster.store');
+
+
+    

@@ -885,7 +885,10 @@ textarea.form-control {
         </div>
     @endif
 
-    <form action="{{ route('recruitment.store') }}" method="POST" id="recruitmentForm">
+    <form action="{{ route('recruitment.store') }}" 
+      method="POST" 
+      enctype="multipart/form-data" 
+      id="recruitmentForm">
             @csrf
             <div class="step-content" id="step-content-1">
               <div class="form-grid">
