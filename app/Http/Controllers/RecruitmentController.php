@@ -13,12 +13,15 @@ class RecruitmentController extends Controller
     }
 
     public function create() {
+
         $currentStep = session('currentStep', 1);
     return view('recruitment.create', compact('currentStep'));
+
     }
 
     public function store(Request $request) {
         $request->validate([
+
             'namaPosisi' => 'required|string|max:255',
             'regionalDirektorat' => 'required|string',
             'unitSub' => 'required|string',
@@ -49,6 +52,7 @@ class RecruitmentController extends Controller
 
         
         Recruitment::create($data);
+
         return redirect()->route('recruitment.index')->with('success', 'Posisi berhasil ditambahkan');
     }
 
@@ -84,12 +88,14 @@ class RecruitmentController extends Controller
         ]);
 
         $recruitments = Recruitment::findOrFail($id);
+
         $data = $request->all();
 
         if ($request->hasFile('nde')){
             $data['nde'] = $request->file('nde')->store('uploads', 'public');
         }
         $recruitments->update($data);
+
 
         return redirect()->route('recruitment.index')->with('success', 'Posisi berhasil diperbarui');
     }
@@ -113,6 +119,7 @@ class RecruitmentController extends Controller
             'data' => $data
         ]);
     }
+
 
 
 public function nextStep(Request $request) 
@@ -162,10 +169,13 @@ public function nextStep(Request $request)
         $finalData = array_merge($step1, $step2);
         $finalData['created_by_role'] = auth()->user()->role;
 
+
         Recruitment::create($finalData);
 
         session()->forget('recruitment');
+
         session()->forget('currentStep');
+
 
         return response()->json([
             'success' => true,

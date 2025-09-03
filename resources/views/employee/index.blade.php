@@ -729,6 +729,7 @@ ul li a:hover:not(.active) {
       <div class="icon-circle purple"><i class="fas fa-briefcase"></i></div>
       <div class="stat-info">
         <div class="stat-value">{{ number_format($totalKaryawan, 0, ',', '.') }}</div>
+
         <div class="stat-label">Total Karyawan</div>
       </div>
     </div>
