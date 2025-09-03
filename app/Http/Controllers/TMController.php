@@ -13,11 +13,9 @@ class TMController extends Controller
     // Ambil parameter dari URL, misalnya ?sort_by=nama&sort_order=asc
     $sortBy = $request->get('sort_by', 'nik'); // default urut berdasarkan NIK
     $sortOrder = $request->get('sort_order', 'asc'); // default ASC
-
     // Ambil data dengan orderBy
     $employees = Employee::orderBy($sortBy, $sortOrder)->paginate(10);
      $totalKaryawan = Employee::count(); // ambil jumlah total
-
 
     return view('employee.index', compact('employees', 'totalKaryawan',  'sortBy', 'sortOrder'));
 }
