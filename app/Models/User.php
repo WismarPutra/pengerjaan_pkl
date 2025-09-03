@@ -12,7 +12,6 @@ class User extends Authenticatable
     use HasFactory, Notifiable;
 
     protected $table = 'users';
-    protected $primaryKey = 'id_user';
 
     /**
      * The attributes that are mass assignable.
@@ -20,7 +19,7 @@ class User extends Authenticatable
      * @var list<string>
      */
 
-     protected $fillable = [
+    protected $fillable = [
         'username',
         'email',
         'password',
@@ -40,7 +39,8 @@ class User extends Authenticatable
         ];
     }
 
-    public function username() {
+    public function username()
+    {
         return 'username'; // field login Anda
     }
 
@@ -65,8 +65,9 @@ class User extends Authenticatable
     {
         return $this->role === 'bod';
     }
-    
-    public function hasRole($role) {
+
+    public function hasRole($role)
+    {
         return $this->role == $role;
     }
 }
