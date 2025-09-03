@@ -160,10 +160,12 @@ public function nextStep(Request $request)
         $step2 = session('recruitment.step2', []);
 
         $finalData = array_merge($step1, $step2);
+        $finalData['created_by_role'] = auth()->user()->role;
 
         Recruitment::create($finalData);
 
         session()->forget('recruitment');
+        session()->forget('currentStep');
 
         return response()->json([
             'success' => true,
