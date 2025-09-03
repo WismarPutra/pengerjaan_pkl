@@ -10,13 +10,13 @@ class Employee extends Model
     use HasFactory;
 
     protected $fillable = [
-        'nik', 
-        'name', 
-        'tanggal_lahir', 
-        'email', 
+        'nik',
+        'name',
+        'tanggal_lahir',
+        'email',
         'posisi',
-        'direktorat', 
-        'status_karyawan', 
+        'direktorat',
+        'status_karyawan',
         'no_ktp',
         'jenis_kelamin',
         'ttl',
@@ -32,8 +32,13 @@ class Employee extends Model
         'tahun_lulus',
     ];
 
-    public function CareerActivity() {
+    public function CareerActivity()
+    {
         return $this->hasMany(CareerActivity::class, 'employee_id');
     }
 
+    public function families()
+    {
+        return $this->hasMany(EmployeeFamily::class);
+    }
 }

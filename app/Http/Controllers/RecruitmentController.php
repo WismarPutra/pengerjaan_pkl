@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Recruitment;
+use Illuminate\Support\Facades\Auth;
 
 class RecruitmentController extends Controller
 {
@@ -43,7 +44,7 @@ class RecruitmentController extends Controller
 
 
         $data = $request->all();
-        $data['created_by_role'] = auth()->user()->role;
+        $data['created_by_role'] = Auth::user()->role;
 
         //handle file upload
         if ($request->hasFile('nde')) {

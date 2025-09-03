@@ -9,16 +9,25 @@ use App\Models\CareerActivity;
 
 class TMController extends Controller
 {
-    public function index() {
-        $employees = Employee::all();
+    public function index(Request $request)
+    {
+        // Ambil parameter dari URL, misalnya ?sort_by=nama&sort_order=asc
+        $sortBy = $request->get('sort_by', 'nik'); // default urut berdasarkan NIK
+        $sortOrder = $request->get('sort_order', 'asc'); // default ASC
+
+        // Ambil data dengan orderBy
+        $employees = Employee::orderBy($sortBy, $sortOrder)->paginate(10);
         $totalKaryawan = Employee::count(); // ambil jumlah total
 
-        return view('employee.index', compact('employees', 'totalKaryawan'));
+
+        return view('employee.index', compact('employees', 'totalKaryawan',  'sortBy', 'sortOrder'));
     }
 
 
 
-    public function show(Employee $employee) {
+
+    public function show(Employee $employee)
+    {
         $payslips = [
             ['filename' => '2024-Jan.pdf', 'date' => '28 Januari 2024'],
             ['filename' => '2024-Feb.pdf', 'date' => '28 Februari 2024'],
@@ -35,16 +44,17 @@ class TMController extends Controller
         ];
 
 
-        
+
         $career = CareerActivity::where('employee_id', $employee->id)
-                ->orderByRaw('YEAR(tanggalKDMP) DESC')
-                ->get();
+            ->orderByRaw('YEAR(tanggalKDMP) DESC')
+            ->get();
 
 
-        return view('employee.show', compact ('employee', 'payslips'));
+        return view('employee.show', compact('employee', 'payslips'));
     }
 
-    public function edit($id) {
+    public function edit($id)
+    {
         $employee = Employee::findOrFail($id);
         $career = CareerActivity::where('employee_id', $id)->get();
 
@@ -53,16 +63,16 @@ class TMController extends Controller
 
 
         return view('employee.edit', compact('employee', 'career'));
-
     }
 
-    public function update(Request $request, $id) {
+    public function update(Request $request, $id)
+    {
 
         $validated = $request->validate([
             'nik' => 'required',
-            'name'=> 'required', 
-            'tanggal_lahir' => 'required', 
-            'email' => 'required', 
+            'name' => 'required',
+            'tanggal_lahir' => 'required',
+            'email' => 'required',
             'no_ktp' => 'required',
             'jenis_kelamin' => 'required',
             'ttl' => 'required',
@@ -77,29 +87,32 @@ class TMController extends Controller
             'institusi_pendidikan' => 'required',
             'tahun_lulus' => 'required',
         ]);
-    
+
         $employee = Employee::findOrFail($id);
         $employee->update($validated);
 
         return redirect()->route('employee.show', $employee->id)
-                         ->with('success', 'Data berhasil diupdate!');    
+            ->with('success', 'Data berhasil diupdate!');
     }
 
-    public function downloadPayslip($filename) {
+    public function downloadPayslip($filename)
+    {
         $file = storage_path('app/payslips/' . $filename);
         if (!file_exists($file)) {
             abort(404, 'File not found.');
         }
         return response()->download($file);
     }
-    
 
-    public function getCareerActivities($employee_id) {
+
+    public function getCareerActivities($employee_id)
+    {
         $employee = Employee::with('careerActivities')->findOrFail($employee_id);
         return view('employee.career', compact('employee'));
     }
 
-    public function storeCareerActivity(Request $request, $employee_id) {
+    public function storeCareerActivity(Request $request, $employee_id)
+    {
         $validated = $request->validate([
             'nama_role' => 'required',
             'unitSub' => 'required',
@@ -139,25 +152,26 @@ class TMController extends Controller
         $career->tanggal_lepasPJ = $request->tanggal_lepasPJ;
         $career->tanggal_pensiun = $request->tanggal_pensiun;
         $career->tanggal_akhir_kontrak = $request->tanggal_akhir_kontrak;
-        
+
         if ($request->hasFile('dokumenSK')) {
             $career->dokumenSK = $request->file('dokumenSK')->store('dokumen_sk', 'public');
         }
-    
+
         if ($request->hasFile('dokumen_nota_dinas')) {
             $career->dokumen_nota_dinas = $request->file('dokumen_nota_dinas')->store('dokumen_nota_dinas', 'public');
         }
-    
+
         if ($request->hasFile('dokumen_lainnya')) {
             $career->dokumen_lainnya = $request->file('dokumen_lainnya')->store('dokumen_lainnya', 'public');
         }
-        
+
         $career->save();
 
         return back()->with('success', 'Aktivitas Karir berhasil ditambahkan');
     }
 
-    public function updateCareerActivity(Request $request, $id) {
+    public function updateCareerActivity(Request $request, $id)
+    {
         $career = CareerActivity::findOrFail($id);
 
         $validated = $request->validate([
@@ -181,34 +195,34 @@ class TMController extends Controller
             'dokumen_lainnya' => 'nullable|file|mimes:pdf,jpg,png|max:2048',
         ]);
 
+        // update field biasa
         $career->fill([
-            $career->employee_id = $employee_id,
-            $career->nama_role = $request->nama_role,
-            $career->regional_direktorat = $request->regional_direktorat,
-            $career->unitSub = $request->unitSub,
-            $career->band_posisi = $request->band_posisi,
-            $career->deskripsi = $request->deskripsi,
-            $career->statusPJ = $request->statusPJ,
-            $career->tanggalBand = $request->tanggalBand,
-            $career->tanggalKDMP = $request->tanggalKDMP,
-            $career->tanggalTKWT = $request->tanggalTKWT,
-            $career->tanggal_akhirTKWT = $request->tanggal_akhirTKWT,
-            $career->tanggal_mutasi = $request->tanggal_mutasi,
-            $career->tanggalPJ = $request->tanggalPJ,
-            $career->tanggal_lepasPJ = $request->tanggal_lepasPJ,
-            $career->tanggal_pensiun = $request->tanggal_pensiun,
-            $career->tanggal_akhir_kontrak = $request->tanggal_akhir_kontrak,
+            'nama_role'             => $request->nama_role,
+            'regional_direktorat'   => $request->regional_direktorat,
+            'unitSub'               => $request->unitSub,
+            'band_posisi'           => $request->band_posisi,
+            'deskripsi'             => $request->deskripsi,
+            'statusPJ'              => $request->statusPJ,
+            'tanggalBand'           => $request->tanggalBand,
+            'tanggalKDMP'           => $request->tanggalKDMP,
+            'tanggalTKWT'           => $request->tanggalTKWT,
+            'tanggal_akhirTKWT'     => $request->tanggal_akhirTKWT,
+            'tanggal_mutasi'        => $request->tanggal_mutasi,
+            'tanggalPJ'             => $request->tanggalPJ,
+            'tanggal_lepasPJ'       => $request->tanggal_lepasPJ,
+            'tanggal_pensiun'       => $request->tanggal_pensiun,
+            'tanggal_akhir_kontrak' => $request->tanggal_akhir_kontrak,
         ]);
-        
-        
+
+        // handle upload file
         if ($request->hasFile('dokumenSK')) {
             $career->dokumenSK = $request->file('dokumenSK')->store('dokumen_sk', 'public');
         }
-    
+
         if ($request->hasFile('dokumen_nota_dinas')) {
             $career->dokumen_nota_dinas = $request->file('dokumen_nota_dinas')->store('dokumen_nota_dinas', 'public');
         }
-    
+
         if ($request->hasFile('dokumen_lainnya')) {
             $career->dokumen_lainnya = $request->file('dokumen_lainnya')->store('dokumen_lainnya', 'public');
         }
@@ -218,11 +232,12 @@ class TMController extends Controller
         return back()->with('success', 'Aktivitas Karir berhasil diupdate');
     }
 
-    public function deleteCareerActivity($id) {
+
+    public function deleteCareerActivity($id)
+    {
         $career = CareerActivity::findOrFail($id);
         $career->delete();
 
         return back()->with('success', 'Aktivitas Karir berhasil dihapus');
     }
-
 }
