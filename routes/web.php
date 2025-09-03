@@ -111,7 +111,6 @@ Route::post('/recruitment/next-step', [RecruitmentController::class, 'nextStep']
 Route::post('/recruitment/previous-step', [RecruitmentController::class, 'previousStep'])->name('recruitment.previousStep');
 
 
-
 /* DASHBOARD OUTSOURCE */
 
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
