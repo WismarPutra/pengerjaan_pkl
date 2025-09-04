@@ -8,10 +8,50 @@ use Illuminate\Support\Facades\Auth;
 
 class RecruitmentController extends Controller
 {
-    public function index() {
-        $recruitments = Recruitment::paginate(10);
-        return view('recruitment.index', compact('recruitments'));
+    public function index(Request $request)
+{
+    // Ambil parameter sort & direction dari URL
+    $sort = $request->get('sort', 'id');       // default sort by id
+    $direction = $request->get('direction', 'desc'); // default desc
+
+    // Daftar kolom yang boleh di-sort
+    $allowedSorts = [
+        'namaPosisi',
+        'regionalDirektorat',
+        'unitSub',
+        'band_posisi',
+        'status_kepegawaian',
+        'lokasi_pekerjaan',
+        'medis_non_medis',
+        'jumlah_lowongan',
+        'target_tanggal',
+        'hiring_manager',
+        'pendidikan_terakhir',
+        'jurusan_relevan',
+        'pengalaman_minimum',
+        'domisili_preferensi',
+        'jenis_kelamin',
+        'batasan_usia',
+        'created_by',
+    ];
+
+    // Kalau kolom yang dikirim user tidak ada di daftar, pakai default
+    if (! in_array($sort, $allowedSorts)) {
+        $sort = 'id';
     }
+
+    // Ambil data recruitment dengan sorting
+    $recruitments = Recruitment::orderBy($sort, $direction)
+        ->paginate(10)
+        ->appends([
+            'sort' => $sort,
+            'direction' => $direction
+        ]); // biar pagination bawa query sort
+
+    // Kirim ke view
+    return view('recruitment.index', compact('recruitments', 'sort', 'direction'));
+}
+
 
     public function create() {
 
@@ -51,7 +91,9 @@ class RecruitmentController extends Controller
             $data['nde'] = $request->file('nde')->store('uploads','public');
         }
 
-        
+        // isi otomatis created_by pakai user login
+    $data['created_by'] = Auth::id();
+
         Recruitment::create($data);
 
         return redirect()->route('recruitment.index')->with('success', 'Posisi berhasil ditambahkan');
