@@ -39,12 +39,12 @@ class Employee extends Model
 
     public function families()
     {
-        return $this->hasMany(EmployeeFamily::class);
+        return $this->hasMany(EmployeeFamily::class, 'employee_id');
     }
+
 
     public function talentClusters()
     {
         return $this->hasMany(TalentCluster::class);
     }
-
 }
