@@ -26,6 +26,7 @@ class Recruitment extends Model
         'domisili_preferensi',
         'jenis_kelamin',
         'batasan_usia',
+        'created_by',
     ];
 
     public function user()

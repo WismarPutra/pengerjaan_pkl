@@ -784,41 +784,69 @@ ul li a:hover:not(.active) {
     </div>
 
     
-  <div class="tab-content" id="kebutuhan" style="display: none;">
-    <table id="customers" style="margin-top: 10px;">
-      <tr>
-          <th>No</th>
-          <th>Nama Posisi</th>
-          <th>Regional/Direktorat</th>
-          <th>Band Posisi</th>
-          <th>Jumlah Lowongan</th>
-          <th>Target Tanggal Perekrutan</th>
-          <th>Created By</th>
-          <th>Actions</th>
-      </tr>
+  @php
+    $currentSort = request()->get('sort');
+    $currentDirection = request()->get('direction', 'asc');
 
-      @foreach ($recruitments as $recruitment)
-      <tr>
-        <td>{{ $loop->iteration }}</td>
-        <td>{{ $recruitment->namaPosisi }}</td>
-        <td>{{ $recruitment->regionalDirektorat }}</td>
-        <td>{{ $recruitment->band_posisi }}</td>
-        <td>{{ $recruitment->jumlah_lowongan }}</td>
-        <td>{{ $recruitment->target_tanggal }}</td>
-        <td>{{ $recruitment->users->role ?? '-' }}</td>
-        <td>
-          <div class="dropdown-action">
-            <button class="horizontal-dots" onclick="toggleActions()">&#x22EF;</button>
-            <div class="dropdown-action-content" id="dropdownActions">
-              <a href="#" class="dropdown-action-detail">Detail</a><br>
-              <a href="#" class="dropdown-action-edit">Edit</a><br>
-            </div>
-          </div>
-        </td>
-      </tr>
-      @endforeach
+    function sortLink($column, $label, $currentSort, $currentDirection) {
+        $newDirection = ($currentSort === $column && $currentDirection === 'asc') ? 'desc' : 'asc';
+
+        // default icon
+        $arrow = '⇅'; // unicode panah atas-bawah
+
+        // kalau lagi aktif sort
+        if ($currentSort === $column) {
+            $arrow = $currentDirection === 'asc' ? '↑' : '↓';
+        }
+
+        // tambahkan anchor #kebutuhan supaya tetap di tab
+        return '<a href="'.route('recruitment.index', [
+            'sort' => $column,
+            'direction' => $newDirection
+        ]).'#kebutuhan">'.$label.' '.$arrow.'</a>';
+    }
+@endphp
+
+<div class="tab-content" id="kebutuhan" style="display: none;">
+    <table id="customers" style="margin-top: 10px;">
+        <thead>
+            <tr>
+                <th>No</th>
+                <th>{!! sortLink('namaPosisi', 'Nama Posisi', $currentSort, $currentDirection) !!}</th>
+                <th>{!! sortLink('regionalDirektorat', 'Regional/Direktorat', $currentSort, $currentDirection) !!}</th>
+                <th>{!! sortLink('band_posisi', 'Band Posisi', $currentSort, $currentDirection) !!}</th>
+                <th>{!! sortLink('jumlah_lowongan', 'Jumlah Lowongan', $currentSort, $currentDirection) !!}</th>
+                <th>{!! sortLink('target_tanggal', 'Target Tanggal Perekrutan', $currentSort, $currentDirection) !!}</th>
+                <th>{!! sortLink('created_by', 'Created By', $currentSort, $currentDirection) !!}</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach ($recruitments as $recruitment)
+                <tr>
+                    <td>{{ $loop->iteration }}</td>
+                    <td>{{ $recruitment->namaPosisi }}</td>
+                    <td>{{ $recruitment->regionalDirektorat }}</td>
+                    <td>{{ $recruitment->band_posisi }}</td>
+                    <td>{{ $recruitment->jumlah_lowongan }}</td>
+                    <td>{{ $recruitment->target_tanggal }}</td>
+                    <td>{{ $recruitment->user->role ?? '-' }}</td>
+                    <td>
+                        <div class="dropdown-action">
+                            <button class="horizontal-dots" onclick="toggleActions()">&#x22EF;</button>
+                            <div class="dropdown-action-content" id="dropdownActions">
+                                <a href="#" class="dropdown-action-detail">Detail</a><br>
+                                <a href="#" class="dropdown-action-edit">Edit</a><br>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            @endforeach
+        </tbody>
     </table> 
-  </div>
+</div>
+
+
 
   <div class="tab-content" id="berjalan" style="display: none;">
 
@@ -828,6 +856,15 @@ ul li a:hover:not(.active) {
 
 </div>
 @endsection
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // cek apakah URL punya #kebutuhan
+        if (window.location.hash === "#kebutuhan") {
+            document.getElementById("kebutuhan").style.display = "block";
+        }
+    });
+</script>
 
 <script>
 function showTab(tabId) {
