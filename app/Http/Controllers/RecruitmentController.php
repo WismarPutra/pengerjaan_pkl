@@ -168,7 +168,7 @@ public function nextStep(Request $request)
         $step2 = session('recruitment.step2', []);
 
         $finalData = array_merge($step1, $step2);
-        $finalData['created_by_role'] = auth()->user()->role;
+        $finalData['created_by_role'] = Auth::user()->role;
 
 
         Recruitment::create($finalData);

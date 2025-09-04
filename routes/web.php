@@ -74,10 +74,6 @@ Route::post('/employee/{id}/career', [TMController::class, 'storeCareerActivity'
 Route::put('/career/{id}', [TMController::class, 'updateCareerActivity'])->name('career.update');
 Route::delete('/career/{id}', [TMController::class, 'deleteCareerActivity'])->name('career.delete');
 
-
-
-
-
 /* TRAINING MANAGEMENT */
 
 Route::get('/training', [TrainingController::class, 'index'])->name('training.index');
@@ -124,6 +120,18 @@ Route::get('/workforce', [WorkforceController::class, 'index'])->name('workforce
 /* TALENT CLUSTER */
 Route::post('/employees/{employee}/talent-clusters', [TalentClusterController::class, 'store'])
     ->name('talent-cluster.store');
+
+/* INFOMRASI ANAK */
+
+Route::prefix('employees/{employee}')->group(function () {
+    Route::get('families', [FamilyController::class, 'index'])->name('families.index');
+    Route::get('families/create', [FamilyController::class, 'create'])->name('families.create');
+    Route::post('families', [FamilyController::class, 'store'])->name('families.store');
+    Route::get('families/{family}/edit', [FamilyController::class, 'edit'])->name('families.edit');
+    Route::put('families/{family}', [FamilyController::class, 'update'])->name('families.update');
+    Route::delete('families/{family}', [FamilyController::class, 'destroy'])->name('families.destroy');
+});
+
 
 
     
