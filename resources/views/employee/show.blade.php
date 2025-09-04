@@ -1870,25 +1870,87 @@
 
     <hr class="divider">
 
-    <table id="myTable" class="table-auto w-full border-collapse border border-gray-300 text-center">
+    <table id="myTable" class="table-auto w-full border-collapse border border-gray-300 text-center">>
       <thead class="bg-gray-100 text-gray-600">
-        <tr>
-          <th class="px-4 py-2">No</th>
-          <th class="px-4 py-2">Nama Lengkap ⇅</th>
-          <th class="px-4 py-2">Jenis Kelamin ⇅</th>
-          <th class="px-4 py-2">Tempat, Tanggal Lahir ⇅</th>
-          <th class="px-4 py-2">Pendidikan ⇅</th>
-          <th class="px-4 py-2">Status Anak ⇅</th>
-          <th class="px-4 py-2">Urutan Anak ⇅</th>
-          <th class="px-4 py-2">Keterangan ⇅</th>
-          <!--<th class="px-4 py-2">Aksi</th>-->
-        </tr>
-      </thead>
+    <tr>
+        <th class="px-4 py-2">No</th>
 
+        <th class="px-4 py-2">
+            <a href="{{ route('employees.show', [
+                'employee'          => $employee->id,
+                'sort_by_family'    => 'nama_lengkap',
+                'sort_order_family' => ($sortByFamily == 'nama_lengkap' && $sortOrderFamily == 'asc') ? 'desc' : 'asc'
+            ]) }}#keluarga">
+                Nama Lengkap {!! $sortByFamily == 'nama_lengkap' ? '⇅' : '⇅' !!}
+            </a>
+        </th>
+
+        <th class="px-4 py-2">
+            <a href="{{ route('employees.show', [
+                'employee'          => $employee->id,
+                'sort_by_family'    => 'jenis_kelamin',
+                'sort_order_family' => ($sortByFamily == 'jenis_kelamin' && $sortOrderFamily == 'asc') ? 'desc' : 'asc'
+            ]) }}#keluarga">
+                Jenis Kelamin {!! $sortByFamily == 'jenis_kelamin' ? '⇅' : '⇅' !!}
+            </a>
+        </th>
+
+        <th class="px-4 py-2">
+    <a href="{{ route('employees.show', [
+        'employee'          => $employee->id,
+        'sort_by_family'    => 'tanggal_lahir',
+        'sort_order_family' => ($sortByFamily == 'tanggal_lahir' && $sortOrderFamily == 'asc') ? 'desc' : 'asc'
+    ]) }}#keluarga">
+        Tempat, Tanggal Lahir {!! $sortByFamily == 'tanggal_lahir' ? '⇅' : '⇅' !!}
+    </a>
+</th>
+
+
+        <th class="px-4 py-2">
+            <a href="{{ route('employees.show', [
+                'employee'          => $employee->id,
+                'sort_by_family'    => 'pendidikan',
+                'sort_order_family' => ($sortByFamily == 'pendidikan' && $sortOrderFamily == 'asc') ? 'desc' : 'asc'
+            ]) }}#keluarga">
+                Pendidikan Saat Ini {!! $sortByFamily == 'pendidikan' ? '⇅' : '⇅' !!}
+            </a>
+        </th>
+
+        <th class="px-4 py-2">
+            <a href="{{ route('employees.show', [
+                'employee'          => $employee->id,
+                'sort_by_family'    => 'status_anak',
+                'sort_order_family' => ($sortByFamily == 'status_anak' && $sortOrderFamily == 'asc') ? 'desc' : 'asc'
+            ]) }}#keluarga">
+                Status Anak {!! $sortByFamily == 'status_anak' ? '⇅' : '⇅' !!}
+            </a>
+        </th>
+
+        <th class="px-4 py-2">
+            <a href="{{ route('employees.show', [
+                'employee'          => $employee->id,
+                'sort_by_family'    => 'urutan_anak',
+                'sort_order_family' => ($sortByFamily == 'urutan_anak' && $sortOrderFamily == 'asc') ? 'desc' : 'asc'
+            ]) }}#keluarga">
+                Urutan Anak {!! $sortByFamily == 'urutan_anak' ? '⇅' : '⇅' !!}
+            </a>
+        </th>
+
+        <th class="px-4 py-2">
+            <a href="{{ route('employees.show', [
+                'employee'          => $employee->id,
+                'sort_by_family'    => 'keterangan',
+                'sort_order_family' => ($sortByFamily == 'keterangan' && $sortOrderFamily == 'asc') ? 'desc' : 'asc'
+            ]) }}#keluarga">
+                Keterangan {!! $sortByFamily == 'keterangan' ? '⇅' : '⇅' !!}
+            </a>
+        </th>
+    </tr>
+</thead>
       <tbody>
         @foreach($families as $index => $family)
-        <tr class="border-b hover:bg-gray-50">
-          <td class="px-4 py-2">{{ $index + 1 }}</td>
+        <tr class="border-b">
+          <td class="px-4 py-2">{{ $index+1 }}</td>
           <td class="px-4 py-2">{{ $family->nama_lengkap }}</td>
           <td class="px-4 py-2">{{ $family->jenis_kelamin }}</td>
           <td class="px-4 py-2">{{ $family->tempat_lahir }}, {{ $family->tanggal_lahir }}</td>
@@ -1896,34 +1958,19 @@
           <td class="px-4 py-2">{{ $family->status_anak }}</td>
           <td class="px-4 py-2">Anak ke-{{ $family->urutan_anak }}</td>
           <td class="px-4 py-2">{{ $family->keterangan }}</td>
+          <td>
+            <div class="dropdown-action">
+              <!--<button class="horizontal-dots" onclick="toggleActions()">&#x22EF;</button>-->
+              <div class="dropdown-action-content" id="dropdownActions">
+                <a href="{{ route('families.edit', ['employee' => $employee->id, 'family' => $family->id]) }}" class="dropdown-action-edit">Edit</a>
 
-          <td class="px-4 py-2">
-            <div class="relative inline-block">
-              <!-- PENTING: type="button" supaya tidak submit form -->
-             <!-- <button
-                type="button"
-                class="action-btn px-2 py-1 rounded hover:bg-gray-200"
-                data-family-id="{{ $family->id }}"
-                aria-expanded="false"
-                aria-controls="actions-{{ $family->id }}">⋮</button>-->
-
-              <div id="actions-{{ $family->id }}" class="actions-menu hidden absolute right-0 mt-2 w-40 bg-white border rounded shadow-md z-50">
-                <a href="{{ route('families.edit', ['employee' => $employee->id, 'family' => $family->id]) }}"
-                  class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Edit</a>
-
-                <form action="{{ route('families.destroy', ['employee' => $employee->id, 'family' => $family->id]) }}" method="POST" onsubmit="return confirm('Hapus data keluarga?')">
-                  @csrf
-                  @method('DELETE')
-                  <button type="submit" class="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100">Hapus</button>
-                </form>
+                <br>
               </div>
-            </div>
           </td>
         </tr>
         @endforeach
       </tbody>
     </table>
-
   </div>
 
   <div class="tab-content" id="cluster" style="display: none;">
