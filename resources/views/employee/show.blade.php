@@ -1169,7 +1169,7 @@
     margin-bottom: 20px;
     gap: 10px;
     height: 120px;
-    weight: 250px;
+
     margin-left: 10px;
 
   }
@@ -1870,7 +1870,7 @@
 
     <hr class="divider">
 
-    <table id="myTable" class="table-auto w-full border-collapse border border-gray-300">
+    <table id="myTable" class="table-auto w-full border-collapse border border-gray-300 text-center">>
       <thead class="bg-gray-100 text-gray-600">
         <tr>
           <th class="px-4 py-2">No</th>
@@ -1881,6 +1881,7 @@
           <th class="px-4 py-2 cursor-pointer" onclick="sortTable(5, this)">Status Anak <span class="sort-icon">⇅</span></th>
           <th class="px-4 py-2 cursor-pointer" onclick="sortTable(6, this)">Urutan Anak <span class="sort-icon">⇅</span></th>
           <th class="px-4 py-2 cursor-pointer" onclick="sortTable(7, this)">Keterangan <span class="sort-icon">⇅</span></th>
+          <th class="px-4 py-2 cursor-pointer" onclick="sortTable(8, this)">Action <span class="sort-icon">⇅</span></th>
         </tr>
       </thead>
       <tbody>
@@ -1892,8 +1893,17 @@
           <td class="px-4 py-2">{{ $family->tempat_lahir }}, {{ $family->tanggal_lahir }}</td>
           <td class="px-4 py-2">{{ $family->pendidikan }}</td>
           <td class="px-4 py-2">{{ $family->status_anak }}</td>
-          <td class="px-4 py-2">{{ $family->urutan_anak }}</td>
+          <td class="px-4 py-2">Anak ke-{{ $family->urutan_anak }}</td>
           <td class="px-4 py-2">{{ $family->keterangan }}</td>
+          <td>
+            <div class="dropdown-action">
+              <button class="horizontal-dots" onclick="toggleActions()">&#x22EF;</button>
+              <div class="dropdown-action-content" id="dropdownActions">
+                <a href="{{ route('families.edit', ['employee' => $employee->id, 'family' => $family->id]) }}" class="dropdown-action-edit">Edit</a>
+
+                <br>
+              </div>
+          </td>
         </tr>
         @endforeach
       </tbody>
@@ -1914,53 +1924,53 @@
       </div>
     </div>
     <table id="customers1">
-    <thead class="bg-gray-100 text-gray-600">
-  <tr>
-    <th class="px-4 py-2">No</th>
+      <thead class="bg-gray-100 text-gray-600">
+        <tr>
+          <th class="px-4 py-2">No</th>
 
-    <th class="px-4 py-2">
-      <a href="{{ route('employees.show', [
+          <th class="px-4 py-2">
+            <a href="{{ route('employees.show', [
           'employee'   => $employee->id,
           'sort_by'    => 'periodeCluster',
           'sort_order' => ($sortBy == 'periodeCluster' && $sortOrder == 'asc') ? 'desc' : 'asc'
       ]) }}#cluster">
-        Period {!! $sortBy == 'periodeCluster' ? '⇅' : '⇅' !!}
-      </a>
-    </th>
+              Period {!! $sortBy == 'periodeCluster' ? '⇅' : '⇅' !!}
+            </a>
+          </th>
 
-    <th class="px-4 py-2">
-      <a href="{{ route('employees.show', [
+          <th class="px-4 py-2">
+            <a href="{{ route('employees.show', [
           'employee'   => $employee->id,
           'sort_by'    => 'tahunCluster',
           'sort_order' => ($sortBy == 'tahunCluster' && $sortOrder == 'asc') ? 'desc' : 'asc'
       ]) }}#cluster">
-        Year {!! $sortBy == 'tahunCluster' ? '⇅' : '⇅' !!}
-      </a>
-    </th>
+              Year {!! $sortBy == 'tahunCluster' ? '⇅' : '⇅' !!}
+            </a>
+          </th>
 
-    <th class="px-4 py-2">
-      <a href="{{ route('employees.show', [
+          <th class="px-4 py-2">
+            <a href="{{ route('employees.show', [
           'employee'   => $employee->id,
           'sort_by'    => 'talentCluster',
           'sort_order' => ($sortBy == 'talentCluster' && $sortOrder == 'asc') ? 'desc' : 'asc'
       ]) }}#cluster">
-        Cluster {!! $sortBy == 'talentCluster' ? '⇅' : '⇅' !!}
-      </a>
-    </th>
-  </tr>
-</thead>
-<tbody>
-  @foreach($talentClusters as $i => $tc)
-    <tr>
-      <td class="px-4 py-2">{{ $i+1 }}</td>
-      <td class="px-4 py-2">{{ $tc->periodeCluster }}</td>
-      <td class="px-4 py-2">{{ $tc->tahunCluster }}</td>
-      <td class="px-4 py-2">{{ $tc->talentCluster }}</td>
-    </tr>
-  @endforeach
-</tbody>
+              Cluster {!! $sortBy == 'talentCluster' ? '⇅' : '⇅' !!}
+            </a>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        @foreach($talentClusters as $i => $tc)
+        <tr>
+          <td class="px-4 py-2">{{ $i+1 }}</td>
+          <td class="px-4 py-2">{{ $tc->periodeCluster }}</td>
+          <td class="px-4 py-2">{{ $tc->tahunCluster }}</td>
+          <td class="px-4 py-2">{{ $tc->talentCluster }}</td>
+        </tr>
+        @endforeach
+      </tbody>
 
-  </table>
+    </table>
 
   </div>
 

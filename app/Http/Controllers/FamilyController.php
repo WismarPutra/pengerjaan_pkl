@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Employee;          // <- pastikan huruf besar kecil benar
 use App\Models\EmployeeFamily;    // <- model keluarga
+use App\Models\CareerActivity;
 
 class FamilyController extends Controller
 {
@@ -50,8 +51,25 @@ class FamilyController extends Controller
     {
         $employee = Employee::findOrFail($employeeId);
         $family = EmployeeFamily::findOrFail($familyId);
-        return view('employee.edit', compact('employee', 'family'));
+
+        // Contoh: ambil data dari tabel referensi atau hardcode dulu
+        $jenisKelamin = ['Laki-Laki', 'Perempuan'];
+        $pendidikan = ['SD', 'SMP', 'SMA', 'S1', 'S2', 'S3'];
+        $statusAnak = ['Kandung', 'Tiri', 'Angkat'];
+        $urutanAnak = ['Anak ke-1', 'Anak ke-2', 'Anak ke-3'];
+        $keterangan = ['Ditanggung', 'Tidak Ditanggung'];
+
+        return view('employee.families.edit', compact(
+            'employee',
+            'family',
+            'jenisKelamin',
+            'pendidikan',
+            'statusAnak',
+            'urutanAnak',
+            'keterangan'
+        ));
     }
+
 
     // Update data keluarga
     public function update(Request $request, $employeeId, $familyId)
@@ -70,10 +88,10 @@ class FamilyController extends Controller
         $family = EmployeeFamily::where('employee_id', $employeeId)->findOrFail($familyId);
         $family->update($data);
 
-        return redirect()
-            ->route('employee.index', $employeeId)
-            ->with('success', 'Data keluarga berhasil diperbarui.');
+        return redirect()->route('employees.show', $employeeId)->with('success', 'Data keluarga berhasil diperbarui');
     }
+
+
 
     // Hapus data
     public function destroy($employeeId, $familyId)
