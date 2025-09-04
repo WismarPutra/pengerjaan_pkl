@@ -48,8 +48,26 @@ class RecruitmentController extends Controller
             'direction' => $direction
         ]); // biar pagination bawa query sort
 
+     // --- Tambahan untuk box statistik ---
+    $jumlahKebutuhan = Recruitment::sum('jumlah_lowongan');
+
+    $direktoratAktif = Recruitment::distinct('regionalDirektorat')
+                                  ->count('regionalDirektorat');
+
+    $targetBulanIni = Recruitment::whereMonth('target_tanggal', now()->month)
+                                 ->whereYear('target_tanggal', now()->year)
+                                 ->count();
+    // -----------------------------------
+
     // Kirim ke view
-    return view('recruitment.index', compact('recruitments', 'sort', 'direction'));
+    return view('recruitment.index', compact(
+        'recruitments',
+        'sort',
+        'direction',
+        'jumlahKebutuhan',
+        'direktoratAktif',
+        'targetBulanIni'
+    ));
 }
 
 

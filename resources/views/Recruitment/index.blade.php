@@ -762,7 +762,7 @@ ul li a:hover:not(.active) {
     <div class="stat-box">
       <div class="icon-circle blue"><i class="fas fa-briefcase"></i></div>
       <div class="stat-info">
-        <div class="stat-value">0 Orang</div>
+        <div class="stat-value">{{$jumlahKebutuhan}} Orang</div>
         <div class="stat-label">Jumlah Kebutuhan</div>
       </div>
     </div>
@@ -778,7 +778,7 @@ ul li a:hover:not(.active) {
     <div class="stat-box">
       <div class="icon-circle purple"><i class="fas fa-user-tie"></i></div>
       <div class="stat-info">
-        <div class="stat-value">2 Orang</div>
+        <div class="stat-value">{{$targetBulanIni}} Orang</div>
         <div class="stat-label">Target Rekrutmen Bulan Ini</div>
       </div>
     </div>
@@ -807,7 +807,7 @@ ul li a:hover:not(.active) {
     }
 @endphp
 
-<div class="tab-content" id="kebutuhan" style="display: none;">
+<div class="tab-content" id="kebutuhan" style="display: block;">
     <table id="customers" style="margin-top: 10px;">
         <thead>
             <tr>
