@@ -1321,20 +1321,6 @@ function nextStep(currentStep) {
 </style>
 
 
-
-@endsection
-
-<script>
-function nextStep(step) {
-    document.querySelectorAll('.step').forEach(s => s.classList.add('hidden'));
-    document.querySelector('.step-' + step).classList.remove('hidden');
-}
-function prevStep(step) {
-    document.querySelectorAll('.step').forEach(s => s.classList.add('hidden'));
-    document.querySelector('.step-' + step).classList.remove('hidden');
-}
-</script>
-
 <script>
   function nextStep(currentStep) {
       document.getElementById("step-content-" + currentStep).classList.add("d-none");
@@ -1354,6 +1340,7 @@ function prevStep(step) {
   }
 
   function showPreview() {
+      // ambil value input biasa
       document.getElementById("previewNamaPosisi").innerText =
           document.getElementById("namaPosisi").value;
 
@@ -1368,7 +1355,7 @@ function prevStep(step) {
 
       document.getElementById("previewStatusKepegawaian").innerText =
           document.getElementById("status_kepegawaian").value;
-      
+
       document.getElementById("previewLokasiPekerjaan").innerText =
           document.getElementById("lokasi_pekerjaan").value;
 
@@ -1377,30 +1364,39 @@ function prevStep(step) {
 
       document.getElementById("previewJumlahLowongan").innerText =
           document.getElementById("jumlah_lowongan").value;
-      
+
       document.getElementById("previewTargetTanggalHiring").innerText =
           document.getElementById("target_tanggal").value;
 
       document.getElementById("previewHiringManager").innerText =
           document.getElementById("hiring_manager").value;
 
-      document.getElementById("previewNdeFile").innerText =
-          document.getElementById("nde").value;
+      // khusus NDE file → nama file (bukan value kosong)
+      let ndeFile = document.getElementById("ndeFile");
+      if (ndeFile && ndeFile.files.length > 0) {
+          document.getElementById("previewNdeFile").innerText = ndeFile.files[0].name;
+      }
+
+      // ambil teks option yang dipilih (biar lebih user-friendly)
+      function getSelectedText(id) {
+          let el = document.getElementById(id);
+          return el.options[el.selectedIndex]?.text || "";
+      }
 
       document.getElementById("previewPendidikanTerakhir").innerText =
-          document.getElementById("pendidikan_terakhir").value;
+          getSelectedText("pendidikan_terakhir");
 
       document.getElementById("previewJurusanRelevan").innerText =
-          document.getElementById("jurusan_relevan").value;
+          getSelectedText("jurusan_relevan");
 
       document.getElementById("previewPengalamanMinimum").innerText =
-          document.getElementById("pengalaman_minimum").value;
+          getSelectedText("pengalaman_minimum");
 
       document.getElementById("previewDomisiliPreferensi").innerText =
-          document.getElementById("domisili_preferensi").value;
+          getSelectedText("domisili_preferensi");
 
       document.getElementById("previewJenisKelamin").innerText =
-          document.getElementById("jenis_kelamin").value;
+          getSelectedText("jenis_kelamin");
 
       document.getElementById("previewBatasanUsia").innerText =
           document.getElementById("batasan_usia").value;
@@ -1411,18 +1407,13 @@ function prevStep(step) {
   document.addEventListener("change", function (e) {
       if (e.target && e.target.type === "file") {
           let wrapper = e.target.closest(".file-input"); 
-          /*
-          let preview = wrapper.querySelector(".file-preview"); */
           let textInput = wrapper.querySelector(".file-text"); 
 
           if (e.target.files.length > 0) {
               let fileName = e.target.files[0].name;
-              if (textInput) textInput.value = fileName; // isi ke input text
-              /*
-              if (preview) preview.textContent = fileName; // isi ke <small> */
+              if (textInput) textInput.value = fileName; 
           } else {
               if (textInput) textInput.value = "";
-              if (preview) preview.textContent = "Belum ada file";
           }
       }
   });
@@ -1442,6 +1433,7 @@ function prevStep(step) {
   });
 </script>
 
+@endsection
 <!--
 <script>
     let currentStep = 1;
