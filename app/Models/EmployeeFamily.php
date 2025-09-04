@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class EmployeeFamily extends Model
 {
     use HasFactory;
+    
+    protected $table = 'employee_families';
 
     protected $fillable = [
         'employee_id',
@@ -25,5 +27,5 @@ class EmployeeFamily extends Model
     {
         return $this->belongsTo(Employee::class);
     }
-    
 }
+

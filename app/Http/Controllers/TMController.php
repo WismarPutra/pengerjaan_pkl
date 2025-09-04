@@ -21,7 +21,7 @@ class TMController extends Controller
         $totalKaryawan = Employee::count(); // ambil jumlah total
 
 
-        return view('employee.index', compact('employees', 'totalKaryawan',  'sortBy', 'sortOrder'));
+        return view('employee.index', compact('employees', 'totalKaryawan', 'sortBy', 'sortOrder'));
     }
 
 
