@@ -1872,20 +1872,83 @@
 
     <table id="myTable" class="table-auto w-full border-collapse border border-gray-300 text-center">>
       <thead class="bg-gray-100 text-gray-600">
-        <tr>
-          <th class="px-4 py-2">No</th>
-          <th class="px-4 py-2 cursor-pointer" onclick="sortTable(1, this)">Nama Lengkap <span class="sort-icon">⇅</span></th>
-          <th class="px-4 py-2 cursor-pointer" onclick="sortTable(2, this)">Jenis Kelamin <span class="sort-icon">⇅</span></th>
-          <th class="px-4 py-2 cursor-pointer" onclick="sortTable(3, this)">Tempat, Tanggal Lahir <span class="sort-icon">⇅</span></th>
-          <th class="px-4 py-2 cursor-pointer" onclick="sortTable(4, this)">Pendidikan Saat Ini <span class="sort-icon">⇅</span></th>
-          <th class="px-4 py-2 cursor-pointer" onclick="sortTable(5, this)">Status Anak <span class="sort-icon">⇅</span></th>
-          <th class="px-4 py-2 cursor-pointer" onclick="sortTable(6, this)">Urutan Anak <span class="sort-icon">⇅</span></th>
-          <th class="px-4 py-2 cursor-pointer" onclick="sortTable(7, this)">Keterangan <span class="sort-icon">⇅</span></th>
-          <th class="px-4 py-2 cursor-pointer" onclick="sortTable(8, this)">Action <span class="sort-icon">⇅</span></th>
-        </tr>
-      </thead>
+    <tr>
+        <th class="px-4 py-2">No</th>
+
+        <th class="px-4 py-2">
+            <a href="{{ route('employees.show', [
+                'employee'          => $employee->id,
+                'sort_by_family'    => 'nama_lengkap',
+                'sort_order_family' => ($sortByFamily == 'nama_lengkap' && $sortOrderFamily == 'asc') ? 'desc' : 'asc'
+            ]) }}#keluarga">
+                Nama Lengkap {!! $sortByFamily == 'nama_lengkap' ? '⇅' : '⇅' !!}
+            </a>
+        </th>
+
+        <th class="px-4 py-2">
+            <a href="{{ route('employees.show', [
+                'employee'          => $employee->id,
+                'sort_by_family'    => 'jenis_kelamin',
+                'sort_order_family' => ($sortByFamily == 'jenis_kelamin' && $sortOrderFamily == 'asc') ? 'desc' : 'asc'
+            ]) }}#keluarga">
+                Jenis Kelamin {!! $sortByFamily == 'jenis_kelamin' ? '⇅' : '⇅' !!}
+            </a>
+        </th>
+
+        <th class="px-4 py-2">
+    <a href="{{ route('employees.show', [
+        'employee'          => $employee->id,
+        'sort_by_family'    => 'tanggal_lahir',
+        'sort_order_family' => ($sortByFamily == 'tanggal_lahir' && $sortOrderFamily == 'asc') ? 'desc' : 'asc'
+    ]) }}#keluarga">
+        Tempat, Tanggal Lahir {!! $sortByFamily == 'tanggal_lahir' ? '⇅' : '⇅' !!}
+    </a>
+</th>
+
+
+        <th class="px-4 py-2">
+            <a href="{{ route('employees.show', [
+                'employee'          => $employee->id,
+                'sort_by_family'    => 'pendidikan',
+                'sort_order_family' => ($sortByFamily == 'pendidikan' && $sortOrderFamily == 'asc') ? 'desc' : 'asc'
+            ]) }}#keluarga">
+                Pendidikan Saat Ini {!! $sortByFamily == 'pendidikan' ? '⇅' : '⇅' !!}
+            </a>
+        </th>
+
+        <th class="px-4 py-2">
+            <a href="{{ route('employees.show', [
+                'employee'          => $employee->id,
+                'sort_by_family'    => 'status_anak',
+                'sort_order_family' => ($sortByFamily == 'status_anak' && $sortOrderFamily == 'asc') ? 'desc' : 'asc'
+            ]) }}#keluarga">
+                Status Anak {!! $sortByFamily == 'status_anak' ? '⇅' : '⇅' !!}
+            </a>
+        </th>
+
+        <th class="px-4 py-2">
+            <a href="{{ route('employees.show', [
+                'employee'          => $employee->id,
+                'sort_by_family'    => 'urutan_anak',
+                'sort_order_family' => ($sortByFamily == 'urutan_anak' && $sortOrderFamily == 'asc') ? 'desc' : 'asc'
+            ]) }}#keluarga">
+                Urutan Anak {!! $sortByFamily == 'urutan_anak' ? '⇅' : '⇅' !!}
+            </a>
+        </th>
+
+        <th class="px-4 py-2">
+            <a href="{{ route('employees.show', [
+                'employee'          => $employee->id,
+                'sort_by_family'    => 'keterangan',
+                'sort_order_family' => ($sortByFamily == 'keterangan' && $sortOrderFamily == 'asc') ? 'desc' : 'asc'
+            ]) }}#keluarga">
+                Keterangan {!! $sortByFamily == 'keterangan' ? '⇅' : '⇅' !!}
+            </a>
+        </th>
+    </tr>
+</thead>
       <tbody>
-        @foreach($employee->families as $index => $family)
+        @foreach($families as $index => $family)
         <tr class="border-b">
           <td class="px-4 py-2">{{ $index+1 }}</td>
           <td class="px-4 py-2">{{ $family->nama_lengkap }}</td>
@@ -1927,50 +1990,50 @@
       <thead class="bg-gray-100 text-gray-600">
         <tr>
           <th class="px-4 py-2">No</th>
-
-          <th class="px-4 py-2">
-            <a href="{{ route('employees.show', [
-          'employee'   => $employee->id,
-          'sort_by'    => 'periodeCluster',
-          'sort_order' => ($sortBy == 'periodeCluster' && $sortOrder == 'asc') ? 'desc' : 'asc'
+    <th class="px-4 py-2">
+      <a href="{{ route('employees.show', [
+          'employee'          => $employee->id,
+          'sort_by_cluster'   => 'periodeCluster',
+          'sort_order_cluster'=> ($sortByCluster == 'periodeCluster' && $sortOrderCluster == 'asc') ? 'desc' : 'asc'
       ]) }}#cluster">
-              Period {!! $sortBy == 'periodeCluster' ? '⇅' : '⇅' !!}
-            </a>
-          </th>
+        Period {!! $sortByCluster == 'periodeCluster' ? '⇅' : '⇅' !!}
+      </a>
+    </th>
 
-          <th class="px-4 py-2">
-            <a href="{{ route('employees.show', [
-          'employee'   => $employee->id,
-          'sort_by'    => 'tahunCluster',
-          'sort_order' => ($sortBy == 'tahunCluster' && $sortOrder == 'asc') ? 'desc' : 'asc'
+    <th class="px-4 py-2">
+      <a href="{{ route('employees.show', [
+          'employee'          => $employee->id,
+          'sort_by_cluster'   => 'tahunCluster',
+          'sort_order_cluster'=> ($sortByCluster == 'tahunCluster' && $sortOrderCluster == 'asc') ? 'desc' : 'asc'
       ]) }}#cluster">
-              Year {!! $sortBy == 'tahunCluster' ? '⇅' : '⇅' !!}
-            </a>
-          </th>
+        Year {!! $sortByCluster == 'tahunCluster' ? '⇅' : '⇅' !!}
+      </a>
+    </th>
 
-          <th class="px-4 py-2">
-            <a href="{{ route('employees.show', [
-          'employee'   => $employee->id,
-          'sort_by'    => 'talentCluster',
-          'sort_order' => ($sortBy == 'talentCluster' && $sortOrder == 'asc') ? 'desc' : 'asc'
+    <th class="px-4 py-2">
+      <a href="{{ route('employees.show', [
+          'employee'          => $employee->id,
+          'sort_by_cluster'   => 'talentCluster',
+          'sort_order_cluster'=> ($sortByCluster == 'talentCluster' && $sortOrderCluster == 'asc') ? 'desc' : 'asc'
       ]) }}#cluster">
-              Cluster {!! $sortBy == 'talentCluster' ? '⇅' : '⇅' !!}
-            </a>
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        @foreach($talentClusters as $i => $tc)
-        <tr>
-          <td class="px-4 py-2">{{ $i+1 }}</td>
-          <td class="px-4 py-2">{{ $tc->periodeCluster }}</td>
-          <td class="px-4 py-2">{{ $tc->tahunCluster }}</td>
-          <td class="px-4 py-2">{{ $tc->talentCluster }}</td>
-        </tr>
-        @endforeach
-      </tbody>
+        Cluster {!! $sortByCluster == 'talentCluster' ? '⇅' : '⇅' !!}
+      </a>
+    </th>
+  </tr>
+</thead>
 
-    </table>
+<tbody>
+  @foreach($talentClusters as $i => $tc)
+    <tr>
+      <td class="px-4 py-2">{{ $i+1 }}</td>
+      <td class="px-4 py-2">{{ $tc->periodeCluster }}</td>
+      <td class="px-4 py-2">{{ $tc->tahunCluster }}</td>
+      <td class="px-4 py-2">{{ $tc->talentCluster }}</td>
+    </tr>
+  @endforeach
+</tbody>
+
+  </table>
 
   </div>
 

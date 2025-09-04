@@ -44,20 +44,38 @@ class TMController extends Controller
         ['filename' => '2024-Dec.pdf', 'date' => '28 Desember 2024'],
     ];
 
-    // 🔹 ambil parameter sorting dari URL
-    $sortBy = $request->get('sort_by', 'tahunCluster');   // default sort kolom tahunCluster
-    $sortOrder = $request->get('sort_order', 'desc');     // default desc
-    
-    
+    // ---- Sorting Talent Cluster ----
+    $sortByCluster    = $request->query('sort_by_cluster', 'tahunCluster');
+    $sortOrderCluster = $request->query('sort_order_cluster', 'desc');
 
-    // whitelist biar aman
-    $allowed = ['periodeCluster', 'tahunCluster', 'talentCluster'];
-    if (!in_array($sortBy, $allowed)) {
-        $sortBy = 'tahunCluster';
+    $allowedCluster = ['periodeCluster', 'tahunCluster', 'talentCluster'];
+    if (!in_array($sortByCluster, $allowedCluster)) {
+        $sortByCluster = 'tahunCluster';
     }
-    $sortOrder = $sortOrder === 'asc' ? 'asc' : 'desc';
+    $sortOrderCluster = $sortOrderCluster === 'asc' ? 'asc' : 'desc';
 
-    // CareerActivity (lama)
+    $talentClusters = TalentCluster::where('employee_id', $employee->id)
+        ->orderBy($sortByCluster, $sortOrderCluster)
+        ->get();
+
+    // ---- Sorting Family ----
+    $sortByFamily    = $request->query('sort_by_family', 'nama_lengkap');
+    $sortOrderFamily = $request->query('sort_order_family', 'asc');
+
+    $allowedFamilies = [
+        'nama_lengkap', 'jenis_kelamin', 'tempat_lahir', 'tanggal_lahir',
+        'pendidikan', 'status_anak', 'urutan_anak', 'keterangan'
+    ];
+    if (!in_array($sortByFamily, $allowedFamilies)) {
+        $sortByFamily = 'nama_lengkap';
+    }
+    $sortOrderFamily = $sortOrderFamily === 'asc' ? 'asc' : 'desc';
+
+    $families = $employee->families()
+        ->orderBy($sortByFamily, $sortOrderFamily)
+        ->get();
+
+    // ---- Cluster (Career Activity) ----
     $clusters = CareerActivity::where('employee_id', $employee->id)
         ->selectRaw('
             MONTHNAME(tanggalKDMP) as periode,
@@ -68,13 +86,19 @@ class TMController extends Controller
         ->orderByRaw('MONTH(tanggalKDMP) desc')
         ->get();
 
-    // TalentCluster (baru) + sorting dinamis
-    $talentClusters = TalentCluster::where('employee_id', $employee->id)
-        ->orderBy($sortBy, $sortOrder)
-        ->get();
-
-    return view('employee.show', compact('employee', 'payslips', 'clusters', 'talentClusters', 'sortBy', 'sortOrder'));
+    return view('employee.show', compact(
+        'employee',
+        'payslips',
+        'clusters',
+        'talentClusters',
+        'families',
+        'sortByCluster',
+        'sortOrderCluster',
+        'sortByFamily',
+        'sortOrderFamily'
+    ));
 }
+
 
 
     public function edit($id)
