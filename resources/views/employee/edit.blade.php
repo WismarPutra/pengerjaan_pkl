@@ -1970,17 +1970,19 @@
         </div>
       </div>
       <table id="customers" style="margin-top: 20px;">
-        <tr>
-          <th>No</th>
-          <th>Nama Lengkap</th>
-          <th>Jenis Kelamin</th>
-          <th>Tempat, Tanggal Lahir</th>
-          <th>Pendidikan Saat Ini</th>
-          <th>Status Anak</th>
-          <th>Urutan Anak</th>
-          <th>Keterangan</th>
-          <th>Actions</th>
-        </tr>
+        <thead class="bg-gray-100 text-gray-600">
+          <tr>
+            <th class="px-4 py-2">No</th>
+            <th class="px-4 py-2">Nama Lengkap ⇅</th>
+            <th class="px-4 py-2">Jenis Kelamin ⇅</th>
+            <th class="px-4 py-2">Tempat, Tanggal Lahir ⇅</th>
+            <th class="px-4 py-2">Pendidikan ⇅</th>
+            <th class="px-4 py-2">Status Anak ⇅</th>
+            <th class="px-4 py-2">Urutan Anak ⇅</th>
+            <th class="px-4 py-2">Keterangan ⇅</th>
+            <!--<th class="px-4 py-2">Aksi</th>-->
+          </tr>
+        </thead>
       </table>
 
       <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; flex-wrap: wrap;">
