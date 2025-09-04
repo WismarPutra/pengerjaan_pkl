@@ -771,73 +771,73 @@ ul li a:hover:not(.active) {
     <th>No</th>
 
 <th>
+  Nik
   <a href="{{ route('employees.index', [
           'sort_by' => 'nik',
           'sort_order' => ($sortBy == 'nik' && $sortOrder == 'asc') ? 'desc' : 'asc'
       ]) }}">
-      Nik
       {!! $sortBy == 'nik' ? ($sortOrder == 'asc' ? '⇅' : '⇅') : '⇅' !!}
   </a>
 </th>
 
 <th>
+  Nama
   <a href="{{ route('employees.index', [
           'sort_by' => 'name',
           'sort_order' => ($sortBy == 'name' && $sortOrder == 'asc') ? 'desc' : 'asc'
       ]) }}">
-      Nama
       {!! $sortBy == 'name' ? ($sortOrder == 'asc' ? '⇅' : '⇅') : '⇅' !!}
   </a>
 </th>
 
 
 <th>
+  Tanggal Lahir
   <a href="{{ route('employees.index', [
           'sort_by' => 'tanggal_lahir',
           'sort_order' => ($sortBy == 'tanggal_lahir' && $sortOrder == 'asc') ? 'desc' : 'asc'
       ]) }}">
-      Tanggal Lahir
       {!! $sortBy == 'tanggal_lahir' ? ($sortOrder == 'asc' ? '⇅' : '⇅') : '⇅' !!}
   </a>
 </th>
 
 <th>
+  Nama Posisi
   <a href="{{ route('employees.index', [
           'sort_by' => 'posisi',
           'sort_order' => ($sortBy == 'posisi' && $sortOrder == 'asc') ? 'desc' : 'asc'
       ]) }}">
-      Nama Posisi
       {!! $sortBy == 'posisi' ? ($sortOrder == 'asc' ? '⇅' : '⇅') : '⇅' !!}
   </a>
 </th>
 
 
 <th>
+  Email
   <a href="{{ route('employees.index', [
           'sort_by' => 'email',
           'sort_order' => ($sortBy == 'email' && $sortOrder == 'asc') ? 'desc' : 'asc'
       ]) }}">
-      Email
       {!! $sortBy == 'email' ? ($sortOrder == 'asc' ? '⇅' : '⇅') : '⇅' !!}
   </a>
 </th>
 
 
 <th>
+  Regional/Direktorat
   <a href="{{ route('employees.index', [
           'sort_by' => 'direktorat',
           'sort_order' => ($sortBy == 'direktorat' && $sortOrder == 'asc') ? 'desc' : 'asc'
       ]) }}">
-      Regional/Direktorat
       {!! $sortBy == 'direktorat' ? ($sortOrder == 'asc' ? '⇅' : '⇅') : '⇅' !!}
   </a>
 </th>
 <th>
+  Status Pegawai
   <a href="{{ route('employees.index', [
           'sort_by' => 'status_karyawan',
           'sort_order' => ($sortBy == 'status_karyawan' && $sortOrder == 'asc') ? 'desc' : 'asc'
       ]) }}">
-      Status Pegawai
       {!! $sortBy == 'status_karyawan' ? ($sortOrder == 'asc' ? '⇅' : '⇅') : '⇅' !!}
   </a>
 </th>
