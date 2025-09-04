@@ -9,7 +9,10 @@ class EmployeeFamily extends Model
 {
     use HasFactory;
 
-    protected $table = 'employee_families';
+    protected $table = 'employee_families'; // nama tabel
+    protected $primaryKey = 'id';    // ganti sesuai nama kolom PK di database
+    public $incrementing = true;            // kalau auto increment
+    protected $keyType = 'int';             // tipe data PK
 
     protected $fillable = [
         'employee_id',

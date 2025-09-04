@@ -1969,20 +1969,128 @@
           <button class="arrowDown-btn1"><i class="fas fa-chevron-down"></i></button>
         </div>
       </div>
-      <table id="customers" style="margin-top: 20px;">
+      <table id="myTable" class="table-auto w-full border-collapse border border-gray-300 text-center">>
         <thead class="bg-gray-100 text-gray-600">
           <tr>
             <th class="px-4 py-2">No</th>
-            <th class="px-4 py-2">Nama Lengkap ⇅</th>
-            <th class="px-4 py-2">Jenis Kelamin ⇅</th>
-            <th class="px-4 py-2">Tempat, Tanggal Lahir ⇅</th>
-            <th class="px-4 py-2">Pendidikan ⇅</th>
-            <th class="px-4 py-2">Status Anak ⇅</th>
-            <th class="px-4 py-2">Urutan Anak ⇅</th>
-            <th class="px-4 py-2">Keterangan ⇅</th>
-            <!--<th class="px-4 py-2">Aksi</th>-->
+
+            <th class="px-4 py-2">
+              <a href="{{ route('employees.edit', [
+                'employee'          => $employee->id,
+                'sort_by_family'    => 'nama_lengkap',
+                'sort_order_family' => ($sortByFamily == 'nama_lengkap' && $sortOrderFamily == 'asc') ? 'desc' : 'asc'
+            ]) }}#keluarga">
+                Nama Lengkap {!! $sortByFamily == 'nama_lengkap' ? '⇅' : '⇅' !!}
+              </a>
+            </th>
+
+            <th class="px-4 py-2">
+              <a href="{{ route('employees.edit', [
+                'employee'          => $employee->id,
+                'sort_by_family'    => 'jenis_kelamin',
+                'sort_order_family' => ($sortByFamily == 'jenis_kelamin' && $sortOrderFamily == 'asc') ? 'desc' : 'asc'
+            ]) }}#keluarga">
+                Jenis Kelamin {!! $sortByFamily == 'jenis_kelamin' ? '⇅' : '⇅' !!}
+              </a>
+            </th>
+
+            <th class="px-4 py-2">
+              <a href="{{ route('employees.edit', [
+        'employee'          => $employee->id,
+        'sort_by_family'    => 'tanggal_lahir',
+        'sort_order_family' => ($sortByFamily == 'tanggal_lahir' && $sortOrderFamily == 'asc') ? 'desc' : 'asc'
+    ]) }}#keluarga">
+                Tempat, Tanggal Lahir {!! $sortByFamily == 'tanggal_lahir' ? '⇅' : '⇅' !!}
+              </a>
+            </th>
+
+
+            <th class="px-4 py-2">
+              <a href="{{ route('employees.edit', [
+                'employee'          => $employee->id,
+                'sort_by_family'    => 'pendidikan',
+                'sort_order_family' => ($sortByFamily == 'pendidikan' && $sortOrderFamily == 'asc') ? 'desc' : 'asc'
+            ]) }}#keluarga">
+                Pendidikan Saat Ini {!! $sortByFamily == 'pendidikan' ? '⇅' : '⇅' !!}
+              </a>
+            </th>
+
+            <th class="px-4 py-2">
+              <a href="{{ route('employees.edit', [
+                'employee'          => $employee->id,
+                'sort_by_family'    => 'status_anak',
+                'sort_order_family' => ($sortByFamily == 'status_anak' && $sortOrderFamily == 'asc') ? 'desc' : 'asc'
+            ]) }}#keluarga">
+                Status Anak {!! $sortByFamily == 'status_anak' ? '⇅' : '⇅' !!}
+              </a>
+            </th>
+
+            <th class="px-4 py-2">
+              <a href="{{ route('employees.edit', [
+                'employee'          => $employee->id,
+                'sort_by_family'    => 'urutan_anak',
+                'sort_order_family' => ($sortByFamily == 'urutan_anak' && $sortOrderFamily == 'asc') ? 'desc' : 'asc'
+            ]) }}#keluarga">
+                Urutan Anak {!! $sortByFamily == 'urutan_anak' ? '⇅' : '⇅' !!}
+              </a>
+            </th>
+
+            <th class="px-4 py-2">
+              <a href="{{ route('employees.edit', [
+                'employee'          => $employee->id,
+                'sort_by_family'    => 'keterangan',
+                'sort_order_family' => ($sortByFamily == 'keterangan' && $sortOrderFamily == 'asc') ? 'desc' : 'asc'
+            ]) }}#keluarga">
+                Keterangan {!! $sortByFamily == 'keterangan' ? '⇅' : '⇅' !!}
+              </a>
+            </th>
+            <th class="px-4 py-2 cursor-pointer" onclick="sortTable(8, this)">Action <span class="sort-icon">⇅</span></th>
           </tr>
         </thead>
+        <tbody>
+          @foreach($families as $index => $family)
+          <tr class="border-b">
+            <td class="px-4 py-2">{{ $index+1 }}</td>
+            <td class="px-4 py-2">{{ $family->nama_lengkap }}</td>
+            <td class="px-4 py-2">{{ $family->jenis_kelamin }}</td>
+            <td class="px-4 py-2">{{ $family->tempat_lahir }}, {{ $family->tanggal_lahir }}</td>
+            <td class="px-4 py-2">{{ $family->pendidikan }}</td>
+            <td class="px-4 py-2">{{ $family->status_anak }}</td>
+            <td class="px-4 py-2">Anak ke-{{ $family->urutan_anak }}</td>
+            <td class="px-4 py-2">{{ $family->keterangan }}</td>
+            <td class="text-center">
+              <div class="relative inline-block text-left dropdown-action">
+                <!-- Tombol titik tiga -->
+                <button type="button"
+                  onclick="toggleActions('{{ $employee->id }}')"
+                  class="p-2 text-gray-600 hover:text-black">
+                  &#x22EF;
+                </button>
+
+                <!-- Dropdown menu -->
+                <div id="dropdownActions-{{ $employee->id }}"
+                  class="hidden absolute right-0 mt-2 w-32 bg-white rounded-lg shadow-md border border-gray-200 z-50">
+
+                  <a href="{{ route('employees.show', $employee->id) }}"
+                    class="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                    Detail
+                  </a>
+
+                  <a href="{{ route('families.edit', ['employee' => $employee->id, 'family' => $family->id]) }}"
+                    class="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                    Edit
+                  </a>
+                </div>
+              </div>
+            </td>
+
+
+
+
+
+          </tr>
+          @endforeach
+        </tbody>
       </table>
 
       <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; flex-wrap: wrap;">
@@ -2388,11 +2496,62 @@
 
 
       <script>
-        function openDetailAktivitasModal() {
-          document.getElementById("detailAktivitasModal").style.display = "block";
+        document.addEventListener('DOMContentLoaded', () => {
+          // Toggle menu dropdown
+          window.toggleActions = function(id) {
+            // Tutup menu lain dulu
+            document.querySelectorAll('.dropdown-action-content').forEach(menu => {
+              if (menu.id !== 'dropdownActions-' + id) {
+                menu.classList.add('hidden');
+              }
+            });
+
+            // Toggle menu yang sesuai tombol
+            const currentMenu = document.getElementById('dropdownActions-' + id);
+            if (currentMenu) {
+              currentMenu.classList.toggle('hidden');
+            }
+          };
+
+          // Klik di luar menutup semua menu
+          document.addEventListener('click', (e) => {
+            if (!e.target.closest('.dropdown-action')) {
+              document.querySelectorAll('.dropdown-action-content').forEach(menu => {
+                menu.classList.add('hidden');
+              });
+            }
+          });
+
+          // Tekan Escape menutup semua menu
+          document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+              document.querySelectorAll('.dropdown-action-content').forEach(menu => {
+                menu.classList.add('hidden');
+              });
+            }
+          });
+        });
+      </script>
+      <script>
+        function toggleActions(id) {
+          // Tutup semua dropdown lain
+          document.querySelectorAll('.dropdown-action-content').forEach(el => {
+            if (el.id !== "dropdownActions-" + id) {
+              el.classList.add('hidden');
+            }
+          });
+
+          // Toggle dropdown yang diklik
+          const dropdown = document.getElementById("dropdownActions-" + id);
+          dropdown.classList.toggle("hidden");
         }
 
-        function closeDetailAktivitasModal(id) {
-          document.getElementById("detailAktivitasModal").style.display = "none";
-        }
+        // Klik di luar dropdown → auto tutup
+        window.addEventListener('click', function(e) {
+          if (!e.target.closest('.dropdown-action')) {
+            document.querySelectorAll('.dropdown-action-content').forEach(el => {
+              el.classList.add('hidden');
+            });
+          }
+        });
       </script>

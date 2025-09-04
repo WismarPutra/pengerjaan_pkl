@@ -28,90 +28,131 @@ class TMController extends Controller
 
 
     public function show(Request $request, Employee $employee)
-{
-    $payslips = [
-        ['filename' => '2024-Jan.pdf', 'date' => '28 Januari 2024'],
-        ['filename' => '2024-Feb.pdf', 'date' => '28 Februari 2024'],
-        ['filename' => '2024-Mar.pdf', 'date' => '28 Maret 2024'],
-        ['filename' => '2024-Apr.pdf', 'date' => '28 April 2024'],
-        ['filename' => '2024-May.pdf', 'date' => '28 Mei 2024'],
-        ['filename' => '2024-Jun.pdf', 'date' => '28 Juni 2024'],
-        ['filename' => '2024-Jul.pdf', 'date' => '28 Juli 2024'],
-        ['filename' => '2024-Aug.pdf', 'date' => '28 Agustus 2024'],
-        ['filename' => '2024-Sep.pdf', 'date' => '28 September 2024'],
-        ['filename' => '2024-Oct.pdf', 'date' => '28 Oktober 2024'],
-        ['filename' => '2024-Nov.pdf', 'date' => '28 November 2024'],
-        ['filename' => '2024-Dec.pdf', 'date' => '28 Desember 2024'],
-    ];
+    {
+        $payslips = [
+            ['filename' => '2024-Jan.pdf', 'date' => '28 Januari 2024'],
+            ['filename' => '2024-Feb.pdf', 'date' => '28 Februari 2024'],
+            ['filename' => '2024-Mar.pdf', 'date' => '28 Maret 2024'],
+            ['filename' => '2024-Apr.pdf', 'date' => '28 April 2024'],
+            ['filename' => '2024-May.pdf', 'date' => '28 Mei 2024'],
+            ['filename' => '2024-Jun.pdf', 'date' => '28 Juni 2024'],
+            ['filename' => '2024-Jul.pdf', 'date' => '28 Juli 2024'],
+            ['filename' => '2024-Aug.pdf', 'date' => '28 Agustus 2024'],
+            ['filename' => '2024-Sep.pdf', 'date' => '28 September 2024'],
+            ['filename' => '2024-Oct.pdf', 'date' => '28 Oktober 2024'],
+            ['filename' => '2024-Nov.pdf', 'date' => '28 November 2024'],
+            ['filename' => '2024-Dec.pdf', 'date' => '28 Desember 2024'],
+        ];
 
-    // ---- Sorting Talent Cluster ----
-    $sortByCluster    = $request->query('sort_by_cluster', 'tahunCluster');
-    $sortOrderCluster = $request->query('sort_order_cluster', 'desc');
+        // ---- Sorting Talent Cluster ----
 
-    $allowedCluster = ['periodeCluster', 'tahunCluster', 'talentCluster'];
-    if (!in_array($sortByCluster, $allowedCluster)) {
-        $sortByCluster = 'tahunCluster';
-    }
-    $sortOrderCluster = $sortOrderCluster === 'asc' ? 'asc' : 'desc';
+        $sortByCluster    = $request->query('sort_by_cluster', 'tahunCluster');
+        $sortOrderCluster = $request->query('sort_order_cluster', 'desc');
 
-    $talentClusters = TalentCluster::where('employee_id', $employee->id)
-        ->orderBy($sortByCluster, $sortOrderCluster)
-        ->get();
+        $allowedCluster = ['periodeCluster', 'tahunCluster', 'talentCluster'];
+        if (!in_array($sortByCluster, $allowedCluster)) {
+            $sortByCluster = 'tahunCluster';
+        }
+        $sortOrderCluster = $sortOrderCluster === 'asc' ? 'asc' : 'desc';
 
-    // ---- Sorting Family ----
-    $sortByFamily    = $request->query('sort_by_family', 'nama_lengkap');
-    $sortOrderFamily = $request->query('sort_order_family', 'asc');
+        $talentClusters = TalentCluster::where('employee_id', $employee->id)
+            ->orderBy($sortByCluster, $sortOrderCluster)
+            ->get();
 
-    $allowedFamilies = [
-        'nama_lengkap', 'jenis_kelamin', 'tempat_lahir', 'tanggal_lahir',
-        'pendidikan', 'status_anak', 'urutan_anak', 'keterangan'
-    ];
-    if (!in_array($sortByFamily, $allowedFamilies)) {
-        $sortByFamily = 'nama_lengkap';
-    }
-    $sortOrderFamily = $sortOrderFamily === 'asc' ? 'asc' : 'desc';
+        // ---- Sorting Family ----
+        $sortByFamily    = $request->query('sort_by_family', 'nama_lengkap');
+        $sortOrderFamily = $request->query('sort_order_family', 'asc');
 
-    $families = $employee->families()
-        ->orderBy($sortByFamily, $sortOrderFamily)
-        ->get();
+        $allowedFamilies = [
+            'nama_lengkap',
+            'jenis_kelamin',
+            'tempat_lahir',
+            'tanggal_lahir',
+            'pendidikan',
+            'status_anak',
+            'urutan_anak',
+            'keterangan'
+        ];
+        if (!in_array($sortByFamily, $allowedFamilies)) {
+            $sortByFamily = 'nama_lengkap';
+        }
+        $sortOrderFamily = $sortOrderFamily === 'asc' ? 'asc' : 'desc';
 
-    // ---- Cluster (Career Activity) ----
-    $clusters = CareerActivity::where('employee_id', $employee->id)
-        ->selectRaw('
+        $families = $employee->families()
+            ->orderBy($sortByFamily, $sortOrderFamily)
+            ->get();
+
+        // ---- Cluster (Career Activity) ----
+        $clusters = CareerActivity::where('employee_id', $employee->id)
+            ->selectRaw('
             MONTHNAME(tanggalKDMP) as periode,
             YEAR(tanggalKDMP) as year,
             unitSub as cluster
         ')
-        ->orderBy('year', 'desc')
-        ->orderByRaw('MONTH(tanggalKDMP) desc')
-        ->get();
+            ->orderBy('year', 'desc')
+            ->orderByRaw('MONTH(tanggalKDMP) desc')
+            ->get();
 
-    return view('employee.show', compact(
-        'employee',
-        'payslips',
-        'clusters',
-        'talentClusters',
-        'families',
-        'sortByCluster',
-        'sortOrderCluster',
-        'sortByFamily',
-        'sortOrderFamily'
-    ));
-}
+        return view('employee.show', compact(
+            'employee',
+            'payslips',
+            'clusters',
+            'talentClusters',
+            'families',
+            'sortByCluster',
+            'sortOrderCluster',
+            'sortByFamily',
+            'sortOrderFamily'
+        ));
+    }
 
 
 
-    public function edit($id)
+    public function edit($id, Request $request)
     {
         $employee = Employee::findOrFail($id);
-        $career = CareerActivity::where('employee_id', $id)->get();
 
+        // Ambil parameter sorting dari query string
+        $sortByFamily    = $request->query('sort_by_family', 'nama_lengkap');
+        $sortOrderFamily = $request->query('sort_order_family', 'asc');
 
-        $career = CareerActivity::orderByRaw('YEAR(tanggalKDMP) DESC')->get();
+        // Kolom yang boleh di-sort
+        $allowedFamilies = [
+            'nama_lengkap',
+            'jenis_kelamin',
+            'tempat_lahir',
+            'tanggal_lahir',
+            'pendidikan',
+            'status_anak',
+            'urutan_anak',
+            'keterangan'
+        ];
+        if (!in_array($sortByFamily, $allowedFamilies)) {
+            $sortByFamily = 'nama_lengkap';
+        }
 
+        // Sorting ASC/DESC
+        $sortOrderFamily = $sortOrderFamily === 'asc' ? 'asc' : 'desc';
 
-        return view('employee.edit', compact('employee', 'career'));
+        // Ambil data keluarga sesuai sorting
+        $families = $employee->families()
+            ->orderBy($sortByFamily, $sortOrderFamily)
+            ->get();
+
+        // Data career tetap
+        $career = CareerActivity::where('employee_id', $id)
+            ->orderByRaw('YEAR(tanggalKDMP) DESC')
+            ->get();
+
+        return view('employee.edit', compact(
+            'employee',
+            'career',
+            'families',
+            'sortByFamily',
+            'sortOrderFamily'
+        ));
     }
+
 
     public function update(Request $request, $id)
     {
