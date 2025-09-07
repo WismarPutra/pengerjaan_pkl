@@ -72,9 +72,12 @@ class FamilyController extends Controller
 
 
     // Update data keluarga
-    public function update(Request $request, $employeeId, $familyId)
-    {
-        $data = $request->validate([
+   public function update(Request $request, $id)
+{
+    $employee = Employee::findOrFail($id);
+
+    // Validasi data utama pegawai (sesuaikan dengan kebutuhan Anda)
+    $data = $request->validate([
             'nama_lengkap'   => 'required|string|max:255',
             'jenis_kelamin'  => 'required|in:Laki-Laki,Perempuan',
             'tempat_lahir'   => 'nullable|string|max:255',
@@ -85,20 +88,25 @@ class FamilyController extends Controller
             'keterangan'     => 'nullable|string|max:255',
         ]);
 
-        $family = EmployeeFamily::where('employee_id', $employeeId)->findOrFail($familyId);
-        $family->update($data);
+    // update data pegawai
+    $employee->update($data);
 
-        return redirect()->route('employees.show', $employeeId)->with('success', 'Data keluarga berhasil diperbarui');
+    // 🔹 proses anak (ambil dari hidden input anakData)
+    if ($request->anak_data) {
+        $anakList = json_decode($request->anak_data, true);
+
+        // hapus data lama jika ingin replace total
+        $employee->families()->delete();
+
+        // simpan data anak baru
+        foreach ($anakList as $child) {
+            $employee->families()->create($child);
+        }
     }
 
+    return redirect()
+        ->route('employees.show', $employee->id)
+        ->with('success', 'Data pegawai & keluarga berhasil disimpan.');
+}
 
-
-    // Hapus data
-    public function destroy($employeeId, $familyId)
-    {
-        $family = EmployeeFamily::where('employee_id', $employeeId)->findOrFail($familyId);
-        $family->delete();
-
-        return back()->with('success', 'Data keluarga dihapus.');
-    }
 }
