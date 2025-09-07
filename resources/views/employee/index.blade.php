@@ -846,34 +846,45 @@ ul li a:hover:not(.active) {
     <th>Actions</th>
   </tr>
   @foreach($employees as $employee)
-    <tr>
-      <td>{{ $loop->iteration }}</td>
-      <td>{{ $employee->nik }}</td>
-      <td>{{ $employee->name }}</td>
-      <td>{{ \Carbon\Carbon::parse($employee->tanggal_lahir)->translatedFormat('d F Y') }}</td>
-      <td>{{ $employee->posisi }}</td> 
-      <td>{{ $employee->email }}</td>
-      <td>{{ $employee->direktorat }}</td> 
-      <td>
-        @if ($employee->status_karyawan == 'Karyawan Tetap')
-          <div class="first">{{ $employee->status_karyawan }}</div>
-        @elseif ($employee->status_karyawan == 'TKWT')
-          <div class="sec">{{ $employee->status_karyawan }}</div>
-        @else
-          <div class="third">{{ $employee->status_karyawan }}</div>
-        @endif
-      </td>
-      <td>
-        <div class="dropdown-action">
-          <button class="horizontal-dots" onclick="toggleActions()">&#x22EF;</button>
-          <div class="dropdown-action-content" id="dropdownActions">
-            <a href="{{ route('employees.show', $employee->id) }}" class="dropdown-action-detail">Detail</a><br>
-            <a href="{{ route('employees.edit', $employee->id) }}" class="dropdown-action-edit">Edit</a><br>
-          </div>
-        </div>
-      </td>
-    </tr>
-    @endforeach
+<tr>
+  <td>{{ $loop->iteration }}</td>
+
+  {{-- NIK jadi link ke halaman profil --}}
+  <td>
+    <a href="{{ route('employees.show', $employee->id) }}" 
+       class="text-blue-600 hover:underline">
+      {{ $employee->nik }}
+    </a>
+  </td>
+
+  <td>{{ $employee->name }}</td>
+  <td>{{ \Carbon\Carbon::parse($employee->tanggal_lahir)->translatedFormat('d F Y') }}</td>
+  <td>{{ $employee->posisi }}</td> 
+  <td>{{ $employee->email }}</td>
+  <td>{{ $employee->direktorat }}</td> 
+
+  <td>
+    @if ($employee->status_karyawan == 'Karyawan Tetap')
+      <div class="first">{{ $employee->status_karyawan }}</div>
+    @elseif ($employee->status_karyawan == 'TKWT')
+      <div class="sec">{{ $employee->status_karyawan }}</div>
+    @else
+      <div class="third">{{ $employee->status_karyawan }}</div>
+    @endif
+  </td>
+
+  <td>
+    <div class="dropdown-action">
+      <button class="horizontal-dots" onclick="toggleActions()">&#x22EF;</button>
+      <div class="dropdown-action-content" id="dropdownActions">
+        <a href="{{ route('employees.show', $employee->id) }}" class="dropdown-action-detail">Detail</a><br>
+        <a href="{{ route('employees.edit', $employee->id) }}" class="dropdown-action-edit">Edit</a><br>
+      </div>
+    </div>
+  </td>
+</tr>
+@endforeach
+
   </table>      
 </div>
 @endsection
