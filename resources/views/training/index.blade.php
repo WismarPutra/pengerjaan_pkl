@@ -766,13 +766,13 @@ ul li a:hover:not(.active) {
   <!-- STATISTIK -->
   <div class="stat-boxes">
     <div class="stat-box">
-      <div class="icon-circle blue"><i class="fas fa-user-group"></i></div>
-      <div class="stat-info">
-        <div class="stat-value">102</div>
-        <div class="stat-label">Total Partisipan Berjalan</div>
-      </div>
+        <div class="icon-circle blue"><i class="fas fa-user-group"></i></div>
+        <div class="stat-info">
+            <div class="stat-value">{{ $totalPartisipan }}</div>
+            <div class="stat-label">Total Partisipan Berjalan</div>
+        </div>
     </div>
-
+    
     <div class="stat-box">
       <div class="icon-circle cyan"><i class="fas fa-building"></i></div>
       <div class="stat-info">

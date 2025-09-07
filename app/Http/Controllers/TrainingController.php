@@ -7,11 +7,16 @@ use App\Models\Training;
 
 class TrainingController extends Controller
 {
-    public function index()
-    {
-        $training = Training::all(); // Atau pakai paginate()
-        return view('training.index', compact('training'));
-    }
+    public function index(Request $request)
+{
+    $training = Training::all(); // data tabel
+    
+    // Hitung total partisipan dari kolom 'partisipan'
+    $totalPartisipan = Training::sum('partisipan');
+    
+    return view('training.index', compact('training', 'totalPartisipan'));
+}
+
 
     public function create()
     {
