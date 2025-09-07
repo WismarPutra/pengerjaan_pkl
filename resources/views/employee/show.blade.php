@@ -1870,7 +1870,7 @@
 
     <hr class="divider">
 
-    <table class="table-auto border border-gray-300 text-center text-xs whitespace-nowrap">
+    <table class="table-auto border border-gray-300 text-center text-xs">
       <thead class="bg-gray-100 text-gray-600">
     <tr>
         <th class="px-4 py-2">No</th>
