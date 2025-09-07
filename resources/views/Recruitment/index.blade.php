@@ -808,7 +808,7 @@ ul li a:hover:not(.active) {
 @endphp
 
 <div class="tab-content" id="kebutuhan" style="display: block;">
-    <table id="customers" style="margin-top: 10px;">
+    <table id="customers" style="margin-top: 10px; margin-left: -15px">
         <thead>
             <tr>
                 <th>No</th>
