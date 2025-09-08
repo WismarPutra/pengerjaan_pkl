@@ -1872,88 +1872,88 @@
 
     <table class="table-auto border border-gray-300 text-center text-xs">
       <thead class="bg-gray-100 text-gray-600">
-    <tr>
-        <th class="px-4 py-2">No</th>
+        <tr>
+          <th class="px-4 py-2">No</th>
 
-        <th class="px-3 py-1 text-right whitespace-nowrap">
-          Nama Lengkap 
+          <th class="px-3 py-1 text-right whitespace-nowrap">
+            Nama Lengkap
             <a href="{{ route('employees.show', [
                 'employee'          => $employee->id,
                 'sort_by_family'    => 'nama_lengkap',
                 'sort_order_family' => ($sortByFamily == 'nama_lengkap' && $sortOrderFamily == 'asc') ? 'desc' : 'asc'
             ]) }}#keluarga">
-                {!! $sortByFamily == 'nama_lengkap' ? '⇅' : '⇅' !!}
+              {!! $sortByFamily == 'nama_lengkap' ? '⇅' : '⇅' !!}
             </a>
-        </th>
+          </th>
 
-        <th class="px-3 py-1 text-right whitespace-nowrap">
-          Jenis Kelamin 
+          <th class="px-3 py-1 text-right whitespace-nowrap">
+            Jenis Kelamin
             <a href="{{ route('employees.show', [
                 'employee'          => $employee->id,
                 'sort_by_family'    => 'jenis_kelamin',
                 'sort_order_family' => ($sortByFamily == 'jenis_kelamin' && $sortOrderFamily == 'asc') ? 'desc' : 'asc'
             ]) }}#keluarga">
-                {!! $sortByFamily == 'jenis_kelamin' ? '⇅' : '⇅' !!}
+              {!! $sortByFamily == 'jenis_kelamin' ? '⇅' : '⇅' !!}
             </a>
-        </th>
+          </th>
 
-        <th class="px-3 py-1 text-right whitespace-nowrap">
-          Tempat, Tanggal Lahir 
-    <a href="{{ route('employees.show', [
+          <th class="px-3 py-1 text-right whitespace-nowrap">
+            Tempat, Tanggal Lahir
+            <a href="{{ route('employees.show', [
         'employee'          => $employee->id,
         'sort_by_family'    => 'tanggal_lahir',
         'sort_order_family' => ($sortByFamily == 'tanggal_lahir' && $sortOrderFamily == 'asc') ? 'desc' : 'asc'
     ]) }}#keluarga">
-        {!! $sortByFamily == 'ttl' ? '⇅' : '⇅' !!}
-    </a>
-</th>
+              {!! $sortByFamily == 'ttl' ? '⇅' : '⇅' !!}
+            </a>
+          </th>
 
 
-        <th class="px-3 py-1 text-right whitespace-nowrap">
-          Pendidikan Saat Ini 
+          <th class="px-3 py-1 text-right whitespace-nowrap">
+            Pendidikan Saat Ini
             <a href="{{ route('employees.show', [
                 'employee'          => $employee->id,
                 'sort_by_family'    => 'pendidikan',
                 'sort_order_family' => ($sortByFamily == 'pendidikan' && $sortOrderFamily == 'asc') ? 'desc' : 'asc'
             ]) }}#keluarga">
-                {!! $sortByFamily == 'pendidikan' ? '⇅' : '⇅' !!}
+              {!! $sortByFamily == 'pendidikan' ? '⇅' : '⇅' !!}
             </a>
-        </th>
+          </th>
 
-        <th class="px-3 py-1 text-right whitespace-nowrap">
-          Status Anak 
+          <th class="px-3 py-1 text-right whitespace-nowrap">
+            Status Anak
             <a href="{{ route('employees.show', [
                 'employee'          => $employee->id,
                 'sort_by_family'    => 'status_anak',
                 'sort_order_family' => ($sortByFamily == 'status_anak' && $sortOrderFamily == 'asc') ? 'desc' : 'asc'
             ]) }}#keluarga">
-                {!! $sortByFamily == 'status_anak' ? '⇅' : '⇅' !!}
+              {!! $sortByFamily == 'status_anak' ? '⇅' : '⇅' !!}
             </a>
-        </th>
+          </th>
 
-        <th class="px-3 py-1 text-right whitespace-nowrap">
-          Urutan Anak 
+          <th class="px-3 py-1 text-right whitespace-nowrap">
+            Urutan Anak
             <a href="{{ route('employees.show', [
                 'employee'          => $employee->id,
                 'sort_by_family'    => 'urutan_anak',
                 'sort_order_family' => ($sortByFamily == 'urutan_anak' && $sortOrderFamily == 'asc') ? 'desc' : 'asc'
             ]) }}#keluarga">
-                {!! $sortByFamily == 'urutan_anak' ? '⇅' : '⇅' !!}
+              {!! $sortByFamily == 'urutan_anak' ? '⇅' : '⇅' !!}
             </a>
-        </th>
+          </th>
 
-        <th class="px-3 py-1 text-right whitespace-nowrap">
-          Keterangan 
+          <th class="px-3 py-1 text-right whitespace-nowrap">
+            Keterangan
             <a href="{{ route('employees.show', [
                 'employee'          => $employee->id,
                 'sort_by_family'    => 'keterangan',
                 'sort_order_family' => ($sortByFamily == 'keterangan' && $sortOrderFamily == 'asc') ? 'desc' : 'asc'
                 ]) }}#keluarga">
-                {!! $sortByFamily == 'keterangan' ? '⇅' : '⇅' !!}
+              {!! $sortByFamily == 'keterangan' ? '⇅' : '⇅' !!}
             </a>
-        </th>
-    </tr>
-</thead>
+          </th>
+        </tr>
+      </thead>
       <tbody>
         @foreach($families as $index => $family)
         <tr class="border-b">
@@ -1980,6 +1980,7 @@
     </table>
   </div>
 
+  <!-- TALENT CLUSTER -->
   <div class="tab-content" id="cluster" style="display: none;">
     <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; flex-wrap: wrap;">
       <h2 class="left-section">Talent Cluster</h2>
@@ -1997,7 +1998,7 @@
         <tr>
           <th class="px-4 py-2">No</th>
           <th class="px-4 py-2">
-            Period 
+            Period
             <a href="{{ route('employees.show', [
           'employee'          => $employee->id,
           'sort_by_cluster'   => 'periodeCluster',
@@ -2008,7 +2009,7 @@
           </th>
 
           <th class="px-4 py-2">
-            Year 
+            Year
             <a href="{{ route('employees.show', [
           'employee'          => $employee->id,
           'sort_by_cluster'   => 'tahunCluster',
@@ -2019,7 +2020,7 @@
           </th>
 
           <th class="px-4 py-2">
-            Cluster 
+            Cluster
             <a href="{{ route('employees.show', [
           'employee'          => $employee->id,
           'sort_by_cluster'   => 'talentCluster',
@@ -2043,6 +2044,38 @@
       </tbody>
 
     </table>
+
+    <!-- FILTER TALENT CLUSTER -->
+    <!-- FILTER MODAL -->
+    <div class="filter-modal" id="filterModal">
+      <div class="filter-header">
+        <span>Filter</span>
+        <button class="close-btn" onclick="toggleFilter()">&times;</button>
+      </div>
+      <div class="filter-section">
+        <label>Filter Period</label>
+        <a href="#" class="clear-link">Clear</a>
+        <select>
+          <option>Select one from filter</option>
+          <option>Option A</option>
+          <option>Option B</option>
+        </select>
+      </div>
+      <div class="filter-section">
+        <label>Filter Year</label>
+        <a href="#" class="clear-link">Clear</a>
+        <select>
+          <option>Select one from filter</option>
+          <option>Option A</option>
+          <option>Option B</option>
+        </select>
+      </div>
+      <div class="filter-footer">
+        <button class="reset-btn">Reset</button>
+        <button class="apply-btn">Apply</button>
+      </div>
+    </div>
+
 
   </div>
 
@@ -2295,6 +2328,7 @@
               <div class="form-group2">
                 <div class="label-group">
                   <label>Periode</label>
+                  <label class="bintang">*</label>
                 </div>
                 <select name="periodeCluster" class="form-control1" required>
                   <option disabled selected value=""></option>
@@ -2308,14 +2342,15 @@
               <div class="form-group3">
                 <div class="label-group">
                   <label>Tahun</label>
+                  <label class="bintang">*</label>
                 </div>
                 <input type="month" name="tahunCluster" class="form-control" />
               </div>
 
               <div class="form-group2 fully-width">
                 <div class="label-group">
-                  <label>Talent Cluster</label>
-                  <label class="bintang">*</label>
+                  <label class="mt-[50px]">Talent Cluster</label>
+                  <label class="bintang mt-[50px]">*</label>
                 </div>
                 <select name="talentCluster" class="form-control1" required>
                   <option disabled selected value=""></option>
@@ -2324,7 +2359,7 @@
                 </select>
               </div>
             </div>
-            <div class="form-buttons">
+            <div class="form-buttons w-[700px]">
               <button type="button" class="cancel" onclick="closeAddClusterModal()">Cancel</button>
               <button type="submit" class="submit">Tambah</button>
             </div>
@@ -2535,5 +2570,11 @@
 
       function closeAddClusterModal() {
         document.getElementById("addClusterModal").style.display = "none";
+      }
+    </script>
+    <script>
+      function toggleFilter() {
+        const modal = document.getElementById("filterModal");
+        modal.style.display = modal.style.display === "block" ? "none" : "block";
       }
     </script>
