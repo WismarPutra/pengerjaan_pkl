@@ -1904,7 +1904,7 @@
         'sort_by_family'    => 'tanggal_lahir',
         'sort_order_family' => ($sortByFamily == 'tanggal_lahir' && $sortOrderFamily == 'asc') ? 'desc' : 'asc'
     ]) }}#keluarga">
-        {!! $sortByFamily == 'tanggal_lahir' ? '⇅' : '⇅' !!}
+        {!! $sortByFamily == 'ttl' ? '⇅' : '⇅' !!}
     </a>
 </th>
 
@@ -1960,7 +1960,7 @@
           <td class="px-4 py-2">{{ $index+1 }}</td>
           <td class="px-4 py-2">{{ $family->nama_lengkap }}</td>
           <td class="px-4 py-2">{{ $family->jenis_kelamin }}</td>
-          <td class="px-4 py-2">{{ $family->tempat_lahir }}, {{ $family->tanggal_lahir }}</td>
+          <td class="px-4 py-2">{{ $family->ttl }}</td>
           <td class="px-4 py-2">{{ $family->pendidikan }}</td>
           <td class="px-4 py-2">{{ $family->status_anak }}</td>
           <td class="px-4 py-2">Anak ke-{{ $family->urutan_anak }}</td>
