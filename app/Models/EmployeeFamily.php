@@ -23,6 +23,7 @@ class EmployeeFamily extends Model
         'status_anak',
         'urutan_anak',
         'keterangan',
+        'is_draft',
     ];
 
     public function employee()
