@@ -1581,7 +1581,7 @@
   }
 </style>
 
-<div class="navbar">
+<div class="navbar" style="z-index:0;">
   <div class="left-info">
     <div class="navbar-name">Hello, Satria Hadi!</div>
     <div class="navbar-date">{{ \Carbon\Carbon::now()->translatedFormat('l, d F Y') }}</div>
@@ -1970,133 +1970,206 @@
         </div>
       </div>
       <div id="keluarga-container" class="mt-4">
-  <table class="table-auto border border-gray-300 text-center text-xs">
+        <table class="table-auto border border-gray-300 text-center text-xs">
 
-  <thead class="bg-gray-100 text-gray-700">
-    <tr class="align-middle">
-      <th class="px-3 py-1 text-right whitespace-nowrap">No</th>
+          <thead class="bg-gray-100 text-gray-700">
+            <tr class="align-middle">
+              <th class="px-3 py-1 text-right whitespace-nowrap">No</th>
 
-      <th class="px-3 py-1 text-right whitespace-nowrap">
-        <span class="inline-flex items-center gap-1">
-          <span>Nama Lengkap</span>
-          <a href="{{ route('employees.edit', [
+              <th class="px-3 py-1 text-right whitespace-nowrap">
+                <span class="inline-flex items-center gap-1">
+                  <span>Nama Lengkap</span>
+                  <a href="{{ route('employees.edit', [
               'employee'          => $employee->id,
               'sort_by_family'    => 'nama_lengkap',
               'sort_order_family' => ($sortByFamily == 'nama_lengkap' && $sortOrderFamily == 'asc') ? 'desc' : 'asc'
           ]) }}#keluarga"
-             
-             class="text-lg text-gray-500 hover:text-black translate-y-[1px]">⇅</a>
-        </span>
-      </th>
 
-      <th class="px-3 py-1 text-right whitespace-nowrap">
-        <span class="inline-flex items-center gap-1">
-          <span>Jenis Kelamin</span>
-          <a href="{{ route('employees.edit', [
+                    class="text-lg text-gray-500 hover:text-black translate-y-[1px]">⇅</a>
+                </span>
+              </th>
+
+              <th class="px-3 py-1 text-right whitespace-nowrap">
+                <span class="inline-flex items-center gap-1">
+                  <span>Jenis Kelamin</span>
+                  <a href="{{ route('employees.edit', [
               'employee'          => $employee->id,
               'sort_by_family'    => 'jenis_kelamin',
               'sort_order_family' => ($sortByFamily == 'jenis_kelamin' && $sortOrderFamily == 'asc') ? 'desc' : 'asc'
           ]) }}#keluarga"
-             class="text-lg text-gray-500 hover:text-black translate-y-[1px]">⇅</a>
-        </span>
-      </th>
+                    class="text-lg text-gray-500 hover:text-black translate-y-[1px]">⇅</a>
+                </span>
+              </th>
 
-      <th class="px-3 py-1 text-right whitespace-nowrap">
-        <span class="inline-flex items-center gap-1">
-          <span>Tempat, Tanggal Lahir</span>
-          <a href="{{ route('employees.edit', [
+              <th class="px-3 py-1 text-right whitespace-nowrap">
+                <span class="inline-flex items-center gap-1">
+                  <span>Tempat, Tanggal Lahir</span>
+                  <a href="{{ route('employees.edit', [
               'employee'          => $employee->id,
               'sort_by_family'    => 'tanggal_lahir',
               'sort_order_family' => ($sortByFamily == 'tanggal_lahir' && $sortOrderFamily == 'asc') ? 'desc' : 'asc'
           ]) }}#keluarga"
-             class="text-lg text-gray-500 hover:text-black translate-y-[1px]">⇅</a>
-        </span>
-      </th>
+                    class="text-lg text-gray-500 hover:text-black translate-y-[1px]">⇅</a>
+                </span>
+              </th>
 
-      <th class="px-3 py-1 text-right whitespace-nowrap">
-        <span class="inline-flex items-center gap-1">
-          <span>Pendidikan Saat Ini</span>
-          <a href="{{ route('employees.edit', [
+              <th class="px-3 py-1 text-right whitespace-nowrap">
+                <span class="inline-flex items-center gap-1">
+                  <span>Pendidikan Saat Ini</span>
+                  <a href="{{ route('employees.edit', [
               'employee'          => $employee->id,
               'sort_by_family'    => 'pendidikan',
               'sort_order_family' => ($sortByFamily == 'pendidikan' && $sortOrderFamily == 'asc') ? 'desc' : 'asc'
           ]) }}#keluarga"
-             class="text-lg text-gray-500 hover:text-black translate-y-[1px]">⇅</a>
-        </span>
-      </th>
+                    class="text-lg text-gray-500 hover:text-black translate-y-[1px]">⇅</a>
+                </span>
+              </th>
 
-      <th class="px-3 py-2 text-xs text-left font-medium leading-tight">
-        <span class="inline-flex items-center gap-1">
-          <span>Status Anak</span>
-          <a href="{{ route('employees.edit', [
+              <th class="px-3 py-2 text-xs text-left font-medium leading-tight">
+                <span class="inline-flex items-center gap-1">
+                  <span>Status Anak</span>
+                  <a href="{{ route('employees.edit', [
               'employee'          => $employee->id,
               'sort_by_family'    => 'status_anak',
               'sort_order_family' => ($sortByFamily == 'status_anak' && $sortOrderFamily == 'asc') ? 'desc' : 'asc'
           ]) }}#keluarga"
-             class="text-lg text-gray-500 hover:text-black translate-y-[1px]">⇅</a>
-        </span>
-      </th>
+                    class="text-lg text-gray-500 hover:text-black translate-y-[1px]">⇅</a>
+                </span>
+              </th>
 
-      <th class="px-3 py-2 text-xs text-left font-medium leading-tight">
-        <span class="inline-flex items-center gap-1">
-          <span>Urutan Anak</span>
-          <a href="{{ route('employees.edit', [
+              <th class="px-3 py-2 text-xs text-left font-medium leading-tight">
+                <span class="inline-flex items-center gap-1">
+                  <span>Urutan Anak</span>
+                  <a href="{{ route('employees.edit', [
               'employee'          => $employee->id,
               'sort_by_family'    => 'urutan_anak',
               'sort_order_family' => ($sortByFamily == 'urutan_anak' && $sortOrderFamily == 'asc') ? 'desc' : 'asc'
           ]) }}#keluarga"
-             class="text-lg text-gray-500 hover:text-black translate-y-[1px]">⇅</a>
-        </span>
-      </th>
+                    class="text-lg text-gray-500 hover:text-black translate-y-[1px]">⇅</a>
+                </span>
+              </th>
 
-      <th class="px-3 py-2 text-xs text-left font-medium leading-tight">
-        <span class="inline-flex items-center gap-1">
-          <span>Keterangan</span>
-          <a href="{{ route('employees.edit', [
+              <th class="px-3 py-2 text-xs text-left font-medium leading-tight">
+                <span class="inline-flex items-center gap-1">
+                  <span>Keterangan</span>
+                  <a href="{{ route('employees.edit', [
               'employee'          => $employee->id,
               'sort_by_family'    => 'keterangan',
               'sort_order_family' => ($sortByFamily == 'keterangan' && $sortOrderFamily == 'asc') ? 'desc' : 'asc'
           ]) }}#keluarga"
-             class="text-lg text-gray-500 hover:text-black translate-y-[1px]">⇅</a>
-        </span>
-      </th>
+                    class="text-lg text-gray-500 hover:text-black translate-y-[1px]">⇅</a>
+                </span>
+              </th>
 
-      <th class="px-3 py-2 text-center font-medium leading-tight">Actions</th>
-    </tr>
-  </thead>
+              <th class="px-3 py-2 text-center font-medium leading-tight">Actions</th>
+            </tr>
+          </thead>
 
-    <tbody class="bg-white divide-y divide-gray-200">
-      @foreach($families as $index => $family)
-      <tr>
-        <td class="px-3 py-2 text-center">{{ $index+1 }}</td>
-        <td class="px-3 py-2 text-left">{{ $family->nama_lengkap }}</td>
-        <td class="px-3 py-2 text-left">{{ $family->jenis_kelamin }}</td>
-        <td class="px-3 py-2 text-left">{{ $family->tempat_lahir }}, {{ \Carbon\Carbon::parse($family->tanggal_lahir)->format('d M Y') }}</td>
-        <td class="px-3 py-2 text-left">{{ $family->pendidikan }}</td>
-        <td class="px-3 py-2 text-left">{{ $family->status_anak }}</td>
-        <td class="px-3 py-2 text-left">Anak ke-{{ $family->urutan_anak }}</td>
-        <td class="px-3 py-2 text-left">{{ $family->keterangan }}</td>
-        <td class="px-3 py-2 text-center">
-          <div class="relative inline-block text-left dropdown-action">
-            <button type="button"
-              onclick="toggleActions('{{ $family->id }}')"
-              class="p-1 text-blue-600 hover:text-cyan text-xl">
-              &#x22EF;
-            </button>
-            <div id="dropdownActions-{{ $family->id }}"
-              class="hidden absolute right-0 mt-2 w-32 bg-white rounded-lg shadow-md border border-gray-200 z-50">
-              <a href="{ route('employee.edit', $family->id) }"
-                class="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-100">Detail</a>
-              <a href="{{ route('families.edit', ['employee' => $employee->id, 'family' => $family->id]) }}"
-                class="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-100">Edit</a>
-            </div>
+          <tbody class="bg-white divide-y divide-gray-200">
+            @foreach($families as $index => $family)
+            <tr>
+              <td class="px-3 py-2 text-center">{{ $index+1 }}</td>
+              <td class="px-3 py-2 text-left">{{ $family->nama_lengkap }}</td>
+              <td class="px-3 py-2 text-left">{{ $family->jenis_kelamin }}</td>
+              <td class="px-3 py-2 text-left">{{ $family->tempat_lahir }}, {{ \Carbon\Carbon::parse($family->tanggal_lahir)->format('d M Y') }}</td>
+              <td class="px-3 py-2 text-left">{{ $family->pendidikan }}</td>
+              <td class="px-3 py-2 text-left">{{ $family->status_anak }}</td>
+              <td class="px-3 py-2 text-left">Anak ke-{{ $family->urutan_anak }}</td>
+              <td class="px-3 py-2 text-left">{{ $family->keterangan }}</td>
+              <td class="px-3 py-2 text-center">
+                <div class="relative inline-block text-left dropdown-action">
+                  <button type="button"
+                    onclick="toggleActions('{{ $family->id }}')"
+                    class="p-1 text-blue-600 hover:text-cyan text-xl">
+                    &#x22EF;
+                  </button>
+                  <div id="dropdownActions-{{ $family->id }}"
+                    class="hidden absolute right-0 mt-2 w-32 bg-white rounded-lg shadow-md border border-gray-200 z-50">
+                    <a href="{ route('employee.edit', $family->id) }"
+                      class="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-100">Detail</a>
+
+                    <!-- Tombol baru -->
+                    <button type="button"
+                      onclick="openEditPopup('{{ $family->id }}', '{{ $family->nama_lengkap }}', '{{ $family->jenis_kelamin }}', '{{ $family->tempat_lahir }}', '{{ $family->tanggal_lahir }}', '{{ $family->pendidikan }}', '{{ $family->status_anak }}', '{{ $family->urutan_anak }}', '{{ $family->keterangan }}')"
+                      class="block w-full text-left px-3 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                      edit
+                    </button>
+
+                  </div>
+                </div>
+              </td>
+            </tr>
+            @endforeach
+          </tbody>
+        </table>
+        <!-- Popup Edit -->
+        <div id="popup-edit" style="z-index: 1;"
+          class="hidden fixed inset-1 flex items-center justify-center bg-black bg-opacity-50 z-50">
+          <div class="bg-white rounded-lg shadow-lg p-6 w-[500px]" style="margin-top: 30px;">
+            <h2 class="text-lg font-bold mb-4">Ubah Data Keluarga</h2>
+
+            <form id="popup-edit-form" method="POST">
+              @csrf
+              @method('PUT')
+
+              <!-- FE -->
+              <div class="mb-3">
+                <label class="block text-sm font-medium">Nama Lengkap</label>
+                <input type="text" id="edit-nama" name="nama_lengkap" class="w-full border rounded px-2 py-1">
+              </div>
+
+              <div class="mb-3">
+                <label class="block text-sm font-medium">Jenis Kelamin</label>
+                <select id="edit-jk" name="jenis_kelamin" class="w-full border rounded px-2 py-1">
+                  <option value="Laki-Laki">Laki-Laki</option>
+                  <option value="Perempuan">Perempuan</option>
+                </select>
+              </div>
+
+              <div class="mb-3">
+                <label class="block text-sm font-medium">Tempat Lahir</label>
+                <input type="text" id="edit-tempat" name="tempat_lahir" class="w-full border rounded px-2 py-1">
+              </div>
+
+              <div class="mb-3">
+                <label class="block text-sm font-medium">Tanggal Lahir</label>
+                <input type="date" id="edit-tgl" name="tanggal_lahir" class="w-full border rounded px-2 py-1">
+              </div>
+
+              <div class="mb-3">
+                <label class="block text-sm font-medium">Pendidikan</label>
+                <input type="text" id="edit-pendidikan" name="pendidikan" class="w-full border rounded px-2 py-1">
+              </div>
+
+              <div class="mb-3">
+                <label class="block text-sm font-medium">Status Anak</label>
+                <input type="text" id="edit-status" name="status_anak" class="w-full border rounded px-2 py-1">
+              </div>
+
+              <div class="mb-3">
+                <label class="block text-sm font-medium">Urutan Anak</label>
+                <input type="number" id="edit-urutan" name="urutan_anak" class="w-full border rounded px-2 py-1">
+              </div>
+
+              <div class="mb-3">
+                <label class="block text-sm font-medium">Keterangan</label>
+                <textarea id="edit-keterangan" name="keterangan" class="w-full border rounded px-2 py-1"></textarea>
+              </div>
+
+              <div class="flex justify-end gap-2 mt-4">
+                <button type="button" onclick="closeEditPopup()" class="px-4 py-2 bg-gray-400 text-white rounded hover:bg-gray-500">
+                  Batal
+                </button>
+                <button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
+                  Simpan
+                </button>
+              </div>
+            </form>
           </div>
-        </td>
-      </tr>
-      @endforeach
-    </tbody>
-  </table>
-</div>
+        </div>
+
+
+      </div>
 
 
       <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; flex-wrap: wrap;">
@@ -2559,4 +2632,27 @@
             });
           }
         });
+      </script>
+      <script>
+        function openEditPopup(id, nama, jk, tempat, tgl, pendidikan, status, urutan, keterangan) {
+          document.getElementById('popup-edit').classList.remove('hidden');
+
+          // isi data
+          document.getElementById('edit-nama').value = nama;
+          document.getElementById('edit-jk').value = jk;
+          document.getElementById('edit-tempat').value = tempat;
+          document.getElementById('edit-tgl').value = tgl;
+          document.getElementById('edit-pendidikan').value = pendidikan;
+          document.getElementById('edit-status').value = status;
+          document.getElementById('edit-urutan').value = urutan;
+          document.getElementById('edit-keterangan').value = keterangan;
+
+          // set form action ke families.update
+          document.getElementById('popup-edit-form').action =
+            `/employees/{{ $employee->id }}/families/${id}`;
+        }
+
+        function closeEditPopup() {
+          document.getElementById('popup-edit').classList.add('hidden');
+        }
       </script>

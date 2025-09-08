@@ -71,42 +71,31 @@ class FamilyController extends Controller
     }
 
 
-    // Update data keluarga
-   public function update(Request $request, $id)
+// Update data keluarga
+public function update(Request $request, $employeeId, $familyId)
 {
-    $employee = Employee::findOrFail($id);
+    $family = EmployeeFamily::where('employee_id', $employeeId)
+                ->findOrFail($familyId);
 
-    // Validasi data utama pegawai (sesuaikan dengan kebutuhan Anda)
     $data = $request->validate([
-            'nama_lengkap'   => 'required|string|max:255',
-            'jenis_kelamin'  => 'required|in:Laki-Laki,Perempuan',
-            'tempat_lahir'   => 'nullable|string|max:255',
-            'tanggal_lahir'  => 'nullable|date',
-            'pendidikan'     => 'nullable|string|max:255',
-            'status_anak'    => 'nullable|string|max:255',
-            'urutan_anak'    => 'nullable|string|max:255',
-            'keterangan'     => 'nullable|string|max:255',
-        ]);
+        'nama_lengkap'   => 'required|string|max:255',
+        'jenis_kelamin'  => 'required|in:Laki-Laki,Perempuan',
+        'tempat_lahir'   => 'nullable|string|max:255',
+        'tanggal_lahir'  => 'nullable|date',
+        'pendidikan'     => 'nullable|string|max:255',
+        'status_anak'    => 'nullable|string|max:255',
+        'urutan_anak'    => 'nullable|string|max:255',
+        'keterangan'     => 'nullable|string|max:255',
+    ]);
 
-    // update data pegawai
-    $employee->update($data);
-
-    // 🔹 proses anak (ambil dari hidden input anakData)
-    if ($request->anak_data) {
-        $anakList = json_decode($request->anak_data, true);
-
-        // hapus data lama jika ingin replace total
-        $employee->families()->delete();
-
-        // simpan data anak baru
-        foreach ($anakList as $child) {
-            $employee->families()->create($child);
-        }
-    }
+    $family->update($data);
 
     return redirect()
-        ->route('employees.show', $employee->id)
-        ->with('success', 'Data pegawai & keluarga berhasil disimpan.');
+        ->route('employees.edit', $employeeId)
+        ->with('success', 'Data keluarga berhasil diperbarui.');
 }
+
+
+
 
 }

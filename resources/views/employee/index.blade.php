@@ -852,7 +852,7 @@ ul li a:hover:not(.active) {
   {{-- NIK jadi link ke halaman profil --}}
   <td>
     <a href="{{ route('employees.show', $employee->id) }}" 
-       class="text-blue-600 hover:underline">
+       class="text-black-600 hover:underline" style="text-decoration:none;">
       {{ $employee->nik }}
     </a>
   </td>
