@@ -2007,7 +2007,7 @@
                   <a href="{{ route('employees.edit', [
               'employee'          => $employee->id,
               'sort_by_family'    => 'tanggal_lahir',
-              'sort_order_family' => ($sortByFamily == 'tanggal_lahir' && $sortOrderFamily == 'asc') ? 'desc' : 'asc'
+              'sort_order_family' => ($sortByFamily == 'ttl' && $sortOrderFamily == 'asc') ? 'desc' : 'asc'
           ]) }}#keluarga"
                     class="text-lg text-gray-500 hover:text-black translate-y-[1px]">⇅</a>
                 </span>
@@ -2071,7 +2071,7 @@
               <td class="px-3 py-2 text-center">{{ $index+1 }}</td>
               <td class="px-3 py-2 text-left">{{ $family->nama_lengkap }}</td>
               <td class="px-3 py-2 text-left">{{ $family->jenis_kelamin }}</td>
-              <td class="px-3 py-2 text-left">{{ $family->tempat_lahir }}, {{ \Carbon\Carbon::parse($family->tanggal_lahir)->format('d M Y') }}</td>
+              <td class="px-3 py-2 text-left">{{ $family->ttl }}</td>
               <td class="px-3 py-2 text-left">{{ $family->pendidikan }}</td>
               <td class="px-3 py-2 text-left">{{ $family->status_anak }}</td>
               <td class="px-3 py-2 text-left">Anak ke-{{ $family->urutan_anak }}</td>
@@ -2085,15 +2085,23 @@
                   </button>
                   <div id="dropdownActions-{{ $family->id }}"
                     class="hidden absolute right-0 mt-2 w-32 bg-white rounded-lg shadow-md border border-gray-200 z-50">
-                    <a href="{ route('employee.edit', $family->id) }"
-                      class="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-100">Detail</a>
-
                     <!-- Tombol baru -->
                     <button type="button"
-                      onclick="openEditPopup('{{ $family->id }}', '{{ $family->nama_lengkap }}', '{{ $family->jenis_kelamin }}', '{{ $family->tempat_lahir }}', '{{ $family->tanggal_lahir }}', '{{ $family->pendidikan }}', '{{ $family->status_anak }}', '{{ $family->urutan_anak }}', '{{ $family->keterangan }}')"
+                      onclick="openEditPopup('{{ $family->id }}', '{{ $family->nama_lengkap }}', '{{ $family->jenis_kelamin }}', '{{ $family->ttl }}','{{ $family->pendidikan }}', '{{ $family->status_anak }}', '{{ $family->urutan_anak }}', '{{ $family->keterangan }}')"
                       class="block w-full text-left px-3 py-2 text-sm text-gray-700 hover:bg-gray-100">
                       edit
                     </button>
+                    <form action="{{ route('families.delete', [$employee->id, $family->id]) }}"
+                      method="POST"
+                      onsubmit="return confirm('Yakin ingin menghapus data ini?');">
+                      @csrf
+                      @method('DELETE')
+                      <button type="submit"
+                        class="w-full text-left px-3 py-2 text-sm text-red-600 hover:bg-red-100">
+                        Delete
+                      </button>
+                    </form>
+
 
                   </div>
                 </div>
@@ -2102,58 +2110,56 @@
             @endforeach
           </tbody>
         </table>
-        <!-- Popup Edit -->
-        <div id="popup-edit" style="z-index: 1;"
-          class="hidden fixed inset-1 flex items-center justify-center bg-black bg-opacity-50 z-50">
-          <div class="bg-white rounded-lg shadow-lg p-6 w-[500px]" style="margin-top: 30px;">
-            <h2 class="text-lg font-bold mb-4">Ubah Data Keluarga</h2>
 
-            <form id="popup-edit-form" method="POST">
+
+        <!-- Popup Edit -->
+        <div id="popup-edit" style="z-index: 1;" class="hidden fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+          <div class="bg-white rounded-lg shadow-lg p-6 w-[700px]" style="margin-top: 30px;">
+            <h2 class="text-lg font-bold mb-4">Edit Informasi Anak</h2>
+
+            <form id="popup-edit-form" method="POST" class="grid grid-cols-1 md:grid-cols-2 gap-4">
               @csrf
               @method('PUT')
 
               <!-- FE -->
               <div class="mb-3">
-                <label class="block text-sm font-medium">Nama Lengkap</label>
-                <input type="text" id="edit-nama" name="nama_lengkap" class="w-full border rounded px-2 py-1">
+                <label class="block mb-1 text-sm ">Nama Lengkap</label>
+                <input type="text" id="edit-nama" name="nama_lengkap" class="w-full border p-2 rounded-lg focus:ring focus:ring-blue-300">
               </div>
 
               <div class="mb-3">
-                <label class="block text-sm font-medium">Jenis Kelamin</label>
-                <select id="edit-jk" name="jenis_kelamin" class="w-full border rounded px-2 py-1">
+                <label class="block mb1 text-sm font-medium">Jenis Kelamin</label>
+                <select id="edit-jk" name="jenis_kelamin" class="w-full border p-2 rounded-lg focus:ring focus:ring-blue-300">
                   <option value="Laki-Laki">Laki-Laki</option>
                   <option value="Perempuan">Perempuan</option>
                 </select>
               </div>
 
               <div class="mb-3">
-                <label class="block text-sm font-medium">Tempat Lahir</label>
-                <input type="text" id="edit-tempat" name="tempat_lahir" class="w-full border rounded px-2 py-1">
-              </div>
-
-              <div class="mb-3">
-                <label class="block text-sm font-medium">Tanggal Lahir</label>
-                <input type="date" id="edit-tgl" name="tanggal_lahir" class="w-full border rounded px-2 py-1">
+                <label class="block text-sm font-medium">Tempat, Tanggal Lahir</label>
+                <input type="text" id="edit-ttl" name="ttl"
+                  placeholder="Contoh: Bandung, 12 Mei 2010"
+                  class="w-full border p-2 rounded-lg focus:ring focus:ring-blue-300">
               </div>
 
               <div class="mb-3">
                 <label class="block text-sm font-medium">Pendidikan</label>
-                <input type="text" id="edit-pendidikan" name="pendidikan" class="w-full border rounded px-2 py-1">
+                <input type="text" id="edit-pendidikan" name="pendidikan" class="w-full border p-2 rounded-lg focus:ring focus:ring-blue-300">
               </div>
 
               <div class="mb-3">
                 <label class="block text-sm font-medium">Status Anak</label>
-                <input type="text" id="edit-status" name="status_anak" class="w-full border rounded px-2 py-1">
+                <input type="text" id="edit-status" name="status_anak" class="w-full border p-2 rounded-lg focus:ring focus:ring-blue-300">
               </div>
 
               <div class="mb-3">
                 <label class="block text-sm font-medium">Urutan Anak</label>
-                <input type="number" id="edit-urutan" name="urutan_anak" class="w-full border rounded px-2 py-1">
+                <input type="number" id="edit-urutan" name="urutan_anak" class="w-full border p-2 rounded-lg focus:ring focus:ring-blue-300">
               </div>
 
               <div class="mb-3">
                 <label class="block text-sm font-medium">Keterangan</label>
-                <textarea id="edit-keterangan" name="keterangan" class="w-full border rounded px-2 py-1"></textarea>
+                <textarea id="edit-keterangan" name="keterangan" class="w-full border p-2 rounded-lg focus:ring focus:ring-blue-300"></textarea>
               </div>
 
               <div class="flex justify-end gap-2 mt-4">
@@ -2172,7 +2178,7 @@
       </div>
 
 
-      <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; flex-wrap: wrap;">
+      <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; flex-wrap: nowrap;">
         <div class="right-section3">
           <a href="{{ route('employees.show', $employee->id) }}" class="cancel-btn">Cancel</a>
           <button type="submit" class="btn save-btn">Save</button>
@@ -2252,15 +2258,13 @@
                 </select>
               </div>
 
-              <div class="form-group2">
-                <label>Tempat Lahir</label>
-                <input type="text" name="tempat_lahir" class="form-control" value="{{ old('tempat_lahir') }}">
+              <div class="form-group">
+                <label>Tempat, Tanggal Lahir</label>
+                <input type="text" name="ttl" class="form-control"
+                  placeholder="Contoh: Jakarta, 18 Agustus 2009"
+                  value="{{ old('ttl', $family->ttl ?? '') }}">
               </div>
 
-              <div class="form-group3">
-                <label>Tanggal Lahir</label>
-                <input type="date" name="tanggal_lahir" class="form-control" value="{{ old('tanggal_lahir') }}">
-              </div>
 
               <div class="form-group3">
                 <label>Pendidikan Saat Ini</label>
@@ -2610,7 +2614,7 @@
           });
         });
       </script>
-      <script>
+      <!-- <script>
         function toggleActions(id) {
           // Tutup semua dropdown lain
           document.querySelectorAll('.dropdown-action-content').forEach(el => {
@@ -2632,16 +2636,15 @@
             });
           }
         });
-      </script>
+      </script> -->
       <script>
-        function openEditPopup(id, nama, jk, tempat, tgl, pendidikan, status, urutan, keterangan) {
+        function openEditPopup(id, nama, jk, tempat_tanggal_lahirr, pendidikan, status, urutan, keterangan) {
           document.getElementById('popup-edit').classList.remove('hidden');
 
           // isi data
           document.getElementById('edit-nama').value = nama;
           document.getElementById('edit-jk').value = jk;
-          document.getElementById('edit-tempat').value = tempat;
-          document.getElementById('edit-tgl').value = tgl;
+          document.getElementById('edit-ttl').value = tempat_tanggal_lahirr;
           document.getElementById('edit-pendidikan').value = pendidikan;
           document.getElementById('edit-status').value = status;
           document.getElementById('edit-urutan').value = urutan;

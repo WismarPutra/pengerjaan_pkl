@@ -29,8 +29,7 @@ class FamilyController extends Controller
         $data = $request->validate([
             'nama_lengkap'   => 'required|string|max:255',
             'jenis_kelamin'  => 'required|in:Laki-Laki,Perempuan', // harus sesuai enum di DB
-            'tempat_lahir'   => 'nullable|string|max:255',
-            'tanggal_lahir'  => 'nullable|date',
+            'ttl'            => 'nullable|string|max:255',
             'pendidikan'     => 'nullable|string|max:255',
             'status_anak'    => 'nullable|string|max:255',
             'urutan_anak'    => 'nullable|string|max:255',
@@ -80,8 +79,7 @@ public function update(Request $request, $employeeId, $familyId)
     $data = $request->validate([
         'nama_lengkap'   => 'required|string|max:255',
         'jenis_kelamin'  => 'required|in:Laki-Laki,Perempuan',
-        'tempat_lahir'   => 'nullable|string|max:255',
-        'tanggal_lahir'  => 'nullable|date',
+        'ttl'            => 'nullable|string|max:255',
         'pendidikan'     => 'nullable|string|max:255',
         'status_anak'    => 'nullable|string|max:255',
         'urutan_anak'    => 'nullable|string|max:255',
@@ -95,7 +93,17 @@ public function update(Request $request, $employeeId, $familyId)
         ->with('success', 'Data keluarga berhasil diperbarui.');
 }
 
+public function delete($employeeId, $familyId)
+{
+    $family = EmployeeFamily::where('employee_id', $employeeId)
+                ->findOrFail($familyId);
 
+    $family->delete();
+
+    return redirect()
+        ->route('employees.edit', $employeeId)
+        ->with('success', 'Data keluarga berhasil dihapus.');
+}
 
 
 }

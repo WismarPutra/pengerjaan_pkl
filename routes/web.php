@@ -129,9 +129,5 @@ Route::prefix('employees/{employee}')->group(function () {
     Route::post('families', [FamilyController::class, 'store'])->name('families.store');
     Route::get('families/{family}/edit', [FamilyController::class, 'edit'])->name('families.edit');
     Route::put('families/{family}', [FamilyController::class, 'update'])->name('families.update');
-    Route::delete('families/{family}', [FamilyController::class, 'destroy'])->name('families.destroy');
+    Route::delete('families/{family}', [FamilyController::class, 'delete'])->name('families.delete');
 });
-
-
-
-    
