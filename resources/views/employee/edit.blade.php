@@ -389,7 +389,7 @@
   }
 
   .tab-content {
-    padding: 20px 0;
+    padding: 50px 0;
     font-family: Poppins, sans-serif;
     color: #444;
     display: flex;
@@ -1579,6 +1579,58 @@
     color: mediumblue;
     text-decoration: underline;
   }
+
+  /* Tombol Tambah */
+.btn-tambah {
+    font-size: 14px;
+    font-weight: 600;
+    margin: 0;
+    color: #ffffff;
+    background-color: mediumblue;
+    border-radius: 6px;
+    padding: 6px 18px;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+}
+.btn-tambah:hover {
+    background-color: #0000cd; /* darkblue saat hover */
+}
+
+/* Tombol Cancel */
+.btn-cancel {
+    font-size: 14px;
+    font-weight: 600;
+    margin: 0;
+    color: #495057;
+    background-color: #e9ecef;
+    border-radius: 6px;
+    padding: 6px 18px;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+}
+.btn-cancel:hover {
+    background-color: #dee2e6;
+}
+
+/* Tombol Save */
+.btn-save {
+    font-size: 14px;
+    font-weight: 600;
+    margin: 0;
+    color: #ffffff;
+    background-color: #2f21e6;
+    border-radius: 6px;
+    padding: 6px 18px;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+}
+.btn-save:hover {
+    background-color: #1d0ecb;
+}
+
 </style>
 
 <div class="navbar" style="z-index:0;">
@@ -2215,8 +2267,99 @@
     </div>
 
     <div class="tab-content" id="dokumen" style="display: none;">
-      <div class="content5">
-        <h4 class="content-info">Dokumen Personal</h4>
+      
+
+       
+
+       @php
+    // daftar field -> label
+    $dokumenWajib = [
+        'dokumen_ktp' => 'KTP',
+        'dokumen_kk'  => 'Kartu Keluarga',
+        'dokumen_npwp'=> 'NPWP',
+        'dokumen_bpjs'=> 'BPJS',
+    ];
+
+    $dokumenLainnya = [
+        'dokumen_hasil_psikotest' => 'Hasil Psikotest',
+        'dokumen_assessment_01'   => 'Hasil Assessment 01',
+        'dokumen_assessment_02'   => 'Hasil Assessment 02',
+        'dokumen_assessment_03'   => 'Hasil Assessment 03',
+    ];
+@endphp
+
+{{-- ===== Dokumen Wajib ===== --}}
+<h5 class="fw-bold mb-3">Dokumen Wajib</h5>
+@foreach(collect($dokumenWajib)->chunk(2) as $pair)
+  <div class="row">
+    @foreach($pair as $field => $label)
+      @php
+        $doc = optional($employee->documents)->firstWhere('jenis_dokumen', $field);
+      @endphp
+      <div class="col-md-6 mb-3">
+        <label class="fw-semibold d-block">{{ $label }}</label>
+
+        @if($doc)
+          <div class="d-flex align-items-center gap-2">
+            <a href="{{ asset('storage/'.$doc->file_path) }}" target="_blank" class="text-primary">
+              Klik untuk Melihat
+            </a>
+            <form method="POST" action="{{ route('employee.documents.delete', [$employee->id, $doc->id]) }}"
+                  onsubmit="return confirm('Hapus file ini?')">
+              @csrf
+              @method('DELETE')
+              <button class="btn btn-link text-danger p-0" title="Hapus">✕</button>
+            </form>
+          </div>
+        @else
+          <input type="file" name="dokumen[{{ $field }}]" class="form-control form-control-sm">
+        @endif
+      </div>
+    @endforeach
+  </div>
+@endforeach
+
+{{-- ===== Dokumen Lainnya ===== --}}
+<h5 class="fw-bold mb-3 mt-4">Dokumen Lainnya</h5>
+@foreach(collect($dokumenLainnya)->chunk(2) as $pair)
+  <div class="row">
+    @foreach($pair as $field => $label)
+      @php
+        $doc = optional($employee->documents)->firstWhere('jenis_dokumen', $field);
+      @endphp
+      <div class="col-md-6 mb-3">
+        <label class="fw-semibold d-block">{{ $label }}</label>
+
+        @if($doc)
+          <div class="d-flex align-items-center gap-2">
+            <a href="{{ asset('storage/'.$doc->file_path) }}" target="_blank" class="text-primary">
+              Klik untuk Melihat
+            </a>
+            <form method="POST" action="{{ route('employee.documents.delete', [$employee->id, $doc->id]) }}"
+                  onsubmit="return confirm('Hapus file ini?')">
+              @csrf
+              @method('DELETE')
+              <button class="btn btn-link text-danger p-0" title="Hapus">✕</button>
+            </form>
+          </div>
+        @else
+          <input type="file" name="dokumen[{{ $field }}]" class="form-control form-control-sm">
+        @endif
+      </div>
+    @endforeach
+  </div>
+@endforeach
+
+
+
+            {{-- Tombol --}}
+            <div class="d-flex justify-content-end mt-4">
+                <a href="{{ route('employees.show', $employee->id) }}" class="btn-cancel me-2">Cancel</a>
+                <button type="submit" class="btn btn-save">Save</button>
+            </div>
+        </form>
+    </div>
+</div>
       </div>
     </div>
 
@@ -2306,7 +2449,30 @@
         </div>
 
       </div>
+
+      
       @endsection
+
+      <script>
+    function removeFile(field) {
+        // tandai field yang dihapus (biar controller tahu)
+        let deleted = document.getElementById("deleted_files").value;
+        let list = deleted ? deleted.split(",") : [];
+        if (!list.includes(field)) {
+            list.push(field);
+        }
+        document.getElementById("deleted_files").value = list.join(",");
+
+        // ganti tampilan link -> input file
+        let wrapper = document.getElementById("wrapper-" + field);
+        wrapper.innerHTML = `
+            <label class="form-label">${field.toUpperCase()}</label>
+            <input type="file" name="${field}" id="input-${field}" class="form-control">
+        `;
+    }
+</script>
+
+
       <script>
         function showTab(tabId) {
           // Sembunyikan semua konten

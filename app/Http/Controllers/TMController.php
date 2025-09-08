@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\Employee;
 use App\Models\CareerActivity;
 use App\Models\TalentCluster;
+use App\Models\EmployeeDocument;
+
 
 
 class TMController extends Controller
@@ -155,34 +157,66 @@ class TMController extends Controller
 
 
     public function update(Request $request, $id)
-    {
+{
+    $validated = $request->validate([
+        'nik' => 'required',
+        'name' => 'required',
+        'tanggal_lahir' => 'required',
+        'email' => 'required',
+        'no_ktp' => 'required',
+        'jenis_kelamin' => 'required',
+        'ttl' => 'required',
+        'alamat_ktp' => 'required',
+        'no_npwp' => 'required',
+        'agama' => 'required',
+        'status_perkawinan' => 'required',
+        'alamat_domisili' => 'required',
+        'no_telepon' => 'required',
+        'level_pendidikan' => 'required',
+        'jurusan' => 'required',
+        'institusi_pendidikan' => 'required',
+        'tahun_lulus' => 'required',
 
-        $validated = $request->validate([
-            'nik' => 'required',
-            'name' => 'required',
-            'tanggal_lahir' => 'required',
-            'email' => 'required',
-            'no_ktp' => 'required',
-            'jenis_kelamin' => 'required',
-            'ttl' => 'required',
-            'alamat_ktp' => 'required',
-            'no_npwp' => 'required',
-            'agama' => 'required',
-            'status_perkawinan' => 'required',
-            'alamat_domisili' => 'required',
-            'no_telepon' => 'required',
-            'level_pendidikan' => 'required',
-            'jurusan' => 'required',
-            'institusi_pendidikan' => 'required',
-            'tahun_lulus' => 'required',
-        ]);
+        // tambahkan validasi dokumen
+        'dokumen_ktp' => 'nullable|file|mimes:pdf,jpg,png|max:2048',
+        'dokumen_bpjs_kesehatan' => 'nullable|file|mimes:pdf,jpg,png|max:2048',
+        'dokumen_npwp' => 'nullable|file|mimes:pdf,jpg,png|max:2048',
+        'dokumen_kk' => 'nullable|file|mimes:pdf,jpg,png|max:2048',
+        'dokumen_bpjs_ketenagakerjaan' => 'nullable|file|mimes:pdf,jpg,png|max:2048',
+        'dokumen_nota_dinas' => 'nullable|file|mimes:pdf,jpg,png|max:2048',
+    ]);
 
-        $employee = Employee::findOrFail($id);
-        $employee->update($validated);
+    $employee = Employee::findOrFail($id);
 
-        return redirect()->route('employee.show', $employee->id)
-            ->with('success', 'Data berhasil diupdate!');
+    // update field utama
+    $employee->update($validated);
+
+    // handle upload file (opsional, kalau ada)
+    if ($request->hasFile('dokumen_ktp')) {
+        $employee->dokumen_ktp = $request->file('dokumen_ktp')->store('dokumen', 'public');
     }
+    if ($request->hasFile('dokumen_bpjs_kesehatan')) {
+        $employee->dokumen_bpjs_kesehatan = $request->file('dokumen_bpjs_kesehatan')->store('dokumen', 'public');
+    }
+    if ($request->hasFile('dokumen_npwp')) {
+        $employee->dokumen_npwp = $request->file('dokumen_npwp')->store('dokumen', 'public');
+    }
+    if ($request->hasFile('dokumen_kk')) {
+        $employee->dokumen_kk = $request->file('dokumen_kk')->store('dokumen', 'public');
+    }
+    if ($request->hasFile('dokumen_bpjs_ketenagakerjaan')) {
+        $employee->dokumen_bpjs_ketenagakerjaan = $request->file('dokumen_bpjs_ketenagakerjaan')->store('dokumen', 'public');
+    }
+    if ($request->hasFile('dokumen_nota_dinas')) {
+        $employee->dokumen_nota_dinas = $request->file('dokumen_nota_dinas')->store('dokumen', 'public');
+    }
+
+    $employee->save();
+
+    return redirect()->route('employee.show', $employee->id)
+        ->with('success', 'Data berhasil diupdate!');
+}
+
 
     public function downloadPayslip($filename)
     {
@@ -329,4 +363,54 @@ class TMController extends Controller
 
         return back()->with('success', 'Aktivitas Karir berhasil dihapus');
     }
+
+
+public function updateDocuments(Request $request, $employee_id)
+{
+    $employee = Employee::findOrFail($employee_id);
+
+    $request->validate([
+        'dokumen.*' => 'nullable|file|mimes:pdf,jpg,png|max:2048',
+    ]);
+
+    if ($request->hasFile('dokumen')) {
+        foreach ($request->file('dokumen') as $jenis => $file) {
+            $path = $file->store('dokumen', 'public');
+
+            EmployeeDocument::updateOrCreate(
+                ['employee_id' => $employee->id, 'jenis_dokumen' => $jenis],
+                ['file_path' => $path]
+            );
+        }
+    }
+
+    return back()->with('success', 'Dokumen berhasil diperbarui!');
 }
+
+public function deleteDocument($id)
+{
+    $doc = EmployeeDocument::findOrFail($id);
+
+    if ($doc->file_path) {
+        \Storage::delete('public/'.$doc->file_path);
+    }
+    $doc->delete();
+
+    return back()->with('success', 'Dokumen berhasil dihapus.');
+}
+
+public function deleteFile($id, $field)
+{
+    $employee = Employee::findOrFail($id);
+
+    if ($employee->$field) {
+        Storage::delete('public/'.$employee->$field);
+        $employee->$field = null;
+        $employee->save();
+    }
+
+    return back()->with('success', ucfirst($field).' berhasil dihapus.');
+}
+
+}
+
