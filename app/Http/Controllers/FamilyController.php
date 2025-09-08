@@ -105,5 +105,29 @@ public function delete($employeeId, $familyId)
         ->with('success', 'Data keluarga berhasil dihapus.');
 }
 
+// Finalisasi draft (ubah semua draft jadi permanen)
+public function finalize($employeeId)
+{
+    EmployeeFamily::where('employee_id', $employeeId)
+        ->where('is_draft', 1)
+        ->update(['is_draft' => 0]);
+
+    return redirect()
+        ->route('employees.edit', $employeeId)
+        ->with('success', 'Data keluarga berhasil disimpan permanen.');
+}
+
+// Batalkan draft (hapus semua draft)
+public function cancel($employeeId)
+{
+    EmployeeFamily::where('employee_id', $employeeId)
+        ->where('is_draft', 1)
+        ->delete();
+
+    return redirect()
+        ->route('employees.edit', $employeeId)
+        ->with('success', 'Draft keluarga dibatalkan.');
+}
+
 
 }
