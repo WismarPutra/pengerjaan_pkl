@@ -122,8 +122,7 @@ class TMController extends Controller
         $allowedFamilies = [
             'nama_lengkap',
             'jenis_kelamin',
-            'tempat_lahir',
-            'tanggal_lahir',
+            'ttl',
             'pendidikan',
             'status_anak',
             'urutan_anak',

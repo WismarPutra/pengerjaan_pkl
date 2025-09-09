@@ -18,12 +18,12 @@ class EmployeeFamily extends Model
         'employee_id',
         'nama_lengkap',
         'jenis_kelamin',
-        'tempat_lahir',
-        'tanggal_lahir',
+        'ttl',
         'pendidikan',
         'status_anak',
         'urutan_anak',
         'keterangan',
+        'is_draft',
     ];
 
     public function employee()
