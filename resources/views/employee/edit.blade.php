@@ -2517,23 +2517,6 @@
       </div>
 
       @endsection
-      <script>
-        function showTab(tabId) {
-          // Sembunyikan semua konten
-          const tabs = document.querySelectorAll('.tab-content');
-          tabs.forEach(tab => tab.style.display = 'none');
-
-          // Hapus kelas aktif dari semua tombol
-          const buttons = document.querySelectorAll('.tab-button');
-          buttons.forEach(btn => btn.classList.remove('active'));
-
-          // Tampilkan tab yang diklik
-          document.getElementById(tabId).style.display = 'block';
-
-          // Tambahkan kelas aktif ke tombol yang diklik
-          event.currentTarget.classList.add('active');
-        }
-      </script>
 
       <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -2601,15 +2584,8 @@
             activeTab.style.display = 'block';
           }
 
-          // Optional: jika pakai tombol tab (tab-button class), tandai yang aktif
-          tabButtons.forEach(btn => {
-            const target = btn.getAttribute('href');
-            if (target === hash) {
-              btn.classList.add('active');
-            } else {
-              btn.classList.remove('active');
-            }
-          });
+         // Tambahkan kelas aktif ke tombol yang diklik
+          event.currentTarget.classList.add('active');
         });
       </script>
 
