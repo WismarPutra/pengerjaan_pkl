@@ -47,4 +47,10 @@ class Employee extends Model
     {
         return $this->hasMany(TalentCluster::class, 'employee_id');
     }
+
+    public function documents()
+{
+    return $this->hasMany(EmployeeDocument::class);
+}
+
 }

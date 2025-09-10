@@ -71,6 +71,11 @@ Route::get('/employee/{id}/career', [TMController::class, 'getCareerActivities']
 Route::post('/employee/{id}/career', [TMController::class, 'storeCareerActivity'])->name('employee.career.store');
 Route::put('/career/{id}', [TMController::class, 'updateCareerActivity'])->name('career.update');
 Route::delete('/career/{id}', [TMController::class, 'deleteCareerActivity'])->name('career.delete');
+Route::post('/employee/{id}/documents', [TMController::class, 'updateDocuments'])->name('employee.updateDocuments');
+Route::put('/employees/{id}/documents', [TMController::class, 'updateDocuments'])->name('employee.updateDocuments');
+Route::delete('/employees/documents/{id}', [TMController::class, 'deleteDocument'])->name('employee.deleteDocument');
+
+
 
 /* TRAINING MANAGEMENT */
 
