@@ -2318,92 +2318,113 @@
         </table>
       </div>
     </div>
+
     <!-- MODAL TAMBAH ANAK -->
 
-    <div id="addModal">
-      <div class="modal-content">
-        <div class="content6">
-          <div class="left-content6">
-            <h3>Tambah Informasi Anak</h3>
-          </div>
-
-          <div class="right-content6">
-            <button onclick="closeAddModal()" class="close-button">
-              <i class="fas fa-circle-xmark"></i>
-            </button>
-          </div>
+    <div id="addModal" class="hidden fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50" style="padding-left:400px; padding-top:150px;">
+      <div class="bg-white rounded-2xl shadow-lg w-full max-w-3xl p-6">
+        <!-- Header -->
+        <div class="flex justify-between items-center mb-6">
+          <h3 class="text-xl font-semibold text-gray-800">Tambah Informasi Anak</h3>
+          <button onclick="closeAddModal()" class="text-gray-500 hover:text-gray-700">
+            <i class="fas fa-times text-xl"></i>
+          </button>
         </div>
-        <div class="full-width">
-          <form action="{{ route('families.store', $employee->id) }}" method="POST">
-            @csrf
-            <div class="form-grid1">
-              <div class="form-group2">
-                <label>Nama Lengkap</label>
-                <input type="text" name="nama_lengkap" class="form-control" value="{{ old('nama_lengkap') }}" required>
-              </div>
 
-              <div class="form-group3">
-                <label>Jenis Kelamin</label>
-                <select name="jenis_kelamin" class="form-control1" required>
-                  <option disabled selected value=""></option>
-                  <option value="Laki-Laki" {{ old('jenis_kelamin')==='Laki-Laki'?'selected':'' }}>Laki-Laki</option>
-                  <option value="Perempuan" {{ old('jenis_kelamin')==='Perempuan'?'selected':'' }}>Perempuan</option>
-                </select>
-              </div>
+        <!-- Form -->
+        <form action="{{ route('families.store', $employee->id) }}" method="POST" class="space-y-6">
+          @csrf
 
-              <div class="form-group">
-                <label>Tempat, Tanggal Lahir</label>
-                <input type="text" name="ttl" class="form-control"
-                  placeholder="Contoh: Jakarta, 18 Agustus 2009"
-                  value="{{ old('ttl', $family->ttl ?? '') }}">
-              </div>
-
+          <!-- Grid Form -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Nama Lengkap -->
+            <div>
+              <label class="block text-sm font-medium text-gray-700">Nama Lengkap <span class="text-red-600">*</span></label>
+              <input type="text" name="nama_lengkap" value="{{ old('nama_lengkap') }}"
+                class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                required>
             </div>
 
-        </div>
+            <!-- Jenis Kelamin -->
+            <div>
+              <label class="block text-sm font-medium text-gray-700">Jenis Kelamin <span class="text-red-600">*</span></label>
+              <select name="jenis_kelamin"
+                class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                required>
+                <option disabled selected value=""></option>
+                <option value="Laki-Laki" {{ old('jenis_kelamin')==='Laki-Laki'?'selected':'' }}>Laki-Laki</option>
+                <option value="Perempuan" {{ old('jenis_kelamin')==='Perempuan'?'selected':'' }}>Perempuan</option>
+              </select>
+            </div>
 
-        <div class="form-group3">
-          <label>Pendidikan Saat Ini</label>
-          <select name="pendidikan" class="form-control1">
-            <option disabled selected value=""></option>
-            <option value="SD" {{ old('pendidikan')==='SD'?'selected':'' }}>SD</option>
-            <option value="SMP" {{ old('pendidikan')==='SMP'?'selected':'' }}>SMP</option>
-            <option value="SMA" {{ old('pendidikan')==='SMA'?'selected':'' }}>SMA</option>
-            <option value="Kuliah" {{ old('pendidikan')==='Kuliah'?'selected':'' }}>Kuliah</option>
-          </select>
-        </div>
+            <!-- Tempat, Tanggal Lahir -->
+            <div>
+              <label class="block text-sm font-medium text-gray-700">Tempat, Tanggal Lahir <span class="text-red-600">*</span></label>
+              <input type="text" name="ttl" placeholder="Contoh: Jakarta, 18 Agustus 2009"
+                value="{{ old('ttl', $family->ttl ?? '') }}"
+                class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+            </div>
 
-        <div class="form-group2">
-          <label>Status Anak</label>
-          <select name="status_anak" class="form-control1">
-            <option disabled selected value=""></option>
-            <option value="Kandung" {{ old('status_anak')==='Kandung'?'selected':'' }}>Kandung</option>
-            <option value="Tidak Kandung" {{ old('status_anak')==='Tidak Kandung'?'selected':'' }}>Tidak Kandung</option>
-          </select>
-        </div>
+            <!-- Pendidikan -->
+            <div>
+              <label class="block text-sm font-medium text-gray-700">Pendidikan Saat Ini <span class="text-red-600">*</span></label>
+              <select name="pendidikan"
+                class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                <option disabled selected value=""></option>
+                <option value="SD" {{ old('pendidikan')==='SD'?'selected':'' }}>SD</option>
+                <option value="SMP" {{ old('pendidikan')==='SMP'?'selected':'' }}>SMP</option>
+                <option value="SMA" {{ old('pendidikan')==='SMA'?'selected':'' }}>SMA</option>
+                <option value="Kuliah" {{ old('pendidikan')==='Kuliah'?'selected':'' }}>Kuliah</option>
+              </select>
+            </div>
 
-        <div class="form-group3">
-          <label>Urutan Anak</label>
-          <input type="text" name="urutan_anak" class="form-control" value="{{ old('urutan_anak') }}" placeholder="Contoh: 1, 2, 3 atau Anak ke-1">
-        </div>
+            <!-- Status Anak -->
+            <div>
+              <label class="block text-sm font-medium text-gray-700">Status Anak <span class="text-red-600">*</span></label>
+              <select name="status_anak"
+                class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                <option disabled selected value=""></option>
+                <option value="Kandung" {{ old('status_anak')==='Kandung'?'selected':'' }}>Kandung</option>
+                <option value="Tidak Kandung" {{ old('status_anak')==='Tidak Kandung'?'selected':'' }}>Tidak Kandung</option>
+              </select>
+            </div>
 
-        <div class="form-group2">
-          <label>Keterangan</label>
-          <select name="keterangan" class="form-control1">
-            <option disabled selected value=""></option>
-            <option value="Ditanggung" {{ old('keterangan')==='Ditanggung'?'selected':'' }}>Ditanggung</option>
-            <option value="Tidak Ditanggung" {{ old('keterangan')==='Tidak Ditanggung'?'selected':'' }}>Tidak Ditanggung</option>
-          </select>
-        </div>
+            <!-- Urutan Anak -->
+            <div>
+              <label class="block text-sm font-medium text-gray-700">Urutan Anak <span class="text-red-600">*</span></label>
+              <input type="text" name="urutan_anak" placeholder="Contoh: 1, 2, 3 atau Anak ke-1"
+                value="{{ old('urutan_anak') }}"
+                class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+            </div>
+
+            <!-- Keterangan -->
+            <div class="md:col-span-2">
+              <label class="block text-sm font-medium text-gray-700">Keterangan <span class="text-red-600">*</span></label>
+              <select name="keterangan"
+                class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                <option disabled selected value=""></option>
+                <option value="Ditanggung" {{ old('keterangan')==='Ditanggung'?'selected':'' }}>Ditanggung</option>
+                <option value="Tidak Ditanggung" {{ old('keterangan')==='Tidak Ditanggung'?'selected':'' }}>Tidak Ditanggung</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Tombol -->
+          <div class="flex justify-end gap-3 pt-4">
+            <button type="button" onclick="closeAddModal()"
+              class="w-32 py-2 rounded-lg bg-gray-200 text-gray-700 font-medium hover:bg-gray-300">
+              Cancel
+            </button>
+            <button type="submit"
+              class="w-32 py-2 rounded-lg bg-indigo-600 text-white font-medium hover:bg-indigo-700">
+              Tambah
+            </button>
+          </div>
+        </form>
       </div>
-
-      <div class="form-buttons" style="margin-top:1rem;">
-        <button type="button" class="cancel" onclick="history.back()">Cancel</button>
-        <button type="submit" class="submit">Tambah</button>
-      </div>
-      </form>
-
     </div>
+
+
 
     <!-- AKTIVITAS CAREER -->
 
