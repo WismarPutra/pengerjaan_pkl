@@ -1,5 +1,9 @@
 <?php
 
+namespace App\Models;  
+
+use Illuminate\Database\Eloquent\Model;  
+
 class EmployeeDocument extends Model
 {
     protected $fillable = ['employee_id', 'jenis_dokumen', 'file_path', 'kategori'];
@@ -9,4 +13,3 @@ class EmployeeDocument extends Model
         return $this->belongsTo(Employee::class);
     }
 }
-
