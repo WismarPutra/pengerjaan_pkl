@@ -1987,7 +1987,7 @@
       <div class="right-section11">
         <div class="search-container1">
           <i class="fas fa-search search-icon"></i>
-          <input type="text" placeholder="Cari berdasarkan nama" class="search-bar" />
+          <input type="text" placeholder="Cari berdasarkan Cluster" class="search-bar" />
         </div>
         <button class="filter-btn1" onclick="toggleFilter()"><i class="fas fa-sliders"></i> Filters</button>
         <button class="plus-btn1" onclick="openAddClusterModal()"><i class="fas fa-plus"></i>Tambah</button>
@@ -2322,7 +2322,7 @@
       </div>
       <div class="full-width">
         <div class="full-width">
-          <form action="{{ route('talent-cluster.store', $employee->id) }}" method="POST">
+          <form action="{{ route('clusters.store', $employee->id) }}" method="POST">
             @csrf
             <div class="form-grid1">
               <div class="form-group2">

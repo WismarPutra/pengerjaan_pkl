@@ -9,6 +9,8 @@ class TalentCluster extends Model
 {
     use HasFactory;
 
+    protected $table = 'talent_clusters';
+
     protected $fillable = [
         'employee_id',
         'periodeCluster',
@@ -16,9 +18,9 @@ class TalentCluster extends Model
         'talentCluster',
     ];
 
-    // Relasi ke Employee
+    // relasi balik ke employee
     public function employee()
     {
-        return $this->belongsTo(Employee::class);
+        return $this->belongsTo(Employee::class, 'employee_id');
     }
 }
