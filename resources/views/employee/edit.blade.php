@@ -398,8 +398,7 @@
   .content1,
   .content3,
   .content5,
-  .content6,
-  .content7 {
+  .content6 {
     display: flex;
     width: 100%;
     justify-content: space-between;
@@ -418,7 +417,7 @@
     width: 50%;
   }
 
-  .left-content7 {
+  /* .left-content7 {
     margin-top: 5px;
     display: flex;
     gap: 3px;
@@ -428,7 +427,7 @@
     word-break: break-word;
     word-wrap: break-word;
     width: 250px;
-  }
+  } */
 
   .left-content1 {
     margin-top: 5px;
@@ -475,13 +474,13 @@
     margin-left: 820px;
   }
 
-  .right-content7 {
+  /* .right-content7 {
     display: flex;
     flex-direction: column;
     gap: 3px;
     padding-top: 20px;
     margin-left: 650px;
-  }
+  } */
 
   .content-info {
     font-size: 14px;
@@ -2135,7 +2134,7 @@
                 <div class="relative inline-block text-left dropdown-action">
                   <button type="button"
                     onclick="toggleActions('{{ $family->id }}')"
-                    class="p-1 text-blue-600 hover:text-cyan text-xl">
+                    class=" text-blue-600 hover:text-cyan text-3xl">
                     &#x22EF;
                   </button>
                   <div id="dropdownActions-{{ $family->id }}"
@@ -2368,6 +2367,82 @@
       </div>
     </div>
 
+
+    <!-- DOKUMEN DI HALAMAN EDIT -->
+
+    <div class="tab-content" id="dokumen" style="display: none;">
+      <div class="w-[140vh] p-4 bg-white rounded-lg shadow-sm">
+
+        <!-- Dokumen Personal -->
+        <h5 class="font-semibold text-gray-800 mb-3">Dokumen Personal</h5>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          @foreach($dokumenWajib as $field => $label)
+          <div class="flex justify-between items-center border-b pb-2">
+            <div>
+              <span class="font-medium text-gray-700">{{ $label }}</span><br>
+              @if($employee->$field)
+              <a href="{{ asset('storage/'.$employee->$field) }}" target="_blank" class="text-blue-600 text-sm font-medium hover:underline">
+                Klik untuk Melihat
+              </a>
+              @else
+              <span class="text-gray-400 text-sm">Belum ada file</span>
+              @endif
+            </div>
+            @if($employee->$field)
+            <button type="button" class="text-gray-500 hover:text-red-600 ml-2">
+              <i class="bi bi-x-circle"></i>
+            </button>
+            @endif
+          </div>
+          @endforeach
+        </div>
+
+        <hr class="h-px my-8 bg-gray-200 border-0 dark:bg-gray-700">
+
+        <div class="flex align-middle justify-between">
+          <!-- Dokumen Lainnya -->
+          <h5 class="font-semibold text-gray-800 mb-3">Dokumen Lainnya</h5>
+          <!-- Tombol Tambah -->
+          <button type="button" class="mb-4 px-4 py-2 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700">
+            + Tambah
+        </div>
+
+        <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+          @foreach($dokumenLainnya as $field => $label)
+          <div class="flex justify-between items-center border-b pb-2">
+            <div>
+              <span class="font-medium text-gray-700">{{ $label }}</span><br>
+              @if($employee->$field)
+              <a href="{{ asset('storage/'.$employee->$field) }}" target="_blank" class="text-blue-600 text-sm font-medium hover:underline">
+                Klik untuk Melihat
+              </a>
+              @else
+              <span class="text-gray-400 text-sm">Belum ada file</span>
+              @endif
+            </div>
+            @if($employee->$field)
+            <button type="button" class="text-gray-500 hover:text-red-600 ml-2">
+              <i class="bi bi-x-circle"></i>
+            </button>
+            @endif
+          </div>
+          @endforeach
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="flex justify-end gap-3 mt-6">
+          <a href="{{ route('employees.index') }}" class="px-6 py-2 rounded-lg bg-gray-200 text-gray-700 hover:bg-gray-300">
+            Cancel
+          </a>
+          <button type="submit" class="px-6 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700">
+            Save
+          </button>
+        </div>
+
+      </div>
+    </div>
+
+
     <!-- MODAL TAMBAH ANAK -->
 
     <div id="addModal" class="hidden fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50" style="padding-left:400px; padding-top:60px;">
@@ -2476,12 +2551,12 @@
     <!-- CLUSTER TAMBAH MODAL -->
     <div id="addClusterModal">
       <div class="modal-content">
-        <div class="content11">
-          <div class="left-content11">
+        <div class="">
+          <div class="">
             <h3>Tambah Penilaian Talent Cluster</h3>
           </div>
 
-          <div class="right-content11">
+          <div class="">
             <button onclick="closeAddClusterModal()" class="close-button">
               <i class="fas fa-circle-xmark"></i>
             </button>
@@ -2544,180 +2619,115 @@
       </div>
 
     </div>
-<!-- DOKUMEN -->
+
+
+
+
     <div class="p-4">
 
-    {{-- Dokumen Personal --}}
-    <h5 class="fw-bold mb-3">Dokumen Personal</h5>
-    <div class="row g-3">
-        @foreach($dokumenWajib as $field => $label)
-            <div class="col-md-6 d-flex justify-content-between align-items-center border-bottom pb-2">
-                <div>
-                    <span class="fw-semibold">{{ $label }}</span><br>
-                    @if($employee->$field)
-                        <a href="{{ asset('storage/'.$employee->$field) }}" target="_blank" class="text-primary small">
-                            Klik untuk Melihat
-                        </a>
-                    @else
-                        <span class="text-muted small">Belum ada file</span>
-                    @endif
-                </div>
-                @if($employee->$field)
-                    <button type="button" class="btn btn-sm btn-link text-danger p-0 ms-2">
-                        <i class="bi bi-x-circle"></i>
-                    </button>
-                @endif
-            </div>
-        @endforeach
-    </div>
-    <div class="mt-3 flex justify-end">
-        <button type="button" class="btn btn-primary btn-sm">
-            + Tambah
-        </button>
-    </div>
 
-    <hr class="my-4">
 
-    {{-- Dokumen Lainnya --}}
-    <h5 class="fw-bold mb-3">Dokumen Lainnya</h5>
-    <div class="row g-3">
-        @foreach($dokumenLainnya as $field => $label)
-            <div class="col-md-6 d-flex justify-content-between align-items-center border-bottom pb-2">
-                <div>
-                    <span class="fw-semibold">{{ $label }}</span><br>
-                    @if($employee->$field)
-                        <a href="{{ asset('storage/'.$employee->$field) }}" target="_blank" class="text-primary small">
-                            Klik untuk Melihat
-                        </a>
-                    @else
-                        <span class="text-muted small">Belum ada file</span>
-                    @endif
-                </div>
-                @if($employee->$field)
-                    <button type="button" class="btn btn-sm btn-link text-danger p-0 ms-2">
-                        <i class="bi bi-x-circle"></i>
-                    </button>
-                @endif
-            </div>
-        @endforeach
     </div>
-    {{-- Action Buttons --}}
-    <div class="d-flex justify-content-end gap-2 mt-4">
-        <a href="{{ route('employees.index') }}" class="btn btn-secondary">Cancel</a>
-        <button type="submit" class="btn btn-primary">Save</button>
-    </div>
-</div>
-</div>
-@endsection
+    @endsection
 
-<script>
-  function removeFile(field) {
-    // tandai field yang dihapus (biar controller tahu)
-    let deleted = document.getElementById("deleted_files").value;
-    let list = deleted ? deleted.split(",") : [];
-    if (!list.includes(field)) {
-      list.push(field);
-    }
-    document.getElementById("deleted_files").value = list.join(",");
+    <script>
+      function removeFile(field) {
+        // tandai field yang dihapus (biar controller tahu)
+        let deleted = document.getElementById("deleted_files").value;
+        let list = deleted ? deleted.split(",") : [];
+        if (!list.includes(field)) {
+          list.push(field);
+        }
+        document.getElementById("deleted_files").value = list.join(",");
 
-    // ganti tampilan link -> input file
-    let wrapper = document.getElementById("wrapper-" + field);
-    wrapper.innerHTML = `
+        // ganti tampilan link -> input file
+        let wrapper = document.getElementById("wrapper-" + field);
+        wrapper.innerHTML = `
             <label class="form-label">${field.toUpperCase()}</label>
             <input type="file" name="${field}" id="input-${field}" class="form-control">
         `;
-  }
-</script>
+      }
+    </script>
 
 
-<script>
-  function showTab(tabId) {
-    // Sembunyikan semua konten
-    const tabs = document.querySelectorAll('.tab-content');
-    tabs.forEach(tab => tab.style.display = 'none');
+    <script>
+      function showTab(tabId) {
+        // Sembunyikan semua konten
+        const tabs = document.querySelectorAll('.tab-content');
+        tabs.forEach(tab => tab.style.display = 'none');
 
-    // Hapus kelas aktif dari semua tombol
-    const buttons = document.querySelectorAll('.tab-button');
-    buttons.forEach(btn => btn.classList.remove('active'));
+        // Hapus kelas aktif dari semua tombol
+        const buttons = document.querySelectorAll('.tab-button');
+        buttons.forEach(btn => btn.classList.remove('active'));
 
-    // Tampilkan tab yang diklik
-    document.getElementById(tabId).style.display = 'block';
+        // Tampilkan tab yang diklik
+        document.getElementById(tabId).style.display = 'block';
 
-    // Tambahkan kelas aktif ke tombol yang diklik
-    event.currentTarget.classList.add('active');
-  }
-</script>
+        // Tambahkan kelas aktif ke tombol yang diklik
+        event.currentTarget.classList.add('active');
+      }
+    </script>
 
-<script>
-  document.addEventListener('DOMContentLoaded', function() {
-    const tabs = document.querySelectorAll('.tab-content');
-    const tabButtons = document.querySelectorAll('.tab-button');
-
-
-    // Sembunyikan semua tab dulu
-    tabs.forEach(tab => tab.style.display = 'none');
-
-    // Ambil hash dari URL
-    let hash = window.location.hash || '#profile';
-    let activeTab = document.querySelector(hash);
-
-    if (activeTab) {
-      activeTab.style.display = 'block';
-    }
-
-    // Tambahkan kelas aktif ke tombol yang diklik
-    event.currentTarget.classList.add('active');
-  });
-</script>
-
-<script>
-  function toggleContent(contentId, btn) {
-    const content = document.getElementById(contentId);
-    content.classList.toggle("show");
-
-    const icon = btn.querySelector('i');
-    icon.classList.toggle('fa-chevron-down');
-    icon.classList.toggle('fa-chevron-up');
-  }
-</script>
-
-<script>
-  function openAddModal() {
-    document.getElementById("addModal").style.display = "block";
-  }
-
-  function closeAddModal() {
-    document.getElementById("addModal").style.display = "none";
-  }
-</script>
-
-<script>
-  function openAddClusterModal() {
-    document.getElementById("addClusterModal").style.display = "block";
-  }
-
-  function closeAddClusterModal() {
-    document.getElementById("addClusterModal").style.display = "none";
-  }
-</script>
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        const tabs = document.querySelectorAll('.tab-content');
+        const tabButtons = document.querySelectorAll('.tab-button');
 
 
-<script>
-  document.addEventListener("DOMContentLoaded", function() {
-    const saveBtn = document.getElementById("saveInfo");
-    const openInfoBtn = document.getElementById("openInfo");
-    const infoModalEl = document.getElementById('infoModal');
-    const infoModal = new bootstrap.Modal(infoModalEl, {
-      backdrop: false
-    });
+        // Sembunyikan semua tab dulu
+        tabs.forEach(tab => tab.style.display = 'none');
 
-    openInfoBtn.addEventListener("click", function() {
-      infoModal.show();
-    });
+        // Ambil hash dari URL
+        let hash = window.location.hash || '#profile';
+        let activeTab = document.querySelector(hash);
 
-    // Mapping checkbox value ke field input
-    const fieldTemplates = {
-      "Tanggal KDMP": `
+        if (activeTab) {
+          activeTab.style.display = 'block';
+        }
+
+        // Tambahkan kelas aktif ke tombol yang diklik
+        event.currentTarget.classList.add('active');
+      });
+    </script>
+
+    <script>
+      function toggleContent(contentId, btn) {
+        const content = document.getElementById(contentId);
+        content.classList.toggle("show");
+
+        const icon = btn.querySelector('i');
+        icon.classList.toggle('fa-chevron-down');
+        icon.classList.toggle('fa-chevron-up');
+      }
+    </script>
+
+    <script>
+      function openAddModal() {
+        document.getElementById("addModal").style.display = "block";
+      }
+
+      function closeAddModal() {
+        document.getElementById("addModal").style.display = "none";
+      }
+    </script>
+
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function() {
+        const saveBtn = document.getElementById("saveInfo");
+        const openInfoBtn = document.getElementById("openInfo");
+        const infoModalEl = document.getElementById('infoModal');
+        const infoModal = new bootstrap.Modal(infoModalEl, {
+          backdrop: false
+        });
+
+        openInfoBtn.addEventListener("click", function() {
+          infoModal.show();
+        });
+
+        // Mapping checkbox value ke field input
+        const fieldTemplates = {
+          "Tanggal KDMP": `
               <div class="form-group">
                   <div class="label-group">
                       <label>Tanggal KDMP <span class="bintang">*</span></label>
@@ -2726,7 +2736,7 @@
               </div>
           `,
 
-      "Tanggal TKWT": `
+          "Tanggal TKWT": `
               <div class="form-group">
                   <div class="label-group">
                       <label>Tanggal TKWT <span class="bintang">*</span></label>
@@ -2735,7 +2745,7 @@
               </div>
           `,
 
-      "Tanggal Akhir TKWT": `
+          "Tanggal Akhir TKWT": `
               <div class="form-group">
                   <div class="label-group">
                       <label>Tanggal Akhir TKWT <span class="bintang">*</span></label>
@@ -2744,7 +2754,7 @@
               </div>
           `,
 
-      "Tanggal Mutasi": `
+          "Tanggal Mutasi": `
               <div class="form-group">
                   <div class="label-group">
                       <label>Tanggal Mutasi <span class="bintang">*</span></label>
@@ -2753,7 +2763,7 @@
               </div>
           `,
 
-      "Tanggal PJ": `
+          "Tanggal PJ": `
               <div class="form-group">
                   <div class="label-group">
                       <label>Tanggal PJ <span class="bintang">*</span></label>
@@ -2762,7 +2772,7 @@
               </div>
           `,
 
-      "Tanggal Lepas PJ": `
+          "Tanggal Lepas PJ": `
               <div class="form-group">
                   <div class="label-group">
                       <label>Tanggal Lepas PJ <span class="bintang">*</span></label>
@@ -2771,7 +2781,7 @@
               </div>
           `,
 
-      "Tanggal Band Posisi Terakhir": `
+          "Tanggal Band Posisi Terakhir": `
               <div class="form-group">
                   <div class="label-group">
                       <label>Tanggal Band Posisi Terakhir <span class="bintang">*</span></label>
@@ -2780,7 +2790,7 @@
               </div>
           `,
 
-      "Tanggal Pensiun": `
+          "Tanggal Pensiun": `
               <div class="form-group">
                   <div class="label-group">
                       <label>Tanggal Pensiun <span class="bintang">*</span></label>
@@ -2789,7 +2799,7 @@
               </div>
           `,
 
-      "Tanggal Akhir Kontrak": `
+          "Tanggal Akhir Kontrak": `
               <div class="form-group">
                   <div class="label-group">
                       <label>Tanggal Akhir Kontrak <span class="bintang">*</span></label>
@@ -2798,7 +2808,7 @@
               </div>
           `,
 
-      "Dokumen SK": `
+          "Dokumen SK": `
               <div class="form-group">
                   <div class="label-group">
                       <label>Dokumen SK <span class="bintang">*</span></label>
@@ -2813,7 +2823,7 @@
               </div>
           `,
 
-      "Dokumen Nota Dinas": `
+          "Dokumen Nota Dinas": `
               <div class="form-group">
                   <div class="label-group">
                       <label>Dokumen Nota Dinas <span class="bintang">*</span></label>
@@ -2824,7 +2834,7 @@
               </div>
           `,
 
-      "Dokumen Lainnya": `
+          "Dokumen Lainnya": `
               <div class="form-group">
                   <div class="label-group">
                       <label>Dokumen Lainnya <span class="bintang">*</span></label>
@@ -2833,24 +2843,24 @@
                   <small class="file-preview text-muted"></small>
               </div>
           `
-    };
+        };
 
-    saveBtn.addEventListener("click", function() {
-      const extraFields = document.getElementById("extraFields");
-      extraFields.innerHTML = ""; // reset dulu
+        saveBtn.addEventListener("click", function() {
+          const extraFields = document.getElementById("extraFields");
+          extraFields.innerHTML = ""; // reset dulu
 
-      document.querySelectorAll(".info-option:checked").forEach((checkbox) => {
-        if (fieldTemplates[checkbox.value]) {
-          extraFields.insertAdjacentHTML("beforeend", fieldTemplates[checkbox.value]);
-        }
+          document.querySelectorAll(".info-option:checked").forEach((checkbox) => {
+            if (fieldTemplates[checkbox.value]) {
+              extraFields.insertAdjacentHTML("beforeend", fieldTemplates[checkbox.value]);
+            }
+          });
+
+          infoModal.hide(); // tutup popup kecil
+        });
       });
+    </script>
 
-      infoModal.hide(); // tutup popup kecil
-    });
-  });
-</script>
-
-<!--
+    <!--
 <script>
   document.getElementById("dokumen_sk").addEventListener("change", function() {
       const fileName = this.files.length ? this.files[0].name : "";
@@ -2859,7 +2869,7 @@
 </script>
 -->
 
-<!--
+    <!--
 <script>
   document.getElementById("dokumen_sk").addEventListener("change", function() {
       const fileName = this.files[0] ? this.files[0].name : "Belum ada file dipilih";
@@ -2868,66 +2878,66 @@
 </script>
 -->
 
-<script>
-  document.addEventListener("change", function(e) {
-    if (e.target && e.target.type === "file") {
-      let wrapper = e.target.closest(".file-input");
-      /*
-      let preview = wrapper.querySelector(".file-preview"); */
-      let textInput = wrapper.querySelector(".file-text");
+    <script>
+      document.addEventListener("change", function(e) {
+        if (e.target && e.target.type === "file") {
+          let wrapper = e.target.closest(".file-input");
+          /*
+          let preview = wrapper.querySelector(".file-preview"); */
+          let textInput = wrapper.querySelector(".file-text");
 
-      if (e.target.files.length > 0) {
-        let fileName = e.target.files[0].name;
-        if (textInput) textInput.value = fileName; // isi ke input text
-        /*
-        if (preview) preview.textContent = fileName; // isi ke <small> */
-      } else {
-        if (textInput) textInput.value = "";
-        if (preview) preview.textContent = "Belum ada file";
-      }
-    }
-  });
-</script>
-
-
-<script>
-  document.addEventListener('DOMContentLoaded', () => {
-    // Toggle menu dropdown
-    window.toggleActions = function(id) {
-      // Tutup menu lain dulu
-      document.querySelectorAll('.dropdown-action-content').forEach(menu => {
-        if (menu.id !== 'dropdownActions-' + id) {
-          menu.classList.add('hidden');
+          if (e.target.files.length > 0) {
+            let fileName = e.target.files[0].name;
+            if (textInput) textInput.value = fileName; // isi ke input text
+            /*
+            if (preview) preview.textContent = fileName; // isi ke <small> */
+          } else {
+            if (textInput) textInput.value = "";
+            if (preview) preview.textContent = "Belum ada file";
+          }
         }
       });
+    </script>
 
-      // Toggle menu yang sesuai tombol
-      const currentMenu = document.getElementById('dropdownActions-' + id);
-      if (currentMenu) {
-        currentMenu.classList.toggle('hidden');
-      }
-    };
 
-    // Klik di luar menutup semua menu
-    document.addEventListener('click', (e) => {
-      if (!e.target.closest('.dropdown-action')) {
-        document.querySelectorAll('.dropdown-action-content').forEach(menu => {
-          menu.classList.add('hidden');
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        // Toggle menu dropdown
+        window.toggleActions = function(id) {
+          // Tutup menu lain dulu
+          document.querySelectorAll('.dropdown-action-content').forEach(menu => {
+            if (menu.id !== 'dropdownActions-' + id) {
+              menu.classList.add('hidden');
+            }
+          });
+
+          // Toggle menu yang sesuai tombol
+          const currentMenu = document.getElementById('dropdownActions-' + id);
+          if (currentMenu) {
+            currentMenu.classList.toggle('hidden');
+          }
+        };
+
+        // Klik di luar menutup semua menu
+        document.addEventListener('click', (e) => {
+          if (!e.target.closest('.dropdown-action')) {
+            document.querySelectorAll('.dropdown-action-content').forEach(menu => {
+              menu.classList.add('hidden');
+            });
+          }
         });
-      }
-    });
 
-    // Tekan Escape menutup semua menu
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') {
-        document.querySelectorAll('.dropdown-action-content').forEach(menu => {
-          menu.classList.add('hidden');
+        // Tekan Escape menutup semua menu
+        document.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape') {
+            document.querySelectorAll('.dropdown-action-content').forEach(menu => {
+              menu.classList.add('hidden');
+            });
+          }
         });
-      }
-    });
-  });
-</script>
-<!-- <script>
+      });
+    </script>
+    <!-- <script>
         function toggleActions(id) {
           // Tutup semua dropdown lain
           document.querySelectorAll('.dropdown-action-content').forEach(el => {
@@ -2950,25 +2960,25 @@
           }
         });
       </script> -->
-<script>
-  function openEditPopup(id, nama, jk, tempat_tanggal_lahirr, pendidikan, status, urutan, keterangan) {
-    document.getElementById('popup-edit').classList.remove('hidden');
+    <script>
+      function openEditPopup(id, nama, jk, tempat_tanggal_lahirr, pendidikan, status, urutan, keterangan) {
+        document.getElementById('popup-edit').classList.remove('hidden');
 
-    // isi data
-    document.getElementById('edit-nama').value = nama;
-    document.getElementById('edit-jk').value = jk;
-    document.getElementById('edit-ttl').value = tempat_tanggal_lahirr;
-    document.getElementById('edit-pendidikan').value = pendidikan;
-    document.getElementById('edit-status').value = status;
-    document.getElementById('edit-urutan').value = urutan;
-    document.getElementById('edit-keterangan').value = keterangan;
+        // isi data
+        document.getElementById('edit-nama').value = nama;
+        document.getElementById('edit-jk').value = jk;
+        document.getElementById('edit-ttl').value = tempat_tanggal_lahirr;
+        document.getElementById('edit-pendidikan').value = pendidikan;
+        document.getElementById('edit-status').value = status;
+        document.getElementById('edit-urutan').value = urutan;
+        document.getElementById('edit-keterangan').value = keterangan;
 
-    // set form action ke families.update
-    document.getElementById('popup-edit-form').action =
-      `/employees/{{ $employee->id }}/families/${id}`;
-  }
+        // set form action ke families.update
+        document.getElementById('popup-edit-form').action =
+          `/employees/{{ $employee->id }}/families/${id}`;
+      }
 
-  function closeEditPopup() {
-    document.getElementById('popup-edit').classList.add('hidden');
-  }
-</script>
+      function closeEditPopup() {
+        document.getElementById('popup-edit').classList.add('hidden');
+      }
+    </script>
