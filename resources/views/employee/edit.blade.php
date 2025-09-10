@@ -2362,162 +2362,163 @@
 
         </div>
 
-        <div class="tab-content" id="dokumen" style="display: none;">
-
-
-
-
-          @php
-          // daftar field -> label
-          $dokumenWajib = [
-          'dokumen_ktp' => 'KTP',
-          'dokumen_kk' => 'Kartu Keluarga',
-          'dokumen_npwp'=> 'NPWP',
-          'dokumen_bpjs'=> 'BPJS',
-          ];
-
-          $dokumenLainnya = [
-          'dokumen_hasil_psikotest' => 'Hasil Psikotest',
-          'dokumen_assessment_01' => 'Hasil Assessment 01',
-          'dokumen_assessment_02' => 'Hasil Assessment 02',
-          'dokumen_assessment_03' => 'Hasil Assessment 03',
-          ];
-          @endphp
-
-          {{-- ===== Dokumen Wajib ===== --}}
-          <h5 class="fw-bold mb-3">Dokumen Wajib</h5>
-          @foreach(collect($dokumenWajib)->chunk(2) as $pair)
-          <div class="row">
-            @foreach($pair as $field => $label)
-            @php
-            $doc = optional($employee->documents)->firstWhere('jenis_dokumen', $field);
-            @endphp
-            <div class="col-md-6 mb-3">
-              <label class="fw-semibold d-block">{{ $label }}</label>
-
-              @if($doc)
-              <div class="d-flex align-items-center gap-2">
-                <a href="{{ asset('storage/'.$doc->file_path) }}" target="_blank" class="text-primary">
-                  Klik untuk Melihat
-                </a>
-                <form method="POST" action="{{ route('employee.documents.delete', [$employee->id, $doc->id]) }}"
-                  onsubmit="return confirm('Hapus file ini?')">
-                  @csrf
-                  @method('DELETE')
-                  <button class="btn btn-link text-danger p-0" title="Hapus">✕</button>
-                </form>
-              </div>
-              @else
-              <input type="file" name="dokumen[{{ $field }}]" class="form-control form-control-sm">
-              @endif
-            </div>
-            @endforeach
-          </div>
-          @endforeach
-
-          {{-- ===== Dokumen Lainnya ===== --}}
-          <h5 class="fw-bold mb-3 mt-4">Dokumen Lainnya</h5>
-          @foreach(collect($dokumenLainnya)->chunk(2) as $pair)
-          <div class="row">
-            @foreach($pair as $field => $label)
-            @php
-            $doc = optional($employee->documents)->firstWhere('jenis_dokumen', $field);
-            @endphp
-            <div class="col-md-6 mb-3">
-              <label class="fw-semibold d-block">{{ $label }}</label>
-
-              @if($doc)
-              <div class="d-flex align-items-center gap-2">
-                <a href="{{ asset('storage/'.$doc->file_path) }}" target="_blank" class="text-primary">
-                  Klik untuk Melihat
-                </a>
-                <form method="POST" action="{{ route('employee.documents.delete', [$employee->id, $doc->id]) }}"
-                  onsubmit="return confirm('Hapus file ini?')">
-                  @csrf
-                  @method('DELETE')
-                  <button class="btn btn-link text-danger p-0" title="Hapus">✕</button>
-                </form>
-              </div>
-              @else
-              <input type="file" name="dokumen[{{ $field }}]" class="form-control form-control-sm">
-              @endif
-            </div>
-            @endforeach
-          </div>
-          @endforeach
-
-
-
-          {{-- Tombol --}}
-          <div class="d-flex justify-content-end mt-4">
-            <a href="{{ route('employees.show', $employee->id) }}" class="btn-cancel me-2">Cancel</a>
-            <button type="submit" class="btn btn-save">Save</button>
-          </div>
-          </form>
+        <div class="form-group3">
+          <label>Pendidikan Saat Ini</label>
+          <select name="pendidikan" class="form-control1">
+            <option disabled selected value=""></option>
+            <option value="SD" {{ old('pendidikan')==='SD'?'selected':'' }}>SD</option>
+            <option value="SMP" {{ old('pendidikan')==='SMP'?'selected':'' }}>SMP</option>
+            <option value="SMA" {{ old('pendidikan')==='SMA'?'selected':'' }}>SMA</option>
+            <option value="Kuliah" {{ old('pendidikan')==='Kuliah'?'selected':'' }}>Kuliah</option>
+          </select>
         </div>
+
+        <div class="form-group2">
+          <label>Status Anak</label>
+          <select name="status_anak" class="form-control1">
+            <option disabled selected value=""></option>
+            <option value="Kandung" {{ old('status_anak')==='Kandung'?'selected':'' }}>Kandung</option>
+            <option value="Tidak Kandung" {{ old('status_anak')==='Tidak Kandung'?'selected':'' }}>Tidak Kandung</option>
+          </select>
+        </div>
+
+        <div class="form-group3">
+          <label>Urutan Anak</label>
+          <input type="text" name="urutan_anak" class="form-control" value="{{ old('urutan_anak') }}" placeholder="Contoh: 1, 2, 3 atau Anak ke-1">
+        </div>
+
+        <div class="form-group2">
+          <label>Keterangan</label>
+          <select name="keterangan" class="form-control1">
+            <option disabled selected value=""></option>
+            <option value="Ditanggung" {{ old('keterangan')==='Ditanggung'?'selected':'' }}>Ditanggung</option>
+            <option value="Tidak Ditanggung" {{ old('keterangan')==='Tidak Ditanggung'?'selected':'' }}>Tidak Ditanggung</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-buttons" style="margin-top:1rem;">
+        <button type="button" class="cancel" onclick="history.back()">Cancel</button>
+        <button type="submit" class="submit">Tambah</button>
+      </div>
+      </form>
+
+    </div>
+
+    <!-- AKTIVITAS CAREER -->
+
+    <div class="tab-content" id="karir" style="display: none;">
+      <div class="aktivitas_karir">
+        @include('employee.partials.aktivitas_karir', ['career' => $career, 'employee' => $employee])
       </div>
 
     </div>
 
+    <!-- DOKUMEN PERSONAL -->
+
+    <div class="tab-content" id="dokumen" style="display: none;">
+      <div class="content5">
+        <h4 class="content-info">Dokumen Personal</h4>
+        @php
+        // daftar field -> label
+        $dokumenWajib = [
+        'dokumen_ktp' => 'KTP',
+        'dokumen_kk' => 'Kartu Keluarga',
+        'dokumen_npwp'=> 'NPWP',
+        'dokumen_bpjs'=> 'BPJS',
+        ];
+
+        $dokumenLainnya = [
+        'dokumen_hasil_psikotest' => 'Hasil Psikotest',
+        'dokumen_assessment_01' => 'Hasil Assessment 01',
+        'dokumen_assessment_02' => 'Hasil Assessment 02',
+        'dokumen_assessment_03' => 'Hasil Assessment 03',
+        ];
+        @endphp
+
+        {{-- ===== Dokumen Wajib ===== --}}
+        <h5 class="fw-bold mb-3">Dokumen Wajib</h5>
+        @foreach(collect($dokumenWajib)->chunk(2) as $pair)
+        <div class="row">
+          @foreach($pair as $field => $label)
+          @php
+          $doc = optional($employee->documents)->firstWhere('jenis_dokumen', $field);
+          @endphp
+          <div class="col-md-6 mb-3">
+            <label class="fw-semibold d-block">{{ $label }}</label>
+
+            @if($doc)
+            <div class="d-flex align-items-center gap-2">
+              <a href="{{ asset('storage/'.$doc->file_path) }}" target="_blank" class="text-primary">
+                Klik untuk Melihat
+              </a>
+              <form method="POST" action="{{ route('employee.documents.delete', [$employee->id, $doc->id]) }}"
+                onsubmit="return confirm('Hapus file ini?')">
+                @csrf
+                @method('DELETE')
+                <button class="btn btn-link text-danger p-0" title="Hapus">✕</button>
+              </form>
+            </div>
+            @else
+            <input type="file" name="dokumen[{{ $field }}]" class="form-control form-control-sm">
+            @endif
+          </div>
+          @endforeach
+        </div>
+        @endforeach
+
+        {{-- ===== Dokumen Lainnya ===== --}}
+        <h5 class="fw-bold mb-3 mt-4">Dokumen Lainnya</h5>
+        @foreach(collect($dokumenLainnya)->chunk(2) as $pair)
+        <div class="row">
+          @foreach($pair as $field => $label)
+          @php
+          $doc = optional($employee->documents)->firstWhere('jenis_dokumen', $field);
+          @endphp
+          <div class="col-md-6 mb-3">
+            <label class="fw-semibold d-block">{{ $label }}</label>
+
+            @if($doc)
+            <div class="d-flex align-items-center gap-2">
+              <a href="{{ asset('storage/'.$doc->file_path) }}" target="_blank" class="text-primary">
+                Klik untuk Melihat
+              </a>
+              <form method="POST" action="{{ route('employee.documents.delete', [$employee->id, $doc->id]) }}"
+                onsubmit="return confirm('Hapus file ini?')">
+                @csrf
+                @method('DELETE')
+                <button class="btn btn-link text-danger p-0" title="Hapus">✕</button>
+              </form>
+            </div>
+            @else
+            <input type="file" name="dokumen[{{ $field }}]" class="form-control form-control-sm">
+            @endif
+          </div>
+          @endforeach
+        </div>
+        @endforeach
 
 
-    <div class="form-group3">
-      <label>Pendidikan Saat Ini</label>
-      <select name="pendidikan" class="form-control1">
-        <option disabled selected value=""></option>
-        <option value="SD" {{ old('pendidikan')==='SD'?'selected':'' }}>SD</option>
-        <option value="SMP" {{ old('pendidikan')==='SMP'?'selected':'' }}>SMP</option>
-        <option value="SMA" {{ old('pendidikan')==='SMA'?'selected':'' }}>SMA</option>
-        <option value="Kuliah" {{ old('pendidikan')==='Kuliah'?'selected':'' }}>Kuliah</option>
-      </select>
+
+        {{-- Tombol --}}
+        <div class="d-flex justify-content-end mt-4">
+          <a href="{{ route('employees.show', $employee->id) }}" class="btn-cancel me-2">Cancel</a>
+          <button type="submit" class="btn btn-save">Save</button>
+        </div>
+        </form>
+      </div>
     </div>
 
-    <div class="form-group2">
-      <label>Status Anak</label>
-      <select name="status_anak" class="form-control1">
-        <option disabled selected value=""></option>
-        <option value="Kandung" {{ old('status_anak')==='Kandung'?'selected':'' }}>Kandung</option>
-        <option value="Tidak Kandung" {{ old('status_anak')==='Tidak Kandung'?'selected':'' }}>Tidak Kandung</option>
-      </select>
-    </div>
-
-    <div class="form-group3">
-      <label>Urutan Anak</label>
-      <input type="text" name="urutan_anak" class="form-control" value="{{ old('urutan_anak') }}" placeholder="Contoh: 1, 2, 3 atau Anak ke-1">
-    </div>
-
-    <div class="form-group2">
-      <label>Keterangan</label>
-      <select name="keterangan" class="form-control1">
-        <option disabled selected value=""></option>
-        <option value="Ditanggung" {{ old('keterangan')==='Ditanggung'?'selected':'' }}>Ditanggung</option>
-        <option value="Tidak Ditanggung" {{ old('keterangan')==='Tidak Ditanggung'?'selected':'' }}>Tidak Ditanggung</option>
-      </select>
-    </div>
   </div>
 
-  <div class="form-buttons" style="margin-top:1rem;">
-    <button type="button" class="cancel" onclick="history.back()">Cancel</button>
-    <button type="submit" class="submit">Tambah</button>
-  </div>
-  </form>
 
 </div>
 
-<div class="tab-content" id="karir" style="display: none;">
-  <div class="aktivitas_karir">
-    @include('employee.partials.aktivitas_karir', ['career' => $career, 'employee' => $employee])
-  </div>
-
 </div>
 
-<div class="tab-content" id="dokumen" style="display: none;">
-  <div class="content5">
-    <h4 class="content-info">Dokumen Personal</h4>
-  </div>
-</div>
 
-</div>
+
+
 
 @endsection
 
