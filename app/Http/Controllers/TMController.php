@@ -110,7 +110,7 @@ class TMController extends Controller
 
     public function edit($id, Request $request)
     {
-        $employee = Employee::findOrFail($id);
+         $employee = Employee::with(['families','talentClusters'])->findOrFail($id);
 
         // Ambil parameter sorting dari query string
         $sortByFamily    = $request->query('sort_by_family', 'nama_lengkap');

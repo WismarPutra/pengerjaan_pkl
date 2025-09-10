@@ -14,9 +14,7 @@ use App\Http\Controllers\RecruitmentController;
 use App\Http\Controllers\WorkforceController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\TalentClusterController;
-
-
-
+use App\Models\TalentCluster;
 
 /*
 |--------------------------------------------------------------------------
@@ -118,8 +116,14 @@ Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard
 Route::get('/workforce', [WorkforceController::class, 'index'])->name('workforce.index');
 
 /* TALENT CLUSTER */
-Route::post('/employees/{employee}/talent-clusters', [TalentClusterController::class, 'store'])
-    ->name('talent-cluster.store');
+Route::prefix('employees/{employee}')->group(function () {
+    Route::get('clusters', [TalentClusterController::class, 'index'])->name('clusters.index');
+    Route::post('clusters', [TalentClusterController::class, 'store'])->name('clusters.store');
+    Route::get('clusters/{cluster}/edit', [TalentClusterController::class, 'edit'])->name('clusters.edit');
+    Route::put('clusters/{cluster}', [TalentClusterController::class, 'update'])->name('clusters.update');
+    Route::delete('clusters/{cluster}/delete', [TalentClusterController::class, 'delete'])->name('clusters.delete');
+});
+
 
 /* INFOMRASI ANAK */
 

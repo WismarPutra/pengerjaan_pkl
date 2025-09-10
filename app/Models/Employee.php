@@ -45,6 +45,6 @@ class Employee extends Model
 
     public function talentClusters()
     {
-        return $this->hasMany(TalentCluster::class);
+        return $this->hasMany(TalentCluster::class, 'employee_id');
     }
 }
