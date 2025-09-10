@@ -1581,7 +1581,7 @@
   }
 
   /* Tombol Tambah */
-.btn-tambah {
+  .btn-tambah {
     font-size: 14px;
     font-weight: 600;
     margin: 0;
@@ -1592,13 +1592,15 @@
     text-decoration: none;
     border: none;
     cursor: pointer;
-}
-.btn-tambah:hover {
-    background-color: #0000cd; /* darkblue saat hover */
-}
+  }
 
-/* Tombol Cancel */
-.btn-cancel {
+  .btn-tambah:hover {
+    background-color: #0000cd;
+    /* darkblue saat hover */
+  }
+
+  /* Tombol Cancel */
+  .btn-cancel {
     font-size: 14px;
     font-weight: 600;
     margin: 0;
@@ -1609,13 +1611,14 @@
     text-decoration: none;
     border: none;
     cursor: pointer;
-}
-.btn-cancel:hover {
-    background-color: #dee2e6;
-}
+  }
 
-/* Tombol Save */
-.btn-save {
+  .btn-cancel:hover {
+    background-color: #dee2e6;
+  }
+
+  /* Tombol Save */
+  .btn-save {
     font-size: 14px;
     font-weight: 600;
     margin: 0;
@@ -1626,11 +1629,11 @@
     text-decoration: none;
     border: none;
     cursor: pointer;
-}
-.btn-save:hover {
-    background-color: #1d0ecb;
-}
+  }
 
+  .btn-save:hover {
+    background-color: #1d0ecb;
+  }
 </style>
 
 <div class="navbar" style="z-index:1;">
@@ -2355,288 +2358,277 @@
                   value="{{ old('ttl', $family->ttl ?? '') }}">
               </div>
 
-      </div>
-      
-    </div>
-
-    <div class="tab-content" id="dokumen" style="display: none;">
-      
-
-       
-
-       @php
-    // daftar field -> label
-    $dokumenWajib = [
-        'dokumen_ktp' => 'KTP',
-        'dokumen_kk'  => 'Kartu Keluarga',
-        'dokumen_npwp'=> 'NPWP',
-        'dokumen_bpjs'=> 'BPJS',
-    ];
-
-    $dokumenLainnya = [
-        'dokumen_hasil_psikotest' => 'Hasil Psikotest',
-        'dokumen_assessment_01'   => 'Hasil Assessment 01',
-        'dokumen_assessment_02'   => 'Hasil Assessment 02',
-        'dokumen_assessment_03'   => 'Hasil Assessment 03',
-    ];
-@endphp
-
-{{-- ===== Dokumen Wajib ===== --}}
-<h5 class="fw-bold mb-3">Dokumen Wajib</h5>
-@foreach(collect($dokumenWajib)->chunk(2) as $pair)
-  <div class="row">
-    @foreach($pair as $field => $label)
-      @php
-        $doc = optional($employee->documents)->firstWhere('jenis_dokumen', $field);
-      @endphp
-      <div class="col-md-6 mb-3">
-        <label class="fw-semibold d-block">{{ $label }}</label>
-
-        @if($doc)
-          <div class="d-flex align-items-center gap-2">
-            <a href="{{ asset('storage/'.$doc->file_path) }}" target="_blank" class="text-primary">
-              Klik untuk Melihat
-            </a>
-            <form method="POST" action="{{ route('employee.documents.delete', [$employee->id, $doc->id]) }}"
-                  onsubmit="return confirm('Hapus file ini?')">
-              @csrf
-              @method('DELETE')
-              <button class="btn btn-link text-danger p-0" title="Hapus">✕</button>
-            </form>
-          </div>
-        @else
-          <input type="file" name="dokumen[{{ $field }}]" class="form-control form-control-sm">
-        @endif
-      </div>
-    @endforeach
-  </div>
-@endforeach
-
-{{-- ===== Dokumen Lainnya ===== --}}
-<h5 class="fw-bold mb-3 mt-4">Dokumen Lainnya</h5>
-@foreach(collect($dokumenLainnya)->chunk(2) as $pair)
-  <div class="row">
-    @foreach($pair as $field => $label)
-      @php
-        $doc = optional($employee->documents)->firstWhere('jenis_dokumen', $field);
-      @endphp
-      <div class="col-md-6 mb-3">
-        <label class="fw-semibold d-block">{{ $label }}</label>
-
-        @if($doc)
-          <div class="d-flex align-items-center gap-2">
-            <a href="{{ asset('storage/'.$doc->file_path) }}" target="_blank" class="text-primary">
-              Klik untuk Melihat
-            </a>
-            <form method="POST" action="{{ route('employee.documents.delete', [$employee->id, $doc->id]) }}"
-                  onsubmit="return confirm('Hapus file ini?')">
-              @csrf
-              @method('DELETE')
-              <button class="btn btn-link text-danger p-0" title="Hapus">✕</button>
-            </form>
-          </div>
-        @else
-          <input type="file" name="dokumen[{{ $field }}]" class="form-control form-control-sm">
-        @endif
-      </div>
-    @endforeach
-  </div>
-@endforeach
-
-
-
-            {{-- Tombol --}}
-            <div class="d-flex justify-content-end mt-4">
-                <a href="{{ route('employees.show', $employee->id) }}" class="btn-cancel me-2">Cancel</a>
-                <button type="submit" class="btn btn-save">Save</button>
             </div>
-        </form>
-    </div>
-</div>
-
-      </div>
-
-
-
-              <div class="form-group3">
-                <label>Pendidikan Saat Ini</label>
-                <select name="pendidikan" class="form-control1">
-                  <option disabled selected value=""></option>
-                  <option value="SD" {{ old('pendidikan')==='SD'?'selected':'' }}>SD</option>
-                  <option value="SMP" {{ old('pendidikan')==='SMP'?'selected':'' }}>SMP</option>
-                  <option value="SMA" {{ old('pendidikan')==='SMA'?'selected':'' }}>SMA</option>
-                  <option value="Kuliah" {{ old('pendidikan')==='Kuliah'?'selected':'' }}>Kuliah</option>
-                </select>
-              </div>
-
-              <div class="form-group2">
-                <label>Status Anak</label>
-                <select name="status_anak" class="form-control1">
-                  <option disabled selected value=""></option>
-                  <option value="Kandung" {{ old('status_anak')==='Kandung'?'selected':'' }}>Kandung</option>
-                  <option value="Tidak Kandung" {{ old('status_anak')==='Tidak Kandung'?'selected':'' }}>Tidak Kandung</option>
-                </select>
-              </div>
-
-              <div class="form-group3">
-                <label>Urutan Anak</label>
-                <input type="text" name="urutan_anak" class="form-control" value="{{ old('urutan_anak') }}" placeholder="Contoh: 1, 2, 3 atau Anak ke-1">
-              </div>
-
-              <div class="form-group2">
-                <label>Keterangan</label>
-                <select name="keterangan" class="form-control1">
-                  <option disabled selected value=""></option>
-                  <option value="Ditanggung" {{ old('keterangan')==='Ditanggung'?'selected':'' }}>Ditanggung</option>
-                  <option value="Tidak Ditanggung" {{ old('keterangan')==='Tidak Ditanggung'?'selected':'' }}>Tidak Ditanggung</option>
-                </select>
-              </div>
-            </div>
-
-            <div class="form-buttons" style="margin-top:1rem;">
-              <button type="button" class="cancel" onclick="history.back()">Cancel</button>
-              <button type="submit" class="submit">Tambah</button>
-            </div>
-          </form>
-
-        </div>
-
-        <div class="tab-content" id="karir" style="display: none;">
-          <div class="aktivitas_karir">
-            @include('employee.partials.aktivitas_karir', ['career' => $career, 'employee' => $employee])
-          </div>
 
         </div>
 
         <div class="tab-content" id="dokumen" style="display: none;">
-          <div class="content5">
-            <h4 class="content-info">Dokumen Personal</h4>
+
+
+
+
+          @php
+          // daftar field -> label
+          $dokumenWajib = [
+          'dokumen_ktp' => 'KTP',
+          'dokumen_kk' => 'Kartu Keluarga',
+          'dokumen_npwp'=> 'NPWP',
+          'dokumen_bpjs'=> 'BPJS',
+          ];
+
+          $dokumenLainnya = [
+          'dokumen_hasil_psikotest' => 'Hasil Psikotest',
+          'dokumen_assessment_01' => 'Hasil Assessment 01',
+          'dokumen_assessment_02' => 'Hasil Assessment 02',
+          'dokumen_assessment_03' => 'Hasil Assessment 03',
+          ];
+          @endphp
+
+          {{-- ===== Dokumen Wajib ===== --}}
+          <h5 class="fw-bold mb-3">Dokumen Wajib</h5>
+          @foreach(collect($dokumenWajib)->chunk(2) as $pair)
+          <div class="row">
+            @foreach($pair as $field => $label)
+            @php
+            $doc = optional($employee->documents)->firstWhere('jenis_dokumen', $field);
+            @endphp
+            <div class="col-md-6 mb-3">
+              <label class="fw-semibold d-block">{{ $label }}</label>
+
+              @if($doc)
+              <div class="d-flex align-items-center gap-2">
+                <a href="{{ asset('storage/'.$doc->file_path) }}" target="_blank" class="text-primary">
+                  Klik untuk Melihat
+                </a>
+                <form method="POST" action="{{ route('employee.documents.delete', [$employee->id, $doc->id]) }}"
+                  onsubmit="return confirm('Hapus file ini?')">
+                  @csrf
+                  @method('DELETE')
+                  <button class="btn btn-link text-danger p-0" title="Hapus">✕</button>
+                </form>
+              </div>
+              @else
+              <input type="file" name="dokumen[{{ $field }}]" class="form-control form-control-sm">
+              @endif
+            </div>
+            @endforeach
           </div>
+          @endforeach
+
+          {{-- ===== Dokumen Lainnya ===== --}}
+          <h5 class="fw-bold mb-3 mt-4">Dokumen Lainnya</h5>
+          @foreach(collect($dokumenLainnya)->chunk(2) as $pair)
+          <div class="row">
+            @foreach($pair as $field => $label)
+            @php
+            $doc = optional($employee->documents)->firstWhere('jenis_dokumen', $field);
+            @endphp
+            <div class="col-md-6 mb-3">
+              <label class="fw-semibold d-block">{{ $label }}</label>
+
+              @if($doc)
+              <div class="d-flex align-items-center gap-2">
+                <a href="{{ asset('storage/'.$doc->file_path) }}" target="_blank" class="text-primary">
+                  Klik untuk Melihat
+                </a>
+                <form method="POST" action="{{ route('employee.documents.delete', [$employee->id, $doc->id]) }}"
+                  onsubmit="return confirm('Hapus file ini?')">
+                  @csrf
+                  @method('DELETE')
+                  <button class="btn btn-link text-danger p-0" title="Hapus">✕</button>
+                </form>
+              </div>
+              @else
+              <input type="file" name="dokumen[{{ $field }}]" class="form-control form-control-sm">
+              @endif
+            </div>
+            @endforeach
+          </div>
+          @endforeach
+
+
+
+          {{-- Tombol --}}
+          <div class="d-flex justify-content-end mt-4">
+            <a href="{{ route('employees.show', $employee->id) }}" class="btn-cancel me-2">Cancel</a>
+            <button type="submit" class="btn btn-save">Save</button>
+          </div>
+          </form>
         </div>
-
       </div>
 
-      @endsection
-
-      <script>
-        document.addEventListener('DOMContentLoaded', function() {
-          const tabs = document.querySelectorAll('.tab-content');
-          const tabButtons = document.querySelectorAll('.tab-button');
+    </div>
 
 
-      </div>
 
-      
-      @endsection
+    <div class="form-group3">
+      <label>Pendidikan Saat Ini</label>
+      <select name="pendidikan" class="form-control1">
+        <option disabled selected value=""></option>
+        <option value="SD" {{ old('pendidikan')==='SD'?'selected':'' }}>SD</option>
+        <option value="SMP" {{ old('pendidikan')==='SMP'?'selected':'' }}>SMP</option>
+        <option value="SMA" {{ old('pendidikan')==='SMA'?'selected':'' }}>SMA</option>
+        <option value="Kuliah" {{ old('pendidikan')==='Kuliah'?'selected':'' }}>Kuliah</option>
+      </select>
+    </div>
 
-      <script>
-    function removeFile(field) {
-        // tandai field yang dihapus (biar controller tahu)
-        let deleted = document.getElementById("deleted_files").value;
-        let list = deleted ? deleted.split(",") : [];
-        if (!list.includes(field)) {
-            list.push(field);
-        }
-        document.getElementById("deleted_files").value = list.join(",");
+    <div class="form-group2">
+      <label>Status Anak</label>
+      <select name="status_anak" class="form-control1">
+        <option disabled selected value=""></option>
+        <option value="Kandung" {{ old('status_anak')==='Kandung'?'selected':'' }}>Kandung</option>
+        <option value="Tidak Kandung" {{ old('status_anak')==='Tidak Kandung'?'selected':'' }}>Tidak Kandung</option>
+      </select>
+    </div>
 
-        // ganti tampilan link -> input file
-        let wrapper = document.getElementById("wrapper-" + field);
-        wrapper.innerHTML = `
+    <div class="form-group3">
+      <label>Urutan Anak</label>
+      <input type="text" name="urutan_anak" class="form-control" value="{{ old('urutan_anak') }}" placeholder="Contoh: 1, 2, 3 atau Anak ke-1">
+    </div>
+
+    <div class="form-group2">
+      <label>Keterangan</label>
+      <select name="keterangan" class="form-control1">
+        <option disabled selected value=""></option>
+        <option value="Ditanggung" {{ old('keterangan')==='Ditanggung'?'selected':'' }}>Ditanggung</option>
+        <option value="Tidak Ditanggung" {{ old('keterangan')==='Tidak Ditanggung'?'selected':'' }}>Tidak Ditanggung</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="form-buttons" style="margin-top:1rem;">
+    <button type="button" class="cancel" onclick="history.back()">Cancel</button>
+    <button type="submit" class="submit">Tambah</button>
+  </div>
+  </form>
+
+</div>
+
+<div class="tab-content" id="karir" style="display: none;">
+  <div class="aktivitas_karir">
+    @include('employee.partials.aktivitas_karir', ['career' => $career, 'employee' => $employee])
+  </div>
+
+</div>
+
+<div class="tab-content" id="dokumen" style="display: none;">
+  <div class="content5">
+    <h4 class="content-info">Dokumen Personal</h4>
+  </div>
+</div>
+
+</div>
+
+@endsection
+
+<script>
+  function removeFile(field) {
+    // tandai field yang dihapus (biar controller tahu)
+    let deleted = document.getElementById("deleted_files").value;
+    let list = deleted ? deleted.split(",") : [];
+    if (!list.includes(field)) {
+      list.push(field);
+    }
+    document.getElementById("deleted_files").value = list.join(",");
+
+    // ganti tampilan link -> input file
+    let wrapper = document.getElementById("wrapper-" + field);
+    wrapper.innerHTML = `
             <label class="form-label">${field.toUpperCase()}</label>
             <input type="file" name="${field}" id="input-${field}" class="form-control">
         `;
-    }
+  }
 </script>
 
 
-      <script>
-        function showTab(tabId) {
-          // Sembunyikan semua konten
-          const tabs = document.querySelectorAll('.tab-content');
-          tabs.forEach(tab => tab.style.display = 'none');
+<script>
+  function showTab(tabId) {
+    // Sembunyikan semua konten
+    const tabs = document.querySelectorAll('.tab-content');
+    tabs.forEach(tab => tab.style.display = 'none');
 
-          // Hapus kelas aktif dari semua tombol
-          const buttons = document.querySelectorAll('.tab-button');
-          buttons.forEach(btn => btn.classList.remove('active'));
+    // Hapus kelas aktif dari semua tombol
+    const buttons = document.querySelectorAll('.tab-button');
+    buttons.forEach(btn => btn.classList.remove('active'));
 
-          // Tampilkan tab yang diklik
-          document.getElementById(tabId).style.display = 'block';
+    // Tampilkan tab yang diklik
+    document.getElementById(tabId).style.display = 'block';
 
-          // Tambahkan kelas aktif ke tombol yang diklik
-          event.currentTarget.classList.add('active');
-        }
-      </script>
+    // Tambahkan kelas aktif ke tombol yang diklik
+    event.currentTarget.classList.add('active');
+  }
+</script>
 
-      <script>
-        document.addEventListener('DOMContentLoaded', function() {
-          const tabs = document.querySelectorAll('.tab-content');
-          const tabButtons = document.querySelectorAll('.tab-button');
-
-
-          // Sembunyikan semua tab dulu
-          tabs.forEach(tab => tab.style.display = 'none');
-
-          // Ambil hash dari URL
-          let hash = window.location.hash || '#profile';
-          let activeTab = document.querySelector(hash);
-
-          if (activeTab) {
-            activeTab.style.display = 'block';
-          }
-
-         // Tambahkan kelas aktif ke tombol yang diklik
-          event.currentTarget.classList.add('active');
-        });
-      </script>
-
-      <script>
-        function toggleContent(contentId, btn) {
-          const content = document.getElementById(contentId);
-          content.classList.toggle("show");
-
-          const icon = btn.querySelector('i');
-          icon.classList.toggle('fa-chevron-down');
-          icon.classList.toggle('fa-chevron-up');
-        }
-      </script>
-
-      <script>
-        function openAddModal() {
-          document.getElementById("addModal").style.display = "block";
-        }
-
-        function closeAddModal() {
-          document.getElementById("addModal").style.display = "none";
-        }
-      </script>
-
-      <script>
-        function openAddClusterModal() {
-          document.getElementById("addClusterModal").style.display = "block";
-        }
-
-        function closeAddClusterModal() {
-          document.getElementById("addClusterModal").style.display = "none";
-        }
-      </script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const tabs = document.querySelectorAll('.tab-content');
+    const tabButtons = document.querySelectorAll('.tab-button');
 
 
-      <script>
-        document.addEventListener("DOMContentLoaded", function() {
-          const saveBtn = document.getElementById("saveInfo");
-          const openInfoBtn = document.getElementById("openInfo");
-          const infoModalEl = document.getElementById('infoModal');
-          const infoModal = new bootstrap.Modal(infoModalEl, {
-            backdrop: false
-          });
+    // Sembunyikan semua tab dulu
+    tabs.forEach(tab => tab.style.display = 'none');
 
-          openInfoBtn.addEventListener("click", function() {
-            infoModal.show();
-          });
+    // Ambil hash dari URL
+    let hash = window.location.hash || '#profile';
+    let activeTab = document.querySelector(hash);
 
-          // Mapping checkbox value ke field input
-          const fieldTemplates = {
-            "Tanggal KDMP": `
+    if (activeTab) {
+      activeTab.style.display = 'block';
+    }
+
+    // Tambahkan kelas aktif ke tombol yang diklik
+    event.currentTarget.classList.add('active');
+  });
+</script>
+
+<script>
+  function toggleContent(contentId, btn) {
+    const content = document.getElementById(contentId);
+    content.classList.toggle("show");
+
+    const icon = btn.querySelector('i');
+    icon.classList.toggle('fa-chevron-down');
+    icon.classList.toggle('fa-chevron-up');
+  }
+</script>
+
+<script>
+  function openAddModal() {
+    document.getElementById("addModal").style.display = "block";
+  }
+
+  function closeAddModal() {
+    document.getElementById("addModal").style.display = "none";
+  }
+</script>
+
+<script>
+  function openAddClusterModal() {
+    document.getElementById("addClusterModal").style.display = "block";
+  }
+
+  function closeAddClusterModal() {
+    document.getElementById("addClusterModal").style.display = "none";
+  }
+</script>
+
+
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    const saveBtn = document.getElementById("saveInfo");
+    const openInfoBtn = document.getElementById("openInfo");
+    const infoModalEl = document.getElementById('infoModal');
+    const infoModal = new bootstrap.Modal(infoModalEl, {
+      backdrop: false
+    });
+
+    openInfoBtn.addEventListener("click", function() {
+      infoModal.show();
+    });
+
+    // Mapping checkbox value ke field input
+    const fieldTemplates = {
+      "Tanggal KDMP": `
               <div class="form-group">
                   <div class="label-group">
                       <label>Tanggal KDMP <span class="bintang">*</span></label>
@@ -2645,7 +2637,7 @@
               </div>
           `,
 
-            "Tanggal TKWT": `
+      "Tanggal TKWT": `
               <div class="form-group">
                   <div class="label-group">
                       <label>Tanggal TKWT <span class="bintang">*</span></label>
@@ -2654,7 +2646,7 @@
               </div>
           `,
 
-            "Tanggal Akhir TKWT": `
+      "Tanggal Akhir TKWT": `
               <div class="form-group">
                   <div class="label-group">
                       <label>Tanggal Akhir TKWT <span class="bintang">*</span></label>
@@ -2663,7 +2655,7 @@
               </div>
           `,
 
-            "Tanggal Mutasi": `
+      "Tanggal Mutasi": `
               <div class="form-group">
                   <div class="label-group">
                       <label>Tanggal Mutasi <span class="bintang">*</span></label>
@@ -2672,7 +2664,7 @@
               </div>
           `,
 
-            "Tanggal PJ": `
+      "Tanggal PJ": `
               <div class="form-group">
                   <div class="label-group">
                       <label>Tanggal PJ <span class="bintang">*</span></label>
@@ -2681,7 +2673,7 @@
               </div>
           `,
 
-            "Tanggal Lepas PJ": `
+      "Tanggal Lepas PJ": `
               <div class="form-group">
                   <div class="label-group">
                       <label>Tanggal Lepas PJ <span class="bintang">*</span></label>
@@ -2690,7 +2682,7 @@
               </div>
           `,
 
-            "Tanggal Band Posisi Terakhir": `
+      "Tanggal Band Posisi Terakhir": `
               <div class="form-group">
                   <div class="label-group">
                       <label>Tanggal Band Posisi Terakhir <span class="bintang">*</span></label>
@@ -2699,7 +2691,7 @@
               </div>
           `,
 
-            "Tanggal Pensiun": `
+      "Tanggal Pensiun": `
               <div class="form-group">
                   <div class="label-group">
                       <label>Tanggal Pensiun <span class="bintang">*</span></label>
@@ -2708,7 +2700,7 @@
               </div>
           `,
 
-            "Tanggal Akhir Kontrak": `
+      "Tanggal Akhir Kontrak": `
               <div class="form-group">
                   <div class="label-group">
                       <label>Tanggal Akhir Kontrak <span class="bintang">*</span></label>
@@ -2717,7 +2709,7 @@
               </div>
           `,
 
-            "Dokumen SK": `
+      "Dokumen SK": `
               <div class="form-group">
                   <div class="label-group">
                       <label>Dokumen SK <span class="bintang">*</span></label>
@@ -2732,7 +2724,7 @@
               </div>
           `,
 
-            "Dokumen Nota Dinas": `
+      "Dokumen Nota Dinas": `
               <div class="form-group">
                   <div class="label-group">
                       <label>Dokumen Nota Dinas <span class="bintang">*</span></label>
@@ -2743,7 +2735,7 @@
               </div>
           `,
 
-            "Dokumen Lainnya": `
+      "Dokumen Lainnya": `
               <div class="form-group">
                   <div class="label-group">
                       <label>Dokumen Lainnya <span class="bintang">*</span></label>
@@ -2752,24 +2744,24 @@
                   <small class="file-preview text-muted"></small>
               </div>
           `
-          };
+    };
 
-          saveBtn.addEventListener("click", function() {
-            const extraFields = document.getElementById("extraFields");
-            extraFields.innerHTML = ""; // reset dulu
+    saveBtn.addEventListener("click", function() {
+      const extraFields = document.getElementById("extraFields");
+      extraFields.innerHTML = ""; // reset dulu
 
-            document.querySelectorAll(".info-option:checked").forEach((checkbox) => {
-              if (fieldTemplates[checkbox.value]) {
-                extraFields.insertAdjacentHTML("beforeend", fieldTemplates[checkbox.value]);
-              }
-            });
+      document.querySelectorAll(".info-option:checked").forEach((checkbox) => {
+        if (fieldTemplates[checkbox.value]) {
+          extraFields.insertAdjacentHTML("beforeend", fieldTemplates[checkbox.value]);
+        }
+      });
 
-            infoModal.hide(); // tutup popup kecil
-          });
-        });
-      </script>
+      infoModal.hide(); // tutup popup kecil
+    });
+  });
+</script>
 
-      <!--
+<!--
 <script>
   document.getElementById("dokumen_sk").addEventListener("change", function() {
       const fileName = this.files.length ? this.files[0].name : "";
@@ -2778,7 +2770,7 @@
 </script>
 -->
 
-      <!--
+<!--
 <script>
   document.getElementById("dokumen_sk").addEventListener("change", function() {
       const fileName = this.files[0] ? this.files[0].name : "Belum ada file dipilih";
@@ -2787,66 +2779,66 @@
 </script>
 -->
 
-      <script>
-        document.addEventListener("change", function(e) {
-          if (e.target && e.target.type === "file") {
-            let wrapper = e.target.closest(".file-input");
-            /*
-            let preview = wrapper.querySelector(".file-preview"); */
-            let textInput = wrapper.querySelector(".file-text");
+<script>
+  document.addEventListener("change", function(e) {
+    if (e.target && e.target.type === "file") {
+      let wrapper = e.target.closest(".file-input");
+      /*
+      let preview = wrapper.querySelector(".file-preview"); */
+      let textInput = wrapper.querySelector(".file-text");
 
-            if (e.target.files.length > 0) {
-              let fileName = e.target.files[0].name;
-              if (textInput) textInput.value = fileName; // isi ke input text
-              /*
-              if (preview) preview.textContent = fileName; // isi ke <small> */
-            } else {
-              if (textInput) textInput.value = "";
-              if (preview) preview.textContent = "Belum ada file";
-            }
-          }
+      if (e.target.files.length > 0) {
+        let fileName = e.target.files[0].name;
+        if (textInput) textInput.value = fileName; // isi ke input text
+        /*
+        if (preview) preview.textContent = fileName; // isi ke <small> */
+      } else {
+        if (textInput) textInput.value = "";
+        if (preview) preview.textContent = "Belum ada file";
+      }
+    }
+  });
+</script>
+
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    // Toggle menu dropdown
+    window.toggleActions = function(id) {
+      // Tutup menu lain dulu
+      document.querySelectorAll('.dropdown-action-content').forEach(menu => {
+        if (menu.id !== 'dropdownActions-' + id) {
+          menu.classList.add('hidden');
+        }
+      });
+
+      // Toggle menu yang sesuai tombol
+      const currentMenu = document.getElementById('dropdownActions-' + id);
+      if (currentMenu) {
+        currentMenu.classList.toggle('hidden');
+      }
+    };
+
+    // Klik di luar menutup semua menu
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('.dropdown-action')) {
+        document.querySelectorAll('.dropdown-action-content').forEach(menu => {
+          menu.classList.add('hidden');
         });
-      </script>
+      }
+    });
 
-
-      <script>
-        document.addEventListener('DOMContentLoaded', () => {
-          // Toggle menu dropdown
-          window.toggleActions = function(id) {
-            // Tutup menu lain dulu
-            document.querySelectorAll('.dropdown-action-content').forEach(menu => {
-              if (menu.id !== 'dropdownActions-' + id) {
-                menu.classList.add('hidden');
-              }
-            });
-
-            // Toggle menu yang sesuai tombol
-            const currentMenu = document.getElementById('dropdownActions-' + id);
-            if (currentMenu) {
-              currentMenu.classList.toggle('hidden');
-            }
-          };
-
-          // Klik di luar menutup semua menu
-          document.addEventListener('click', (e) => {
-            if (!e.target.closest('.dropdown-action')) {
-              document.querySelectorAll('.dropdown-action-content').forEach(menu => {
-                menu.classList.add('hidden');
-              });
-            }
-          });
-
-          // Tekan Escape menutup semua menu
-          document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') {
-              document.querySelectorAll('.dropdown-action-content').forEach(menu => {
-                menu.classList.add('hidden');
-              });
-            }
-          });
+    // Tekan Escape menutup semua menu
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        document.querySelectorAll('.dropdown-action-content').forEach(menu => {
+          menu.classList.add('hidden');
         });
-      </script>
-      <!-- <script>
+      }
+    });
+  });
+</script>
+<!-- <script>
         function toggleActions(id) {
           // Tutup semua dropdown lain
           document.querySelectorAll('.dropdown-action-content').forEach(el => {
@@ -2869,25 +2861,25 @@
           }
         });
       </script> -->
-      <script>
-        function openEditPopup(id, nama, jk, tempat_tanggal_lahirr, pendidikan, status, urutan, keterangan) {
-          document.getElementById('popup-edit').classList.remove('hidden');
+<script>
+  function openEditPopup(id, nama, jk, tempat_tanggal_lahirr, pendidikan, status, urutan, keterangan) {
+    document.getElementById('popup-edit').classList.remove('hidden');
 
-          // isi data
-          document.getElementById('edit-nama').value = nama;
-          document.getElementById('edit-jk').value = jk;
-          document.getElementById('edit-ttl').value = tempat_tanggal_lahirr;
-          document.getElementById('edit-pendidikan').value = pendidikan;
-          document.getElementById('edit-status').value = status;
-          document.getElementById('edit-urutan').value = urutan;
-          document.getElementById('edit-keterangan').value = keterangan;
+    // isi data
+    document.getElementById('edit-nama').value = nama;
+    document.getElementById('edit-jk').value = jk;
+    document.getElementById('edit-ttl').value = tempat_tanggal_lahirr;
+    document.getElementById('edit-pendidikan').value = pendidikan;
+    document.getElementById('edit-status').value = status;
+    document.getElementById('edit-urutan').value = urutan;
+    document.getElementById('edit-keterangan').value = keterangan;
 
-          // set form action ke families.update
-          document.getElementById('popup-edit-form').action =
-            `/employees/{{ $employee->id }}/families/${id}`;
-        }
+    // set form action ke families.update
+    document.getElementById('popup-edit-form').action =
+      `/employees/{{ $employee->id }}/families/${id}`;
+  }
 
-        function closeEditPopup() {
-          document.getElementById('popup-edit').classList.add('hidden');
-        }
-      </script>
+  function closeEditPopup() {
+    document.getElementById('popup-edit').classList.add('hidden');
+  }
+</script>
