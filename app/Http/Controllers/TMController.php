@@ -145,14 +145,33 @@ class TMController extends Controller
             ->orderByRaw('YEAR(tanggalKDMP) DESC')
             ->get();
 
-        return view('employee.edit', compact(
-            'employee',
-            'career',
-            'families',
-            'sortByFamily',
-            'sortOrderFamily'
-        ));
-    }
+
+        $dokumenWajib = [
+        'dokumen_ktp'               => 'KTP',
+        'dokumen_kk'                => 'Kartu Keluarga',
+        'dokumen_npwp'              => 'NPWP',
+        'dokumen_bpjs_kesehatan'    => 'BPJS Kesehatan',
+        'dokumen_bpjs_ketenagakerjaan' => 'BPJS Ketenagakerjaan',
+        'dokumen_nota_dinas'        => 'Nota Dinas',
+    ];
+
+    $dokumenLainnya = [
+        'dokumen_hasil_psikotest' => 'Hasil Psikotest',
+        'dokumen_assessment_01'   => 'Hasil Assessment 01',
+        'dokumen_assessment_02'   => 'Hasil Assessment 02',
+        'dokumen_assessment_03'   => 'Hasil Assessment 03',
+    ];
+
+    return view('employee.edit', compact(
+        'employee',
+        'career',
+        'families',
+        'sortByFamily',
+        'sortOrderFamily',
+        'dokumenWajib',   // ✅ dikirim ke view
+        'dokumenLainnya'  // ✅ dikirim ke view
+    ));
+}
 
 
     public function update(Request $request, $id)

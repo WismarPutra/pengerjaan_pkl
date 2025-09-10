@@ -2434,113 +2434,70 @@
       </div>
 
     </div>
+<!-- DOKUMEN -->
+    <div class="p-4">
 
-    <!-- DOKUMEN PERSONAL -->
-
-    <div class="tab-content" id="dokumen" style="display: none;">
-      <div class="content5">
-        <h4 class="content-info">Dokumen Personal</h4>
-        @php
-        // daftar field -> label
-        $dokumenWajib = [
-        'dokumen_ktp' => 'KTP',
-        'dokumen_kk' => 'Kartu Keluarga',
-        'dokumen_npwp'=> 'NPWP',
-        'dokumen_bpjs'=> 'BPJS',
-        ];
-
-        $dokumenLainnya = [
-        'dokumen_hasil_psikotest' => 'Hasil Psikotest',
-        'dokumen_assessment_01' => 'Hasil Assessment 01',
-        'dokumen_assessment_02' => 'Hasil Assessment 02',
-        'dokumen_assessment_03' => 'Hasil Assessment 03',
-        ];
-        @endphp
-
-        {{-- ===== Dokumen Wajib ===== --}}
-        <h5 class="fw-bold mb-3">Dokumen Wajib</h5>
-        @foreach(collect($dokumenWajib)->chunk(2) as $pair)
-        <div class="row">
-          @foreach($pair as $field => $label)
-          @php
-          $doc = optional($employee->documents)->firstWhere('jenis_dokumen', $field);
-          @endphp
-          <div class="col-md-6 mb-3">
-            <label class="fw-semibold d-block">{{ $label }}</label>
-
-            @if($doc)
-            <div class="d-flex align-items-center gap-2">
-              <a href="{{ asset('storage/'.$doc->file_path) }}" target="_blank" class="text-primary">
-                Klik untuk Melihat
-              </a>
-              <form method="POST" action="{{ route('employee.documents.delete', [$employee->id, $doc->id]) }}"
-                onsubmit="return confirm('Hapus file ini?')">
-                @csrf
-                @method('DELETE')
-                <button class="btn btn-link text-danger p-0" title="Hapus">✕</button>
-              </form>
+    {{-- Dokumen Personal --}}
+    <h5 class="fw-bold mb-3">Dokumen Personal</h5>
+    <div class="row g-3">
+        @foreach($dokumenWajib as $field => $label)
+            <div class="col-md-6 d-flex justify-content-between align-items-center border-bottom pb-2">
+                <div>
+                    <span class="fw-semibold">{{ $label }}</span><br>
+                    @if($employee->$field)
+                        <a href="{{ asset('storage/'.$employee->$field) }}" target="_blank" class="text-primary small">
+                            Klik untuk Melihat
+                        </a>
+                    @else
+                        <span class="text-muted small">Belum ada file</span>
+                    @endif
+                </div>
+                @if($employee->$field)
+                    <button type="button" class="btn btn-sm btn-link text-danger p-0 ms-2">
+                        <i class="bi bi-x-circle"></i>
+                    </button>
+                @endif
             </div>
-            @else
-            <input type="file" name="dokumen[{{ $field }}]" class="form-control form-control-sm">
-            @endif
-          </div>
-          @endforeach
-        </div>
         @endforeach
-
-        {{-- ===== Dokumen Lainnya ===== --}}
-        <h5 class="fw-bold mb-3 mt-4">Dokumen Lainnya</h5>
-        @foreach(collect($dokumenLainnya)->chunk(2) as $pair)
-        <div class="row">
-          @foreach($pair as $field => $label)
-          @php
-          $doc = optional($employee->documents)->firstWhere('jenis_dokumen', $field);
-          @endphp
-          <div class="col-md-6 mb-3">
-            <label class="fw-semibold d-block">{{ $label }}</label>
-
-            @if($doc)
-            <div class="d-flex align-items-center gap-2">
-              <a href="{{ asset('storage/'.$doc->file_path) }}" target="_blank" class="text-primary">
-                Klik untuk Melihat
-              </a>
-              <form method="POST" action="{{ route('employee.documents.delete', [$employee->id, $doc->id]) }}"
-                onsubmit="return confirm('Hapus file ini?')">
-                @csrf
-                @method('DELETE')
-                <button class="btn btn-link text-danger p-0" title="Hapus">✕</button>
-              </form>
-            </div>
-            @else
-            <input type="file" name="dokumen[{{ $field }}]" class="form-control form-control-sm">
-            @endif
-          </div>
-          @endforeach
-        </div>
-        @endforeach
-
-
-
-        {{-- Tombol --}}
-        <div class="d-flex justify-content-end mt-4">
-          <a href="{{ route('employees.show', $employee->id) }}" class="btn-cancel me-2">Cancel</a>
-          <button type="submit" class="btn btn-save">Save</button>
-        </div>
-        </form>
-      </div>
+    </div>
+    <div class="mt-3 flex justify-end">
+        <button type="button" class="btn btn-primary btn-sm">
+            + Tambah
+        </button>
     </div>
 
-  </div>
+    <hr class="my-4">
 
-
+    {{-- Dokumen Lainnya --}}
+    <h5 class="fw-bold mb-3">Dokumen Lainnya</h5>
+    <div class="row g-3">
+        @foreach($dokumenLainnya as $field => $label)
+            <div class="col-md-6 d-flex justify-content-between align-items-center border-bottom pb-2">
+                <div>
+                    <span class="fw-semibold">{{ $label }}</span><br>
+                    @if($employee->$field)
+                        <a href="{{ asset('storage/'.$employee->$field) }}" target="_blank" class="text-primary small">
+                            Klik untuk Melihat
+                        </a>
+                    @else
+                        <span class="text-muted small">Belum ada file</span>
+                    @endif
+                </div>
+                @if($employee->$field)
+                    <button type="button" class="btn btn-sm btn-link text-danger p-0 ms-2">
+                        <i class="bi bi-x-circle"></i>
+                    </button>
+                @endif
+            </div>
+        @endforeach
+    </div>
+    {{-- Action Buttons --}}
+    <div class="d-flex justify-content-end gap-2 mt-4">
+        <a href="{{ route('employees.index') }}" class="btn btn-secondary">Cancel</a>
+        <button type="submit" class="btn btn-primary">Save</button>
+    </div>
 </div>
-
 </div>
-
-
-
-
-
 @endsection
 
 <script>

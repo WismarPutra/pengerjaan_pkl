@@ -15,6 +15,7 @@ use App\Http\Controllers\WorkforceController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\TalentClusterController;
 use App\Models\TalentCluster;
+use App\Http\Controllers\CareerActivityController;
 
 /*
 |--------------------------------------------------------------------------
@@ -142,3 +143,14 @@ Route::prefix('employees/{employee}')->group(function () {
     Route::put('families/{family}', [FamilyController::class, 'update'])->name('families.update');
     Route::delete('families/{family}', [FamilyController::class, 'delete'])->name('families.delete');
 });
+
+/* CAREER ACTIVITIES */
+Route::prefix('employees/{employee}')->group(function () {
+    Route::get('careers', [CareerActivityController::class, 'index'])->name('career_activities.index');
+    Route::get('careers/create', [CareerActivityController::class, 'create'])->name('career_activities.create');
+    Route::post('careers', [CareerActivityController::class, 'store'])->name('career_activities.store');
+    Route::get('careers/{career}/edit', [CareerActivityController::class, 'edit'])->name('career_activities.edit');
+    Route::put('careers/{career}', [CareerActivityController::class, 'update'])->name('career_activities.update');
+    Route::delete('careers/{career}', [CareerActivityController::class, 'destroy'])->name('career_activities.destroy');
+});
+

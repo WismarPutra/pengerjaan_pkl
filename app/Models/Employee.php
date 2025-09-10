@@ -53,4 +53,10 @@ class Employee extends Model
     return $this->hasMany(EmployeeDocument::class);
 }
 
+public function careerActivities()
+{
+    return $this->hasMany(CareerActivity::class, 'employee_id');
+}
+
+
 }
