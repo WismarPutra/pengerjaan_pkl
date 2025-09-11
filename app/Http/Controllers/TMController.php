@@ -7,6 +7,7 @@ use App\Models\Employee;
 use App\Models\CareerActivity;
 use App\Models\TalentCluster;
 use App\Models\EmployeeDocument;
+use App\Models\Training;
 
 
 
@@ -84,6 +85,19 @@ class TMController extends Controller
             ->orderBy($sortByFamily, $sortOrderFamily)
             ->get();
 
+        
+         // ---- Sorting Training ----
+    $sortByTraining    = $request->query('sort_by_training', 'nama_training');
+    $sortOrderTraining = $request->query('sort_order_training', 'asc');
+
+    $allowedTraining = ['nama_training', 'penyelenggara', 'tanggal_mulai', 'tanggal_akhir', 'status', 'sertifikat'];
+    if (!in_array($sortByTraining, $allowedTraining)) {
+        $sortByTraining = 'nama_training';
+    }
+    $sortOrderTraining = $sortOrderTraining === 'asc' ? 'asc' : 'desc';
+
+   $trainings = Training::orderBy($sortByTraining, $sortOrderTraining)->get();
+
         // ---- Cluster (Career Activity) ----
         $clusters = CareerActivity::where('employee_id', $employee->id)
             ->selectRaw('
@@ -101,10 +115,13 @@ class TMController extends Controller
             'clusters',
             'talentClusters',
             'families',
+            'trainings', 
             'sortByCluster',
             'sortOrderCluster',
             'sortByFamily',
-            'sortOrderFamily'
+            'sortOrderFamily',
+            'sortByTraining',   
+            'sortOrderTraining' 
         ));
     }
 
