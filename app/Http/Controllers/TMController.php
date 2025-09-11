@@ -90,7 +90,7 @@ class TMController extends Controller
     $sortByTraining    = $request->query('sort_by_training', 'nama_training');
     $sortOrderTraining = $request->query('sort_order_training', 'asc');
 
-    $allowedTraining = ['nama_training', 'penyelenggara', 'tanggal_mulai', 'tanggal_akhir', 'status', 'sertifikat'];
+    $allowedTraining = ['nama_training', 'penyelenggara', 'tanggal_mulai', 'tanggal_selesai', 'status', 'sertifikat_pelatihan'];
     if (!in_array($sortByTraining, $allowedTraining)) {
         $sortByTraining = 'nama_training';
     }

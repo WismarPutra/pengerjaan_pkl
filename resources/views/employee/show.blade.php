@@ -2265,13 +2265,13 @@
     </th>
 
         <th class="px-4 py-2">
-        Tanggal Akhir
+        Tanggal Selesai
         <a href="{{ route('employees.show', [
             'employee'           => $employee->id,
-            'sort_by_training'   => 'tanggal_akhir',
-            'sort_order_training'=> ($sortByTraining == 'tanggal_akhir' && $sortOrderTraining == 'asc') ? 'desc' : 'asc'
+            'sort_by_training'   => 'tanggal_selesai',
+            'sort_order_training'=> ($sortByTraining == 'tanggal_selesai' && $sortOrderTraining == 'asc') ? 'desc' : 'asc'
         ]) }}#pelatihan">
-            {!! $sortByTraining == 'tanggal_akhir' ? '⇅' : '⇅' !!}
+            {!! $sortByTraining == 'tanggal_selesai' ? '⇅' : '⇅' !!}
         </a>
     </th>
 
@@ -2290,10 +2290,10 @@
         Sertifikat
         <a href="{{ route('employees.show', [
             'employee'           => $employee->id,
-            'sort_by_training'   => 'sertifikat',
-            'sort_order_training'=> ($sortByTraining == 'sertifikat' && $sortOrderTraining == 'asc') ? 'desc' : 'asc'
+            'sort_by_training'   => 'sertifikat_pelatihan',
+            'sort_order_training'=> ($sortByTraining == 'sertifikat_pelatihan' && $sortOrderTraining == 'asc') ? 'desc' : 'asc'
         ]) }}#pelatihan">
-            {!! $sortByTraining == 'sertifikat' ? '⇅' : '⇅' !!}
+            {!! $sortByTraining == 'sertifikat_pelatihan' ? '⇅' : '⇅' !!}
         </a>
     </th>
 
