@@ -1643,6 +1643,144 @@
     border: 1px solid #ccc;
     background-color: white;
   }
+
+ /* Khusus untuk Pelatihan */
+.tab-nav {
+  display: flex;
+  gap: 8px;
+  margin: 20px 0;
+}
+
+.tab-btn {
+  padding: 10px 24px;
+  border: none;
+  background: #f3f3f8; /* warna background default */
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  color: #111827; /* hampir hitam */
+  transition: all 0.2s ease-in-out;
+}
+
+.tab-btn:hover {
+  background: #e5e7eb; /* sedikit lebih gelap saat hover */
+}
+
+.tab-btn.active {
+  background: #3b5bff; /* biru figma */
+  color: #fff;
+  font-weight: 600;
+}
+
+.btn-isi {
+    background-color: #3B57FF; /* warna biru */
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 8px; /* biar rounded */
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 6px; /* jarak antara ikon dan teks */
+  }
+
+  .btn-isi i {
+    font-size: 14px; /* ukuran ikon */
+  }
+
+  .btn-isi:hover {
+    background-color: #2f46cc; /* warna saat hover */
+  }
+
+  /* === EMOJI RATING === */
+.emoji-rating {
+  display: flex;
+  gap: 16px;
+  margin: 15px 0;
+}
+.emoji-btn {
+  flex: 1;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  padding: 16px;
+  text-align: center;
+  font-size: 16px;
+  background: #fff;
+  cursor: pointer;
+  transition: 0.2s;
+}
+.emoji-btn:hover,
+.emoji-btn.active {
+  border-color: #3B57FF;
+  background: #f4f6ff;
+}
+
+/* === PERTANYAAN SKALA === */
+/* Pertanyaan */
+.pertanyaan {
+  margin-top: 20px;
+}
+
+/* Skala Likert */
+.skala {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 10px;
+}
+.skala-options {
+  display: flex;
+  gap: 8px;
+  flex-wrap: nowrap;
+}
+.skala input {
+  display: none;
+}
+.skala label {
+  cursor: pointer;
+}
+.skala label span {
+  display: inline-block;
+  width: 36px;
+  height: 36px;
+  line-height: 36px;
+  text-align: center;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  transition: all 0.2s;
+}
+.skala input:checked + span {
+  background-color: #3B57FF;
+  color: #fff;
+  border-color: #3B57FF;
+}
+
+/* Label kiri/kanan */
+.label-kiri, .label-kanan {
+  font-size: 14px;
+  min-width: 80px;
+}
+
+
+/* === FOOTER BUTTON === */
+.btn-cancel {
+  background: #f1f1f1;
+  border: none;
+  padding: 8px 18px;
+  border-radius: 8px;
+}
+.btn-submit {
+  background: #3B57FF;
+  color: #fff;
+  border: none;
+  padding: 8px 20px;
+  border-radius: 8px;
+}
+.btn-submit:hover {
+  background: #2f46cc;
+}
+
 </style>
 
 <div class="navbar">
@@ -2092,13 +2230,73 @@
     </div>
     <table id="customers1" style="margin-top: 10px;">
       <tr>
-        <th>No</th>
-        <th>Nama Training</th>
-        <th>Pelaksana</th>
-        <th>Tanggal Mulai</th>
-        <th>Tanggal Akhir</th>
-        <th>Status</th>
-        <th>Sertifikat</th>
+    <th>No</th>
+    <th class="px-4 py-2">
+        Nama Training
+        <a href="{{ route('employees.show', [
+            'employee'           => $employee->id,
+            'sort_by_training'   => 'nama_training',
+            'sort_order_training'=> ($sortByTraining == 'nama_training' && $sortOrderTraining == 'asc') ? 'desc' : 'asc'
+        ]) }}#pelatihan">
+            {!! $sortByTraining == 'nama_training' ? '⇅' : '⇅' !!}
+        </a>
+    </th>
+
+        <th class="px-4 py-2">
+        Gap Kompetensi
+        <a href="{{ route('employees.show', [
+            'employee'           => $employee->id,
+            'sort_by_training'   => 'gap_kompetensi',
+            'sort_order_training'=> ($sortByTraining == 'gap_kompetensi' && $sortOrderTraining == 'asc') ? 'desc' : 'asc'
+        ]) }}#pelatihan">
+            {!! $sortByTraining == 'gap_kompetensi' ? '⇅' : '⇅' !!}
+        </a>
+    </th>
+
+        <th class="px-4 py-2">
+        Tanggal Mulai
+        <a href="{{ route('employees.show', [
+            'employee'           => $employee->id,
+            'sort_by_training'   => 'tanggal_mulai',
+            'sort_order_training'=> ($sortByTraining == 'tanggal_mulai' && $sortOrderTraining == 'asc') ? 'desc' : 'asc'
+        ]) }}#pelatihan">
+            {!! $sortByTraining == 'tanggal_mulai' ? '⇅' : '⇅' !!}
+        </a>
+    </th>
+
+        <th class="px-4 py-2">
+        Tanggal Akhir
+        <a href="{{ route('employees.show', [
+            'employee'           => $employee->id,
+            'sort_by_training'   => 'tanggal_akhir',
+            'sort_order_training'=> ($sortByTraining == 'tanggal_akhir' && $sortOrderTraining == 'asc') ? 'desc' : 'asc'
+        ]) }}#pelatihan">
+            {!! $sortByTraining == 'tanggal_akhir' ? '⇅' : '⇅' !!}
+        </a>
+    </th>
+
+        <th class="px-4 py-2">
+        Status
+        <a href="{{ route('employees.show', [
+            'employee'           => $employee->id,
+            'sort_by_training'   => 'status',
+            'sort_order_training'=> ($sortByTraining == 'status' && $sortOrderTraining == 'asc') ? 'desc' : 'asc'
+        ]) }}#pelatihan">
+            {!! $sortByTraining == 'status' ? '⇅' : '⇅' !!}
+        </a>
+    </th>
+
+        <th class="px-4 py-2">
+        Sertifikat
+        <a href="{{ route('employees.show', [
+            'employee'           => $employee->id,
+            'sort_by_training'   => 'sertifikat',
+            'sort_order_training'=> ($sortByTraining == 'sertifikat' && $sortOrderTraining == 'asc') ? 'desc' : 'asc'
+        ]) }}#pelatihan">
+            {!! $sortByTraining == 'sertifikat' ? '⇅' : '⇅' !!}
+        </a>
+    </th>
+
         <th>Actions</th>
       </tr>
       <tr>
@@ -2124,20 +2322,30 @@
     </table>
   </div>
 
+  <div id="pelatihan-container">
   <div class="tab-content" id="pelatihan-detail" style="display: none;">
-    <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; flex-wrap: wrap;">
-      <div class="left-section">
-        <div class="breadcrumb-row">
-          <i href="#" onclick="backToPelatihan()" class="fas fa-arrow-left breadcrumb-arrow"></i>
-          <div class="breadcrumb-text">Histori Pelatihan: Effective Communication Skills</div>
-        </div>
-      </div>
-      <div class="right-section3">
-        <div class="feedback-container">
-          <button type="button" class="feedback-btn" data-bs-toggle="modal" data-bs-target="#feedbackModal"><i class="fas fa-message"></i>Input Feedback</button>
-        </div>
+  <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; flex-wrap: wrap;">
+    <div class="left-section">
+      <div class="breadcrumb-row">
+        <i href="#" onclick="backToPelatihan()" class="fas fa-arrow-left breadcrumb-arrow"></i>
+        <div class="breadcrumb-text"><strong>Histori Pelatihan: Effective Communication Skills</strong></div>
       </div>
     </div>
+    <div class="right-section3">
+      <div class="feedback-container"></div>
+    </div>
+  </div>
+
+  <!-- 🔹 NAVIGASI TAB -->
+    <div class="tab-nav">
+      <button class="tab-btn active" data-target="pelatihan-detail-content">Detail</button>
+      <button class="tab-btn" data-target="pelatihan-hasil">Hasil Pelatihan</button>
+      <button class="tab-btn" data-target="pelatihan-peserta">Evaluasi Peserta</button>
+      <button class="tab-btn" data-target="pelatihan-atasan">Evaluasi Atasan</button>
+    </div>
+
+  <!-- 🔹 TAB CONTENT: DETAIL -->
+  <div id="pelatihan-detail-content" class="tab-pane active">
     <div class="content8">
       <div class="left-content8">
         <p class="info1">Training ID</p>
@@ -2168,8 +2376,286 @@
         <a href="#" class="sertif-link">Klik untuk Melihat</a>
       </div>
     </div>
-
   </div>
+
+  <!-- 🔹 TAB CONTENT: HASIL PELATIHAN -->
+   <div id="pelatihan-hasil" class="tab-pane fade show active">
+    <div class="content7">
+      <div class="left-content8">
+        <p class="info1">Kehadiran (28/08/2025)</p>
+        <p class="info2">Hadir</p>
+        <p class="info1">Kehadiran (30/08/2025)</p>
+        <p class="info2">Hadir</p>
+        <p class="info1">Nilai Pre-Test</p>
+        <p class="info2">85</p>
+        <p class="info1">Sertifikat</p>
+        <a href="#" class="sertif-link">Klik untuk Melihat</a>
+      </div>
+      <div class="right-content8">
+        <p class="info1">Kehadiran (29/08/2025)</p>
+        <p class="info2">Hadir</p>
+        <p class="info1">Kelulusan</p>
+        <p class="info2">Lulus</p>
+        <p class="info1">Nilai Pre-Test</p>
+        <p class="info2">85</p>
+      </div>
+    </div>
+  </div>   
+
+
+  <!-- 🔹 TAB CONTENT: EVALUASI PESERTA -->
+  <div id="pelatihan-peserta" class="tab-pane">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+      <strong>Evaluasi Peserta terhadap Training</strong>
+      <button class="btn-isi" data-bs-toggle="modal" data-bs-target="#modalEvaluasiPeserta">
+        <i class="fas fa-pen"></i> Isi Evaluasi
+      </button>
+    </div>
+    <p>Keseluruhan Pengalaman Training</p><strong>Cukup Baik</strong>
+    <p>Hasil Pelatihan menambah pengetahuan saya<br><strong>8 (Setuju)</strong></p>
+    <p>Saya mudah mengimplementasikan hasil pelatihan<br><strong>8 (Sangat Setuju)</strong></p>
+    <p>Hasil pelatihan mempermudah pekerjaan saya<br><strong>9 (Sangat Setuju)</strong></p>
+    <p>Saya konsisten menerapkan hasil pelatihan<br><strong>10 (Sangat Setuju)</strong></p>
+    <p>Hasil pelatihan meningkatkan kinerja unit<br><strong>10 (Sangat Setuju)</strong></p>
+    <p><strong>Komentar:</strong><br>Pelatihan ini membantu pengembangan karir saya.</p>
+  </div>
+
+  <!-- 🔹 TAB CONTENT: EVALUASI ATASAN -->
+  <div id="pelatihan-atasan" class="tab-pane">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+      <strong>Evaluasi Dampak Training</strong>
+      <button class="btn-isi" data-bs-toggle="modal" data-bs-target="#modalEvaluasiAtasan">
+        <i class="fas fa-pen"></i> Isi Evaluasi
+      </button>
+    </div>
+    <p>Hasil pelatihan yang diikuti, menambah pengetahuan & keterampilan staff Saudara<br><strong>8 (Setuju)</strong></p>
+    <p>Staff Saudara mengimplementasikan hasil pelatihan dalam tugas/pekerjaannya<br><strong>9 (Sangat Setuju)</strong></p>
+    <p>Dengan hasil pelatihan tersebut, banyak tugas dan kasus dipekerjakan unit staff Saudara yang bisa disolusikan <br><strong>10 (Sangat Setuju)</strong></p>
+    <p>Staff Saudara menerapkan hasil dalam tugas/pekerjaan secara konsisten<br><strong>10 (Sangat Setuju)</strong></p>
+    <p>Hasil pelatihan yang diperoleh staff Saudara meningkatkan performansi/kinerja unit<br><strong>10 (Sangat Setuju)</strong></p>
+    <p>Komentar:<br><strong>Sangat berdampak baik</strong></p>
+  </div>
+</div>
+<!-- 🔹 MODAL ISI EVALUASI PESERTA -->
+<div class="modal fade" id="modalEvaluasiPeserta" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title"><strong>Nilai Pelatihan yang Anda Ikuti</strong></h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <p>Terima kasih telah mengikuti dan menyelesaikan pelatihan ini!</p>
+
+        <!-- Emoji Rating -->
+        <div class="emoji-rating">
+          <button class="emoji-btn">🥰 <br> Sangat Suka</button>
+          <button class="emoji-btn">🙂 <br> Cukup Baik</button>
+          <button class="emoji-btn">😐 <br> Kurang Baik</button>
+        </div>
+
+        <!-- Pertanyaan Skala -->
+        <div class="pertanyaan">
+  <label>Hasil pelatihan yang saya ikuti, menambah pengetahuan dan keterampilan saya *</label>
+  <div class="skala">
+    <span class="label-kiri">Tidak Setuju</span>
+    <div class="skala-options">
+      @for ($i = 1; $i <= 10; $i++)
+        <label>
+          <input type="radio" name="q1" value="{{ $i }}">
+          <span>{{ $i }}</span>
+        </label>
+      @endfor
+    </div>
+    <span class="label-kanan">Sangat Setuju</span>
+  </div>
+</div>
+
+        <div class="pertanyaan">
+          <label>Saya mudah mengimplementasikan hasil pelatihan dalam tugas/pekerjaan saya *</label>
+          <div class="skala">
+  <span>Tidak Setuju</span>
+  @for ($i = 1; $i <= 10; $i++)
+    <label>
+      <input type="radio" name="q1" value="{{ $i }}">
+      <span>{{ $i }}</span>
+    </label>
+      @endfor
+    <span>Sangat Setuju</span>
+  </div>
+</div>
+
+<div class="pertanyaan">
+  <label>Hasil pelatihan yang didapat mempercepat/mempermudah penyelesaian tugas/pekerjaan saya *</label>
+  <div class="skala">
+    <span class="label-kiri">Tidak Setuju</span>
+    <div class="skala-options">
+      @for ($i = 1; $i <= 10; $i++)
+        <label>
+          <input type="radio" name="q1" value="{{ $i }}">
+          <span>{{ $i }}</span>
+        </label>
+      @endfor
+    </div>
+    <span class="label-kanan">Sangat Setuju</span>
+  </div>
+</div>
+
+<div class="pertanyaan">
+  <label>Saya menerapkan secara konsisten hasil pelatihan pada tugas/pekerjaan saya *</label>
+  <div class="skala">
+    <span class="label-kiri">Tidak Setuju</span>
+    <div class="skala-options">
+      @for ($i = 1; $i <= 10; $i++)
+        <label>
+          <input type="radio" name="q1" value="{{ $i }}">
+          <span>{{ $i }}</span>
+        </label>
+      @endfor
+    </div>
+    <span class="label-kanan">Sangat Setuju</span>
+  </div>
+</div>
+
+<div class="pertanyaan">
+  <label>Hasil pelatihan yang saya ikuti meningkatkan kinerja/performansi di unit saya saat ini *</label>
+  <div class="skala">
+    <span class="label-kiri">Tidak Setuju</span>
+    <div class="skala-options">
+      @for ($i = 1; $i <= 10; $i++)
+        <label>
+          <input type="radio" name="q1" value="{{ $i }}">
+          <span>{{ $i }}</span>
+        </label>
+      @endfor
+    </div>
+    <span class="label-kanan">Sangat Setuju</span>
+  </div>
+</div>
+        <!-- Komentar -->
+        <div class="pertanyaan">
+          <label>Berikan komentar Anda *</label>
+          <textarea class="form-control" rows="3"></textarea>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn-cancel" data-bs-dismiss="modal">Cancel</button>
+        <button class="btn-submit">Submit</button>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- 🔹 MODAL EVALUASI ATASAN -->
+<div class="modal fade" id="modalEvaluasiAtasan" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title"><strong>Nilai Evaluasi Dampak Pelatihan (Atasan)</strong></h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <p>Mohon berikan evaluasi atas dampak dan penerapan pelatihan oleh staf di unit Anda.</p>
+
+        <!-- Pertanyaan Skala 1–10 -->
+        <div class="pertanyaan">
+          <label>Hasil pelatihan menambah pengetahuan & keterampilan staff Saudara *</label>
+          <div class="skala d-flex justify-content-between align-items-center">
+            <span class="label-kiri">Tidak Setuju</span>
+            <div class="d-flex gap-2">
+              @for ($i = 1; $i <= 10; $i++)
+                <label class="text-center">
+                  <input type="radio" name="atasan_q1" value="{{ $i }}">
+                  <span>{{ $i }}</span>
+                </label>
+              @endfor
+            </div>
+            <span class="label-kanan">Sangat Setuju</span>
+          </div>
+        </div>
+
+        <div class="pertanyaan">
+          <label>Staff Saudara mengimplementasikan hasil pelatihan dalam tugas/pekerjaannya *</label>
+          <div class="skala d-flex justify-content-between align-items-center">
+            <span>Tidak Setuju</span>
+            <div class="d-flex gap-2">
+              @for ($i = 1; $i <= 10; $i++)
+                <label class="text-center">
+                  <input type="radio" name="atasan_q2" value="{{ $i }}">
+                  <span>{{ $i }}</span>
+                </label>
+              @endfor
+            </div>
+            <span>Sangat Setuju</span>
+          </div>
+        </div>
+
+        <div class="pertanyaan">
+          <label>Dengan hasil pelatihan tersebut, banyak tugas/kasus unit Saudara yang bisa disolusikan *</label>
+          <div class="skala d-flex justify-content-between align-items-center">
+            <span>Tidak Setuju</span>
+            <div class="d-flex gap-2">
+              @for ($i = 1; $i <= 10; $i++)
+                <label class="text-center">
+                  <input type="radio" name="atasan_q3" value="{{ $i }}">
+                  <span>{{ $i }}</span>
+                </label>
+              @endfor
+            </div>
+            <span>Sangat Setuju</span>
+          </div>
+        </div>
+
+        <div class="pertanyaan">
+          <label>Staff Saudara menerapkan hasil pelatihan secara konsisten *</label>
+          <div class="skala d-flex justify-content-between align-items-center">
+            <span>Tidak Setuju</span>
+            <div class="d-flex gap-2">
+              @for ($i = 1; $i <= 10; $i++)
+                <label class="text-center">
+                  <input type="radio" name="atasan_q4" value="{{ $i }}">
+                  <span>{{ $i }}</span>
+                </label>
+              @endfor
+            </div>
+            <span>Sangat Setuju</span>
+          </div>
+        </div>
+
+        <div class="pertanyaan">
+          <label>Hasil pelatihan meningkatkan performansi/kinerja unit Saudara *</label>
+          <div class="skala d-flex justify-content-between align-items-center">
+            <span>Tidak Setuju</span>
+            <div class="d-flex gap-2">
+              @for ($i = 1; $i <= 10; $i++)
+                <label class="text-center">
+                  <input type="radio" name="atasan_q5" value="{{ $i }}">
+                  <span>{{ $i }}</span>
+                </label>
+              @endfor
+            </div>
+            <span>Sangat Setuju</span>
+          </div>
+        </div>
+
+        <!-- Komentar -->
+        <div class="pertanyaan">
+          <label>Berikan komentar Anda *</label>
+          <textarea class="form-control" rows="3" name="atasan_komentar"></textarea>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <button class="btn btn-primary">Submit</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
 
   <div class="tab-content" id="payroll" style="display: none;">
     <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; flex-wrap: wrap;">
@@ -2578,3 +3064,25 @@
         modal.style.display = modal.style.display === "block" ? "none" : "block";
       }
     </script>
+
+  <script>
+document.addEventListener("DOMContentLoaded", function () {
+  const container = document.getElementById("pelatihan-container");
+  if (!container) return;
+
+  const tabButtons = container.querySelectorAll(".tab-btn");
+  const tabPanes = container.querySelectorAll(".tab-pane");
+
+  tabButtons.forEach(button => {
+    button.addEventListener("click", function () {
+      tabButtons.forEach(btn => btn.classList.remove("active"));
+      this.classList.add("active");
+
+      tabPanes.forEach(pane => pane.classList.remove("active"));
+      const target = this.getAttribute("data-target");
+      container.querySelector("#" + target).classList.add("active");
+    });
+  });
+});
+</script>
+

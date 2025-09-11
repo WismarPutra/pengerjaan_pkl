@@ -154,3 +154,4 @@ Route::prefix('employees/{employee}')->group(function () {
     Route::delete('careers/{career}', [CareerActivityController::class, 'destroy'])->name('career_activities.destroy');
 });
 
+

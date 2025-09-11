@@ -10,7 +10,7 @@ class Training extends Model
     use HasFactory;
 
     public $timestamps = true;
-    
+
     protected $fillable = [
         'id_training',
         'nama_training',
@@ -32,4 +32,12 @@ class Training extends Model
         'biaya',
         'total_biaya',
     ];
+
+    // 🔑 Relasi Many-to-Many dengan Employee
+    public function employees()
+    {
+        return $this->belongsToMany(Employee::class, 'id')
+                    ->withPivot(['tanggal_mulai', 'tanggal_selesai', 'status'])
+                    ->withTimestamps();
+    }
 }
