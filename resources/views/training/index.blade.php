@@ -835,7 +835,7 @@
 
   <!-- STATISTIK SEDANG BERJALAN-->
   <div>
-    <div class="stat-boxes w-[70%]">
+    <div class="stat-boxes w-full">
       <div class="stat-box">
         <div class="icon-circle blue"><i class="fas fa-user-group"></i></div>
         <div class="stat-info">
