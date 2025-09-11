@@ -26,6 +26,9 @@ class Training extends Model
         'metode_pelatihan',
         'partisipan',
         'status',
+        'stream',
+        'keterangan',
+        'tna',
         'biaya',
         'total_biaya',
     ];

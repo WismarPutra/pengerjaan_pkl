@@ -620,7 +620,7 @@ textarea.form-control {
         <div class="form-grid">
         <div class="form-group">
             <label>ID Training *</label>
-            <input type="text" name="id_training" class="form-control-read" required>
+            <input type="text" name="id_training" class="form-control-read" placeholder="CONTOH ISI : TR12345" required>
         </div>
 
         <div class="form-group">
@@ -631,6 +631,33 @@ textarea.form-control {
         <div class="form-group">
             <label>Deskripsi Training *</label>
             <input type="text" name="deskripsi_training" class="form-control" required>
+        </div>
+
+        <div class="form-group">
+            <label>Status *</label>
+            <select name="status" class="form-control1" required>
+                <option disabled selected value=""></option>
+                <option value="Schedule">Schedule</option>
+                <option value="On_Going">On Going</option>
+            </select>
+        </div>
+        
+        <div class="form-group">
+            <label>Stream *</label>
+            <select name="status" class="form-control1" required>
+                <option disabled selected value=""></option>
+                <option value="Health">Health</option>
+                <option value="Investment">Investment</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Keterangan *</label>
+            <select name="status" class="form-control1" required>
+                <option disabled selected value=""></option>
+                <option value="Technical">Technical</option>
+                <option value=""></option>
+            </select>
         </div>
 
         <div class="form-group">
