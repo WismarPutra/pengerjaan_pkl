@@ -8,14 +8,42 @@ use App\Models\Training;
 class TrainingController extends Controller
 {
     public function index(Request $request)
-{
-    $training = Training::all(); // data tabel
-    
-    // Hitung total partisipan dari kolom 'partisipan'
-    $totalPartisipan = Training::sum('partisipan');
-    
-    return view('training.index', compact('training', 'totalPartisipan'));
-}
+    {
+        // Hitung total partisipan dari kolom 'partisipan'
+        $totalPartisipan = Training::sum('partisipan');
+        $tna = Training::where('tna', 'TNA')->count();
+        $nonTna = Training::where('tna', 'Non-TNA')->count();
+        $pelatihanBerjalan = Training::where('status','On Going')->count();
+        $pelatihanDijadwalkan = Training::where('status','scheduled')->count();
+        $tanggalMulai = Training::orderBy('tanggal_mulai', 'desc')->get();
+
+        $sortByTraining    = $request->query('sort_by_training', 'nama_training');
+        $sortOrderTraining = $request->query('sort_order_training', 'desc');
+
+        $allowedTraining = [
+            'id',
+            'id_training',
+            'nama_training',
+            'status',
+            'stream',
+            'keterangan',
+            'partisipan',
+            'tanggal_mulai',
+            'tanggal_selesai',
+            'tipe_training',
+            'penyelenggara',
+            'metode_pelatihan',
+            'tna',
+        ];
+
+        if (!in_array($sortByTraining, $allowedTraining)) {
+            $sortByTraining = 'nama_training';
+        }
+        $sortOrderTraining = $sortOrderTraining === 'asc' ? 'asc' : 'desc';
+
+        $training = Training::orderBy($sortByTraining, $sortOrderTraining)->get();
+        return view('training.index', compact('training', 'totalPartisipan', 'tna','nonTna','pelatihanBerjalan','pelatihanDijadwalkan','tanggalMulai','sortByTraining', 'sortOrderTraining'));
+    }
 
 
     public function create()
@@ -67,7 +95,8 @@ class TrainingController extends Controller
         return redirect()->route('training.index')->with('success', 'Training berhasil ditambahkan.');
     }
 
-    public function show($id) {
+    public function show($id)
+    {
         $training = Training::findOrFail($id);
         return view('training.show', compact('training'));
     }
