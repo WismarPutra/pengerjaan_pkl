@@ -1833,7 +1833,7 @@
 
 
 <!-- KONTEN UTAMA -->
-<div class="content-header-flex">
+<div class="content-header-flex" style="margin-left: 42vh;">
   <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; flex-wrap: wrap;">
     <div style="display: flex; flex-direction: column; gap: 6px;">
       <div style="display: flex; align-items: center; gap: 6px;">
@@ -2379,7 +2379,7 @@
   </div>
 
   <!-- 🔹 TAB CONTENT: HASIL PELATIHAN -->
-   <div id="pelatihan-hasil" class="tab-pane fade show active">
+   <div id="pelatihan-hasil" class="tab-pane">
     <div class="content7">
       <div class="left-content8">
         <p class="info1">Kehadiran (28/08/2025)</p>

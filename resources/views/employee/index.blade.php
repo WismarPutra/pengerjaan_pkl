@@ -669,7 +669,7 @@ ul li a:hover:not(.active) {
 
 
 <!-- KONTEN UTAMA -->
-<div class="content-header-flex">
+<div class="content-header-flex" style="margin-left:42vh;">
   <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; flex-wrap: wrap;">
     <div style="display: flex; flex-direction: column; gap: 6px;">
       <!-- Baris 1: Home & Breadcrumb -->
