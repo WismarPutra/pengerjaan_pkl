@@ -62,11 +62,18 @@ Route::post('/kehadiran', [KehadiranController::class, 'store'])->name('kehadira
 
 /* TALENT MANAGEMENT */
 
+Route::get('/employees/payslip/view/{filename}', [TMController::class, 'viewPayslip'])
+    ->name('employees.payslip.view');
+Route::get('/employees/payslip/download/{filename}', [TMController::class, 'downloadPayslip'])
+    ->name('employees.payslip.download');
+Route::get('/employees/payslip/view/dummy/{filename}', [TMController::class, 'viewPayslipDummy'])
+    ->name('employees.payslip.view.dummy');
+
 Route::get('/employees', [TMController::class, 'index'])->name('employees.index');
-Route::get('/employees/{employee}', [TMController::class, 'show'])->name('employees.show');
 Route::get('/employees/{employee}/edit', [TMController::class, 'edit'])->name('employees.edit');
 Route::put('/employees/{id}', [TMController::class, 'update'])->name('employees.update');
-Route::get('/employees/payslip/download/{filename}', [TMController::class, 'downloadPayslip'])->name('employees.payslip.download');
+Route::get('/employees/{employee}', [TMController::class, 'show'])->name('employees.show');
+
 
 Route::get('/employee/{id}/career', [TMController::class, 'getCareerActivities'])->name('employee.career');
 Route::post('/employee/{id}/career', [TMController::class, 'storeCareerActivity'])->name('employee.career.store');
