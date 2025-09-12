@@ -13,9 +13,18 @@ class TrainingController extends Controller
         $totalPartisipan = Training::sum('partisipan');
         $tna = Training::where('tna', 'TNA')->count();
         $nonTna = Training::where('tna', 'Non-TNA')->count();
-        $pelatihanBerjalan = Training::where('status','On Going')->count();
-        $pelatihanDijadwalkan = Training::where('status','scheduled')->count();
+        $pelatihanBerjalan = Training::where('status', 'On Going')->count();
+        $pelatihanDijadwalkan = Training::where('status', 'scheduled')->count();
         $tanggalMulai = Training::orderBy('tanggal_mulai', 'desc')->get();
+        $totalTraining = Training::count(); // menghitung total baris
+        $perPage = $request->get('per_page', 5);
+        $totalBiaya = Training::sum('total_biaya');
+        $biaya = Training::sum('biaya');
+        $totalNamaTraining = Training::count('nama_training'); 
+
+        // ambil data sesuai jumlah per_page
+        $trainings = Training::paginate($perPage);
+
 
         $sortByTraining    = $request->query('sort_by_training', 'nama_training');
         $sortOrderTraining = $request->query('sort_order_training', 'desc');
@@ -34,6 +43,7 @@ class TrainingController extends Controller
             'penyelenggara',
             'metode_pelatihan',
             'tna',
+            'total_biaya',
         ];
 
         if (!in_array($sortByTraining, $allowedTraining)) {
@@ -42,7 +52,7 @@ class TrainingController extends Controller
         $sortOrderTraining = $sortOrderTraining === 'asc' ? 'asc' : 'desc';
 
         $training = Training::orderBy($sortByTraining, $sortOrderTraining)->get();
-        return view('training.index', compact('training', 'totalPartisipan', 'tna','nonTna','pelatihanBerjalan','pelatihanDijadwalkan','tanggalMulai','sortByTraining', 'sortOrderTraining'));
+        return view('training.index', compact('training', 'totalPartisipan', 'tna', 'nonTna', 'pelatihanBerjalan', 'pelatihanDijadwalkan', 'tanggalMulai', 'totalTraining', 'perPage', 'trainings','totalBiaya', 'biaya','totalNamaTraining','sortByTraining', 'sortOrderTraining'));
     }
 
 
