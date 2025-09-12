@@ -13,7 +13,14 @@ class RecruitmentController extends Controller
     // Ambil parameter sort & direction dari URL
     $sort = $request->get('sort', 'id');       // default sort by id
     $direction = $request->get('direction', 'desc'); // default desc
-
+    $perPage = $request->get('per_page', 10); // default 10
+    $recruitments = Recruitment::orderBy($sort, $direction)
+        ->paginate($perPage)
+        ->appends([
+            'sort' => $sort,
+            'direction' => $direction,
+            'per_page' => $perPage
+        ]);
     // Daftar kolom yang boleh di-sort
     $allowedSorts = [
         'namaPosisi',
@@ -66,7 +73,8 @@ class RecruitmentController extends Controller
         'direction',
         'jumlahKebutuhan',
         'direktoratAktif',
-        'targetBulanIni'
+        'targetBulanIni',
+        'perPage'
     ));
 }
 

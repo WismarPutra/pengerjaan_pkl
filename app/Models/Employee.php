@@ -48,10 +48,21 @@ class Employee extends Model
         return $this->hasMany(TalentCluster::class, 'employee_id');
     }
 
-    public function documents()
+   public function documents()
 {
     return $this->hasMany(EmployeeDocument::class);
 }
+
+public function personalDocuments()
+{
+    return $this->documents()->where('kategori', 'personal');
+}
+
+public function otherDocuments()
+{
+    return $this->documents()->where('kategori', 'lainnya');
+}
+
 
 public function careerActivities()
 {

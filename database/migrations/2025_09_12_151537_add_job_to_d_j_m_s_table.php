@@ -11,15 +11,20 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('recruitment', function (Blueprint $table) {
-            $table->string('created_by_role')->nullable();
-        });
-        
+        Schema::table('d_j_m_s', function (Blueprint $table) {
+    $table->string('job')->nullable()->after('unitSub');
+});
+
     }
 
+    /**
+     * Reverse the migrations.
+     */
     public function down(): void
     {
-        
-    }
+        Schema::table('d_j_m_s', function (Blueprint $table) {
+    $table->string('job')->nullable()->after('unitSub');
+});
 
+    }
 };

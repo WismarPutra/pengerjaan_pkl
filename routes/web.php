@@ -82,6 +82,19 @@ Route::delete('/career/{id}', [TMController::class, 'deleteCareerActivity'])->na
 Route::post('/employee/{id}/documents', [TMController::class, 'updateDocuments'])->name('employee.updateDocuments');
 Route::put('/employees/{id}/documents', [TMController::class, 'updateDocuments'])->name('employee.updateDocuments');
 Route::delete('/employees/documents/{id}', [TMController::class, 'deleteDocument'])->name('employee.deleteDocument');
+Route::post('/employees/{id}/documents', [EmployeeController::class, 'uploadDocument'])->name('employee.uploadDocument');
+Route::delete('/employees/documents/{id}', [EmployeeController::class, 'deleteDocument'])->name('employee.deleteDocument');
+Route::post('/employees/{id}/documents/upload', [TMController::class, 'uploadDocument'])->name('employees.documents.upload');
+Route::resource('talent-clusters', TalentClusterController::class);
+// Talent Cluster (nested di employees)
+Route::post('/employees/{employee}/clusters', [TalentClusterController::class, 'store'])->name('clusters.store');
+Route::get('/employees/{employee}/clusters/{cluster}/edit', [TalentClusterController::class, 'edit'])->name('clusters.edit');
+Route::put('/employees/{employee}/clusters/{cluster}', [TalentClusterController::class, 'update'])->name('clusters.update');
+Route::delete('/employees/{employee}/clusters/{cluster}', [TalentClusterController::class, 'delete'])->name('clusters.delete');
+Route::put('/employees/{employee}/clusters/{cluster}', [TalentClusterController::class, 'update'])
+     ->name('clusters.update');
+// web.php
+Route::resource('employees.clusters', ClusterController::class);
 
 
 

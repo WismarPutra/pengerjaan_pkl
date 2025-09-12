@@ -852,6 +852,25 @@ ul li a:hover:not(.active) {
 
   </div>
 
+  <div class="d-flex align-items-center">
+    <span>Menampilkan</span>
+    <select name="per_page" onchange="this.form.submit()" class="form-select form-select-sm mx-2 w-auto">
+        <option value="5" {{ $perPage == 5 ? 'selected' : '' }}>5</option>
+        <option value="10" {{ $perPage == 10 ? 'selected' : '' }}>10</option>
+        <option value="25" {{ $perPage == 25 ? 'selected' : '' }}>25</option>
+        <option value="50" {{ $perPage == 50 ? 'selected' : '' }}>50</option>
+        <option value="100" {{ $perPage == 100 ? 'selected' : '' }}>100</option>
+    </select>
+    <span>entri dari {{ $recruitments->total() }} entri</span>
+</div>
+
+
+    <div>
+        {{ $recruitments->links() }}
+    </div>
+</div>
+
+
   
 
 </div>
