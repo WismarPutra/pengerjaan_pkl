@@ -250,9 +250,11 @@ class TMController extends Controller
         abort(404, 'File not found: ' . $file);
     }
 
-    return response()->download($file);
+    // Baris ini akan membuka PDF di browser
+    return response()->file($file, [
+        'Content-Type' => 'application/pdf',
+    ]);
 }
-
 
 public function viewPayslip($filename)
 {
@@ -264,6 +266,9 @@ public function viewPayslip($filename)
 
     return view('employee.payslips', ['filename' => $filename]);
 }
+
+
+
     public function getCareerActivities($employee_id)
     {
         $employee = Employee::with('careerActivities')->findOrFail($employee_id);

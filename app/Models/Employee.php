@@ -58,5 +58,10 @@ public function careerActivities()
     return $this->hasMany(CareerActivity::class, 'employee_id');
 }
 
+public function jobHistories()
+{
+    return $this->hasMany(JobHistory::class, 'employee_id');
+}
+
 
 }
