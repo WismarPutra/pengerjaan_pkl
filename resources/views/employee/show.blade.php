@@ -1693,12 +1693,13 @@
     background-color: #2f46cc; /* warna saat hover */
   }
 
-  /* === EMOJI RATING === */
+/* === EMOJI RATING === */
 .emoji-rating {
   display: flex;
   gap: 16px;
   margin: 15px 0;
 }
+
 .emoji-btn {
   flex: 1;
   border: 1px solid #ddd;
@@ -1709,12 +1710,22 @@
   background: #fff;
   cursor: pointer;
   transition: 0.2s;
+  user-select: none;
+  display: block;
 }
-.emoji-btn:hover,
-.emoji-btn.active {
+
+/* hover efek */
+.emoji-btn:hover {
   border-color: #3B57FF;
   background: #f4f6ff;
 }
+
+/* saat dipilih */
+input[type="radio"]:checked + .emoji-btn {
+  border-color: #3B57FF;
+  background: #f4f6ff;
+}
+
 
 /* === PERTANYAAN SKALA === */
 /* Pertanyaan */
@@ -2411,13 +2422,13 @@
         <i class="fas fa-pen"></i> Isi Evaluasi
       </button>
     </div>
-    <p>Keseluruhan Pengalaman Training</p><strong>Cukup Baik</strong>
-    <p>Hasil Pelatihan menambah pengetahuan saya<br><strong>8 (Setuju)</strong></p>
-    <p>Saya mudah mengimplementasikan hasil pelatihan<br><strong>8 (Sangat Setuju)</strong></p>
-    <p>Hasil pelatihan mempermudah pekerjaan saya<br><strong>9 (Sangat Setuju)</strong></p>
-    <p>Saya konsisten menerapkan hasil pelatihan<br><strong>10 (Sangat Setuju)</strong></p>
-    <p>Hasil pelatihan meningkatkan kinerja unit<br><strong>10 (Sangat Setuju)</strong></p>
-    <p><strong>Komentar:</strong><br>Pelatihan ini membantu pengembangan karir saya.</p>
+    <p>Keseluruhan Pengalaman Training</p><br>
+    <p>Hasil Pelatihan menambah pengetahuan saya</p><br>
+    <p>Saya mudah mengimplementasikan hasil pelatihan</p><br>
+    <p>Hasil pelatihan mempermudah pekerjaan saya</p><br>
+    <p>Saya konsisten menerapkan hasil pelatihan</p><br>
+    <p>Hasil pelatihan meningkatkan kinerja unit</p><br>
+    <p>Komentar:</p><br>
   </div>
 
   <!-- 🔹 TAB CONTENT: EVALUASI ATASAN -->
@@ -2428,12 +2439,12 @@
         <i class="fas fa-pen"></i> Isi Evaluasi
       </button>
     </div>
-    <p>Hasil pelatihan yang diikuti, menambah pengetahuan & keterampilan staff Saudara<br><strong>8 (Setuju)</strong></p>
-    <p>Staff Saudara mengimplementasikan hasil pelatihan dalam tugas/pekerjaannya<br><strong>9 (Sangat Setuju)</strong></p>
-    <p>Dengan hasil pelatihan tersebut, banyak tugas dan kasus dipekerjakan unit staff Saudara yang bisa disolusikan <br><strong>10 (Sangat Setuju)</strong></p>
-    <p>Staff Saudara menerapkan hasil dalam tugas/pekerjaan secara konsisten<br><strong>10 (Sangat Setuju)</strong></p>
-    <p>Hasil pelatihan yang diperoleh staff Saudara meningkatkan performansi/kinerja unit<br><strong>10 (Sangat Setuju)</strong></p>
-    <p>Komentar:<br><strong>Sangat berdampak baik</strong></p>
+    <p>Hasil pelatihan yang diikuti, menambah pengetahuan & keterampilan staff Saudara</p><br>
+    <p>Staff Saudara mengimplementasikan hasil pelatihan dalam tugas/pekerjaannya</p><br>
+    <p>Dengan hasil pelatihan tersebut, banyak tugas dan kasus dipekerjakan unit staff Saudara yang bisa disolusikan</p><br>
+    <p>Staff Saudara menerapkan hasil dalam tugas/pekerjaan secara konsisten</p><br>
+    <p>Hasil pelatihan yang diperoleh staff Saudara meningkatkan performansi/kinerja unit</p><br>
+    <p>Komentar:</p><br>
   </div>
 </div>
 <!-- 🔹 MODAL ISI EVALUASI PESERTA -->
@@ -2447,15 +2458,27 @@
       <div class="modal-body">
         <p>Terima kasih telah mengikuti dan menyelesaikan pelatihan ini!</p>
 
-        <!-- Emoji Rating -->
         <div class="emoji-rating">
-          <button class="emoji-btn">🥰 <br> Sangat Suka</button>
-          <button class="emoji-btn">🙂 <br> Cukup Baik</button>
-          <button class="emoji-btn">😐 <br> Kurang Baik</button>
-        </div>
+  <label>
+    <input type="radio" name="emoji_rating" value="sangat_suka" hidden>
+    <span class="emoji-btn">🥰 <br> Sangat Suka</span>
+  </label>
+
+  <label>
+    <input type="radio" name="emoji_rating" value="cukup_baik" hidden>
+    <span class="emoji-btn">🙂 <br> Cukup Baik</span>
+  </label>
+
+  <label>
+    <input type="radio" name="emoji_rating" value="kurang_baik" hidden>
+    <span class="emoji-btn">😐 <br> Kurang Baik</span>
+  </label>
+</div>
+
 
         <!-- Pertanyaan Skala -->
-        <div class="pertanyaan">
+        <!-- Pertanyaan 1 -->
+<div class="pertanyaan">
   <label>Hasil pelatihan yang saya ikuti, menambah pengetahuan dan keterampilan saya *</label>
   <div class="skala">
     <span class="label-kiri">Tidak Setuju</span>
@@ -2471,20 +2494,24 @@
   </div>
 </div>
 
-        <div class="pertanyaan">
-          <label>Saya mudah mengimplementasikan hasil pelatihan dalam tugas/pekerjaan saya *</label>
-          <div class="skala">
-  <span>Tidak Setuju</span>
-  @for ($i = 1; $i <= 10; $i++)
-    <label>
-      <input type="radio" name="q1" value="{{ $i }}">
-      <span>{{ $i }}</span>
-    </label>
+<!-- Pertanyaan 2 -->
+<div class="pertanyaan">
+  <label>Saya mudah mengimplementasikan hasil pelatihan dalam tugas/pekerjaan saya *</label>
+  <div class="skala">
+    <span class="label-kiri">Tidak Setuju</span>
+    <div class="skala-options">
+      @for ($i = 1; $i <= 10; $i++)
+        <label>
+          <input type="radio" name="q2" value="{{ $i }}">
+          <span>{{ $i }}</span>
+        </label>
       @endfor
-    <span>Sangat Setuju</span>
+    </div>
+    <span class="label-kanan">Sangat Setuju</span>
   </div>
 </div>
 
+<!-- Pertanyaan 3 -->
 <div class="pertanyaan">
   <label>Hasil pelatihan yang didapat mempercepat/mempermudah penyelesaian tugas/pekerjaan saya *</label>
   <div class="skala">
@@ -2492,7 +2519,7 @@
     <div class="skala-options">
       @for ($i = 1; $i <= 10; $i++)
         <label>
-          <input type="radio" name="q1" value="{{ $i }}">
+          <input type="radio" name="q3" value="{{ $i }}">
           <span>{{ $i }}</span>
         </label>
       @endfor
@@ -2501,6 +2528,7 @@
   </div>
 </div>
 
+<!-- Pertanyaan 4 -->
 <div class="pertanyaan">
   <label>Saya menerapkan secara konsisten hasil pelatihan pada tugas/pekerjaan saya *</label>
   <div class="skala">
@@ -2508,7 +2536,7 @@
     <div class="skala-options">
       @for ($i = 1; $i <= 10; $i++)
         <label>
-          <input type="radio" name="q1" value="{{ $i }}">
+          <input type="radio" name="q4" value="{{ $i }}">
           <span>{{ $i }}</span>
         </label>
       @endfor
@@ -2517,6 +2545,7 @@
   </div>
 </div>
 
+<!-- Pertanyaan 5 -->
 <div class="pertanyaan">
   <label>Hasil pelatihan yang saya ikuti meningkatkan kinerja/performansi di unit saya saat ini *</label>
   <div class="skala">
@@ -2524,7 +2553,7 @@
     <div class="skala-options">
       @for ($i = 1; $i <= 10; $i++)
         <label>
-          <input type="radio" name="q1" value="{{ $i }}">
+          <input type="radio" name="q5" value="{{ $i }}">
           <span>{{ $i }}</span>
         </label>
       @endfor
@@ -2540,9 +2569,12 @@
       </div>
 
       <div class="modal-footer">
-        <button class="btn-cancel" data-bs-dismiss="modal">Cancel</button>
-        <button class="btn-submit">Submit</button>
-      </div>
+          <!-- Cancel otomatis nutup modal -->
+          <button type="button" class="btn-cancel" data-bs-dismiss="modal">Cancel</button>
+
+          <!-- Submit simpan data -->
+          <button type="submit" class="btn-submit">Submit</button>
+        </div>
     </div>
   </div>
 </div>
@@ -2668,6 +2700,7 @@
         <button class="filter-btn" onclick="toggleFilter()"><i class="fas fa-sliders"></i> Filters</button>
       </div>
     </div>
+
     @if(isset($payslips) && is_array($payslips))
     <div class="payslip-grid">
       @foreach($payslips as $payslip)
@@ -2676,7 +2709,8 @@
         <div class="payslip-text">
           <strong>{{ $payslip['filename'] }}</strong><br>
           <span>{{ $payslip['date'] }}</span><br>
-          <a href="{{ route('employees.payslip.download', ['filename' => $payslip['filename']]) }}" class="download-link">Klik untuk Download</a>
+          <!-- Link untuk popup modal -->
+          <a href="{{ asset('payslips/dummy.pdf') }}" class="download-link view-payslip-link">Klik untuk Download</a>
         </div>
       </div>
       @endforeach
@@ -2684,7 +2718,42 @@
     @else
     <p>Tidak ada data payslip.</p>
     @endif
+</div>
+
+<!-- Modal Datapayroll -->
+<div id="payslipModal" class="modal" 
+     style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; 
+            background: rgba(0,0,0,0.5); justify-content:center; align-items:center; z-index:9999;">
+  <div class="modal-content" 
+       style="background:#fff; border-radius:12px; width:70%; max-width:800px; height:90%; 
+              position:relative; display:flex; flex-direction:column; overflow:hidden;">
+
+    <!-- Tombol Close -->
+    <button type="button" onclick="closePayslipModal()" 
+      style="position:absolute; top:15px; right:15px; background:none; border:none; 
+             font-size:24px; font-weight:bold; cursor:pointer; color:#333;">&times;</button>
+
+    <!-- Judul -->
+    <div style="padding:20px 20px 0 20px; text-align:left; font-size:18px; font-weight:600;">
+      Slip Gaji Januari 2024
+    </div>
+
+    <!-- Isi PDF (dummy iframe atau gambar) -->
+    <div style="flex:1; padding:20px;">
+      <iframe id="payslipFrame" src="" 
+        style="width:100%; height:100%; border:none; border-radius:8px; box-shadow:0 2px 6px rgba(0,0,0,0.1);"></iframe>
+    </div>
+
+    <!-- Tombol Download -->
+    <div style="padding:15px; text-align:center; border-top:1px solid #eee;">
+      <a id="downloadPayslipBtn" href="#" download 
+         style="background:#3B82F6; color:#fff; font-weight:600; font-size:16px; 
+                padding:12px 30px; border-radius:8px; text-decoration:none; 
+                display:inline-block; transition:background 0.3s;">Download</a>
+    </div>
   </div>
+</div>
+
 
   <div class="tab-content" id="karir" style="display: none;">
     <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; flex-wrap: wrap;">
@@ -3083,6 +3152,28 @@ document.addEventListener("DOMContentLoaded", function () {
       container.querySelector("#" + target).classList.add("active");
     });
   });
+});
+</script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const modal = document.getElementById('payslipModal');
+  const frame = document.getElementById('payslipFrame');
+  const downloadBtn = document.getElementById('downloadPayslipBtn');
+
+  document.querySelectorAll('.view-payslip-link').forEach(link => {
+    link.addEventListener('click', function(e){
+      e.preventDefault(); // penting supaya tidak pindah tab
+      const fileUrl = this.href;
+      frame.src = fileUrl;
+      downloadBtn.href = fileUrl;
+      modal.style.display = 'flex';
+    });
+  });
+
+  window.closePayslipModal = function() {
+    modal.style.display = 'none';
+    frame.src = '';
+  }
 });
 </script>
 
