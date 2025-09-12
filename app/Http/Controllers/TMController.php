@@ -34,17 +34,6 @@ class TMController extends Controller
     {
         $payslips = [
             ['filename' => '2024-Jan.pdf', 'date' => '28 Januari 2024'],
-            ['filename' => '2024-Feb.pdf', 'date' => '28 Februari 2024'],
-            ['filename' => '2024-Mar.pdf', 'date' => '28 Maret 2024'],
-            ['filename' => '2024-Apr.pdf', 'date' => '28 April 2024'],
-            ['filename' => '2024-May.pdf', 'date' => '28 Mei 2024'],
-            ['filename' => '2024-Jun.pdf', 'date' => '28 Juni 2024'],
-            ['filename' => '2024-Jul.pdf', 'date' => '28 Juli 2024'],
-            ['filename' => '2024-Aug.pdf', 'date' => '28 Agustus 2024'],
-            ['filename' => '2024-Sep.pdf', 'date' => '28 September 2024'],
-            ['filename' => '2024-Oct.pdf', 'date' => '28 Oktober 2024'],
-            ['filename' => '2024-Nov.pdf', 'date' => '28 November 2024'],
-            ['filename' => '2024-Dec.pdf', 'date' => '28 Desember 2024'],
         ];
 
         // ---- Sorting Talent Cluster ----
@@ -254,15 +243,27 @@ class TMController extends Controller
 
 
     public function downloadPayslip($filename)
-    {
-        $file = storage_path('app/payslips/' . $filename);
-        if (!file_exists($file)) {
-            abort(404, 'File not found.');
-        }
-        return response()->download($file);
+{
+    $file = storage_path('app/payslips/' . $filename);
+
+    if (!file_exists($file)) {
+        abort(404, 'File not found: ' . $file);
     }
 
+    return response()->download($file);
+}
 
+
+public function viewPayslip($filename)
+{
+    $filePath = storage_path('app/payslips/' . $filename);
+
+    if (!file_exists($filePath)) {
+        abort(404, 'File not found: ' . $filePath);
+    }
+
+    return view('employee.payslips', ['filename' => $filename]);
+}
     public function getCareerActivities($employee_id)
     {
         $employee = Employee::with('careerActivities')->findOrFail($employee_id);

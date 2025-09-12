@@ -1,6 +1,5 @@
 @extends('layouts.app')
 
-
 @section('content')
 <style>
   .payslip-grid {
@@ -57,9 +56,13 @@
             <div class="payslip-card">
                 <img src="{{ asset('assets/pdf-icon.png') }}" alt="PDF" class="pdf-icon">
                 <div class="payslip-text">
-                <strong>{{ $payslip['filename'] }}</strong><br>
-                <span>{{ $payslip['date'] }}</span><br>
-                <a href="{{ route('employees.payslip.download', ['filename' => $payslip['filename']]) }}" class="download-link">Klik untuk Download</a>
+                    <strong>{{ $payslip['filename'] }}</strong><br>
+                    <span>{{ $payslip['date'] }}</span><br>
+                    <!-- Link sementara ke halaman dummy preview -->
+                    <a href="{{ route('employees.payslip.view.dummy', ['filename' => $payslip['filename']]) }}" 
+                       target="_blank" class="download-link">
+                       Lihat Payslip
+                    </a>
                 </div>
             </div>
         @endforeach
