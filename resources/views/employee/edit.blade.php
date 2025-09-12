@@ -2328,22 +2328,38 @@
                   <div id="dropdownActions-{{ $cluster->id }}"
                     class="hidden absolute right-0 mt-2 w-32 bg-white rounded-lg shadow-md border border-gray-200 z-50">
                     <!-- Tombol baru -->
-                    <button type="button"
-                      onclick="openEditPopup('{{ $cluster->id }}', '{{  $cluster->periodeCluster }}', '{{ $cluster->tahunCluster }}', '{{ $cluster->talentCluster }}')"
-                      class="block w-full text-left px-3 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                      edit
-                    </button>
-                    <form action="{{ route('clusters.delete', [$employee->id, $cluster->id]) }}"
-                      method="POST"
-                      onsubmit="return confirm('Yakin ingin menghapus data ini?');">
-                      @csrf
-                      @method('DELETE')
-                      <button type="submit"
-                        class="w-full text-left px-3 py-2 text-sm text-red-600 hover:bg-red-100">
-                        Delete
-                      </button>
-                    </form>
-                  </div>
+                  <div class="relative inline-block text-left">
+  <!-- Tombol Action -->
+  <button type="button" 
+          onclick="toggleDropdown('actionMenuCluster{{ $cluster->id }}')" 
+          class="px-3 py-2 bg-gray-200 rounded">
+    Action
+  </button>
+
+  <!-- Dropdown Menu -->
+  <div id="actionMenuCluster{{ $cluster->id }}" 
+       class="hidden absolute right-0 mt-2 w-48 bg-white rounded shadow-lg z-50">
+    
+    <!-- Edit -->
+    <button type="button"
+      onclick="openEditClusterPopup('{{ $cluster->id }}', '{{ $cluster->periodeCluster }}', '{{ $cluster->tahunCluster }}', '{{ $cluster->talentCluster }}')"
+      class="block w-full text-left px-4 py-2 text-sm hover:bg-gray-100">
+      Edit
+    </button>
+
+    <!-- Delete -->
+    <form action="{{ route('employees.clusters.destroy', [$employee->id, $cluster->id]) }}" 
+          method="POST"
+          onsubmit="return confirm('Yakin ingin menghapus cluster ini?')">
+      @csrf
+      @method('DELETE')
+      <button type="submit" 
+              class="block w-full text-left px-4 py-2 text-sm hover:bg-gray-100">
+        Delete
+      </button>
+    </form>
+  </div>
+</div>
               </td>
             </tr>
             @empty
@@ -2354,19 +2370,19 @@
           </tbody>
         </table>
         <div class="flex justify-end gap-2 mt-4">
-          <form action="" method="POST">
-            @csrf
-            <button type="submit" class="bg-gray-300 px-4 py-2 rounded">Cancel</button>
-          </form>
+  <form action="" method="POST">
+    @csrf
+    <button type="submit" class="bg-gray-300 px-4 py-2 rounded">Cancel</button>
+  </form>
 
-          <form action="" method="POST">
-            @csrf
-            <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded">Save</button>
-          </form>
-        </div>
+  <form action="" method="POST">
+    @csrf
+    <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded">Save</button>
+  </form>
+</div>
       </div>
     </div>
-
+    
 
     <!-- DOKUMEN DI HALAMAN EDIT -->
 
@@ -2375,27 +2391,50 @@
 
         <!-- Dokumen Personal -->
         <h5 class="font-semibold text-gray-800 mb-3">Dokumen Personal</h5>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          @foreach($dokumenWajib as $field => $label)
-          <div class="flex justify-between items-center border-b pb-2">
-            <div>
-              <span class="font-medium text-gray-700">{{ $label }}</span><br>
-              @if($employee->$field)
-              <a href="{{ asset('storage/'.$employee->$field) }}" target="_blank" class="text-blue-600 text-sm font-medium hover:underline">
-                Klik untuk Melihat
-              </a>
-              @else
-              <span class="text-gray-400 text-sm">Belum ada file</span>
-              @endif
-            </div>
-            @if($employee->$field)
-            <button type="button" class="text-gray-500 hover:text-red-600 ml-2">
-              <i class="bi bi-x-circle"></i>
-            </button>
-            @endif
-          </div>
-          @endforeach
-        </div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+  @foreach($dokumenWajib as $field => $label)
+  <div class="flex justify-between items-center border-b pb-2">
+    <div>
+      <span class="font-medium text-gray-700">{{ $label }}</span><br>
+
+      @if($employee->$field)
+        {{-- Kalau sudah ada file --}}
+        <a href="{{ asset('storage/'.$employee->$field) }}" target="_blank" class="text-blue-600 text-sm font-medium hover:underline">
+          Klik untuk Melihat
+        </a>
+      @else
+        {{-- Kalau belum ada file, munculin upload --}}
+        <form action="{{ route('employee.updateDocuments', $employee->id) }}" 
+              method="POST" enctype="multipart/form-data" class="flex items-center gap-2">
+          @csrf
+          @method('PUT')
+
+          <input type="file" name="{{ $field }}" id="{{ $field }}" class="hidden" 
+                 accept=".jpg,.jpeg,.png,.pdf" onchange="this.form.submit()">
+
+          <label for="{{ $field }}" 
+                 class="cursor-pointer bg-blue-500 text-white px-3 py-1 rounded text-sm">
+            Upload
+          </label>
+        </form>
+        <span class="text-gray-400 text-sm">Belum ada file</span>
+      @endif
+    </div>
+
+    @if($employee->$field)
+    <form action="{{ route('employee.deleteDocument', [$employee->id, $field]) }}" 
+          method="POST" onsubmit="return confirm('Yakin hapus file ini?')">
+      @csrf
+      @method('DELETE')
+      <button type="submit" class="text-gray-500 hover:text-red-600 ml-2">
+        <i class="bi bi-x-circle"></i>
+      </button>
+    </form>
+    @endif
+  </div>
+  @endforeach
+</div>
+
 
         <hr class="h-px my-8 bg-gray-200 border-0 dark:bg-gray-700">
 
@@ -2407,27 +2446,42 @@
             + Tambah
         </div>
 
-        <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
-          @foreach($dokumenLainnya as $field => $label)
-          <div class="flex justify-between items-center border-b pb-2">
-            <div>
-              <span class="font-medium text-gray-700">{{ $label }}</span><br>
-              @if($employee->$field)
-              <a href="{{ asset('storage/'.$employee->$field) }}" target="_blank" class="text-blue-600 text-sm font-medium hover:underline">
-                Klik untuk Melihat
-              </a>
-              @else
-              <span class="text-gray-400 text-sm">Belum ada file</span>
-              @endif
-            </div>
-            @if($employee->$field)
-            <button type="button" class="text-gray-500 hover:text-red-600 ml-2">
-              <i class="bi bi-x-circle"></i>
-            </button>
-            @endif
-          </div>
-          @endforeach
-        </div>
+        <div class="grid grid-cols-2 gap-4">
+  @forelse($dokumenLainnya as $dokumen)
+    <div class="flex items-center justify-between border-b py-2">
+      <div class="flex items-center gap-3">
+        <span class="font-medium text-gray-700">{{ $dokumen }}</span>
+
+        @php
+          // pakai collection yang telah eager-loaded
+          $doc = $employee->documents->firstWhere('jenis_dokumen', $dokumen);
+        @endphp
+
+        @if($doc && $doc->file_path)
+          <a href="{{ asset('storage/'.$doc->file_path) }}" target="_blank"
+             class="text-blue-600 text-sm font-medium hover:underline ml-2">
+            Lihat File
+          </a>
+        @else
+          <span class="text-gray-400 text-sm ml-2">Belum ada file</span>
+        @endif
+      </div>
+
+      <form action="{{ route('employees.documents.upload', $employee->id) }}" method="POST" enctype="multipart/form-data" class="shrink-0">
+        @csrf
+        <input type="hidden" name="jenis_dokumen" value="{{ $dokumen }}">
+        <input type="hidden" name="kategori" value="lainnya">
+        {{-- gunakan md5 agar id valid tanpa perlu Str::slug --}}
+        <input type="file" name="file" class="hidden" onchange="this.form.submit()" id="upload-{{ md5($dokumen) }}">
+        <label for="upload-{{ md5($dokumen) }}" class="cursor-pointer bg-blue-600 text-white px-3 py-1 rounded text-sm hover:bg-blue-700">
+          Upload
+        </label>
+      </form>
+    </div>
+  @empty
+    <p class="text-gray-500">Tidak ada template dokumen lainnya.</p>
+  @endforelse
+</div>
 
         <!-- Action Buttons -->
         <div class="flex justify-end gap-3 mt-6">
@@ -2611,6 +2665,47 @@
       </div>
     </div>
 
+   <div id="editClusterModal" class="hidden fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+  <div class="bg-white rounded-lg shadow-lg p-6 w-[600px]">
+    <h3 class="text-lg font-bold mb-4">Edit Talent Cluster</h3>
+
+    <form id="editClusterForm" method="POST">
+      @csrf
+      @method('PUT')
+
+      <div class="mb-3">
+        <label>Periode</label>
+        <select id="editPeriodeCluster" name="periodeCluster" class="w-full border p-2">
+          <option value="Q1">Q1</option>
+          <option value="Q2">Q2</option>
+          <option value="Q3">Q3</option>
+          <option value="Q4">Q4</option>
+        </select>
+      </div>
+
+      <div class="mb-3">
+        <label>Tahun</label>
+        <input type="month" id="editTahunCluster" name="tahunCluster" class="w-full border p-2" />
+      </div>
+
+      <div class="mb-3">
+        <label>Talent Cluster</label>
+        <select id="editTalentCluster" name="talentCluster" class="w-full border p-2">
+          <option value="Potential Employee">Potential Employee</option>
+          <option value="Promotable Employee">Promotable Employee</option>
+        </select>
+      </div>
+
+      <div class="flex justify-end gap-2">
+        <button type="button" onclick="closeEditClusterPopup()" class="px-4 py-2 bg-gray-300 rounded">Cancel</button>
+        <button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded">Update</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+
+
     <!-- AKTIVITAS CAREER -->
 
     <div class="tab-content" id="karir" style="display: none;">
@@ -2630,6 +2725,8 @@
     </div>
     @endsection
 
+    
+
     <script>
       function removeFile(field) {
         // tandai field yang dihapus (biar controller tahu)
@@ -2648,6 +2745,48 @@
         `;
       }
     </script>
+
+  <script>
+  // Toggle dropdown
+  function toggleDropdown(id) {
+    const menu = document.getElementById(id);
+    menu.classList.toggle('hidden');
+  }
+
+  // Tutup dropdown kalau klik di luar
+  document.addEventListener('click', function(e) {
+    const dropdowns = document.querySelectorAll('[id^="actionMenuCluster"]');
+    dropdowns.forEach(menu => {
+      if (!menu.parentElement.contains(e.target)) {
+        menu.classList.add('hidden');
+      }
+    });
+  });
+
+  // Buka modal edit cluster
+  function openEditClusterPopup(clusterId, periode, tahun, cluster) {
+    document.getElementById('editPeriodeCluster').value = periode;
+    document.getElementById('editTahunCluster').value = tahun;
+    document.getElementById('editTalentCluster').value = cluster;
+
+    let form = document.getElementById('editClusterForm');
+    form.action = `/employees/{{ $employee->id }}/clusters/${clusterId}`;
+
+    document.getElementById('editClusterModal').classList.remove('hidden');
+  }
+
+  // Tutup modal edit cluster
+  function closeEditClusterPopup() {
+    document.getElementById('editClusterModal').classList.add('hidden');
+  }
+</script>
+
+
+
+
+
+
+
 
 
     <script>
@@ -2710,6 +2849,9 @@
         document.getElementById("addModal").style.display = "none";
       }
     </script>
+
+  
+
 
 
     <script>
