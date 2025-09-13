@@ -11,16 +11,25 @@ class TrainingController extends Controller
     {
         // Hitung total partisipan dari kolom 'partisipan'
         $totalPartisipan = Training::sum('partisipan');
+
+        //TNA
         $tna = Training::where('tna', 'TNA')->count();
         $nonTna = Training::where('tna', 'Non-TNA')->count();
+
+        //Total Training
+        $totalTraining = Training::count();
+        $persenTna = $totalTraining > 0 ? ($tna / $totalTraining) * 100 : 0;
+
+
+        //Status
         $pelatihanBerjalan = Training::where('status', 'On Going')->count();
         $pelatihanDijadwalkan = Training::where('status', 'scheduled')->count();
+
         $tanggalMulai = Training::orderBy('tanggal_mulai', 'desc')->get();
-        $totalTraining = Training::count(); // menghitung total baris
         $perPage = $request->get('per_page', 5);
         $totalBiaya = Training::sum('total_biaya');
         $biaya = Training::sum('biaya');
-        $totalNamaTraining = Training::count('nama_training'); 
+        $totalNamaTraining = Training::count('nama_training');
 
         // ambil data sesuai jumlah per_page
         $trainings = Training::paginate($perPage);
@@ -39,10 +48,23 @@ class TrainingController extends Controller
             'partisipan',
             'tanggal_mulai',
             'tanggal_selesai',
+            'waktu_Pelaksanaan',
             'tipe_training',
             'penyelenggara',
             'metode_pelatihan',
             'tna',
+            'nama',
+            'nama_posisi',
+            'unit',
+            'sub_dit',
+            'dit',
+            'loker',
+            'kota',
+            'status_analysis',
+            'status_training',
+            'prioritas',
+            'biaya',
+            'gap_kompetensi',
             'total_biaya',
         ];
 
@@ -52,7 +74,7 @@ class TrainingController extends Controller
         $sortOrderTraining = $sortOrderTraining === 'asc' ? 'asc' : 'desc';
 
         $training = Training::orderBy($sortByTraining, $sortOrderTraining)->get();
-        return view('training.index', compact('training', 'totalPartisipan', 'tna', 'nonTna', 'pelatihanBerjalan', 'pelatihanDijadwalkan', 'tanggalMulai', 'totalTraining', 'perPage', 'trainings','totalBiaya', 'biaya','totalNamaTraining','sortByTraining', 'sortOrderTraining'));
+        return view('training.index', compact('training', 'totalPartisipan', 'tna', 'persenTna', 'nonTna', 'pelatihanBerjalan', 'pelatihanDijadwalkan', 'tanggalMulai', 'totalTraining', 'perPage', 'trainings', 'totalBiaya', 'biaya', 'totalNamaTraining', 'sortByTraining', 'sortOrderTraining'));
     }
 
 
