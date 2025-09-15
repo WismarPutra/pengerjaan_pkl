@@ -2530,19 +2530,22 @@
             @endforelse
           </tbody>
         </table>
-        <div class="flex justify-end gap-2 mt-4">
-          <form action="" method="POST">
-            @csrf
-            <button type="submit" class="bg-gray-300 px-4 py-2 rounded">Cancel</button>
-          </form>
+    <div class="flex justify-end gap-2 mt-6">
+        <a href="{{ route('employees.show', $employee->id) }}"
+           class="bg-gray-300 text-gray-700 px-6 py-2 rounded">
+            Cancel
+        </a>
 
-          <form action="" method="POST">
-            @csrf
-            <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded">Save</button>
-          </form>
+        <button type="submit" 
+                class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded">
+            Save
+        </button>
+    </div>
+</form>
         </div>
       </div>
     </div>
+
 
 
     <!-- DOKUMEN DI HALAMAN EDIT -->
@@ -2841,28 +2844,30 @@
         <button type="button" class="btn-add">+ Tambah</button>
       </div>
 
-      <div class="timeline-container">
-        <div class="timeline-group">
-          <div class="timeline-item new">
-            <div class="timeline-year">2023</div>
-            <div class="timeline-content">
-              <h4 class="role-title">Nama Role Sekarang</h4>
-              <p class="sub-info">Maret 2023 - Sekarang (3 Tahun 1 Bulan) • Nama Direktorat • Band Level V</p>
-              <p class="promo-date">Tanggal Promosi: 1 Maret 2023</p>
-              <p class="description">
-                Lorem, ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus error eveniet culpa eos cupiditate doloribus impedit aliquid saepe aut nobis, consequuntur ex fuga consectetur quasi dolorum eum. Blanditiis, quibusdam incidunt?
-              </p>
 
-              <!-- tombol action -->
-              <div class="timeline-actions">
-                <button class="btn-delete">
-                  <i class="fa-solid fa-trash"></i> Delete
-                </button>
-                <button class="btn-edit">
-                  <i class="fa-solid fa-pen"></i> Edit
-                </button>
-              </div>
-            </div>
+  <div class="timeline-container">
+    <div class="timeline-group">
+      <div class="timeline-item new">
+        <div class="timeline-year">2023</div>
+        <div class="timeline-content">
+          <h4 class="role-title text-blue-600 cursor-pointer" onclick="openModal('modalRole1')">
+        Nama Role Sekarang
+      </h4>
+      <p class="sub-info">Maret 2023 - Sekarang (3 Tahun 1 Bulan) • Nama Direktorat • Band Level V</p>
+      <p class="promo-date">Tanggal Promosi: 1 Maret 2023</p>
+      <p class="description">
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus error eveniet...
+      </p>
+
+
+          <!-- tombol action -->
+          <div class="timeline-actions">
+            <button class="btn-delete">
+              <i class="fa-solid fa-trash"></i> Delete
+            </button>
+            <button class="btn-edit">
+              <i class="fa-solid fa-pen"></i> Edit
+            </button>
           </div>
 
           <div class="timeline-item old">
@@ -2967,12 +2972,47 @@
         </div>
       </div>
 
-      <!-- Save / Cancel di bawah -->
-      <div class="form-actions">
-        <button class="btn-cancel">Cancel</button>
-        <button class="btn-save">Save</button>
-      </div>
+
+  <!-- Save / Cancel di bawah -->
+  <div class="form-actions">
+    <a href="{{ route('employees.show', $employee->id) }}" class="btn-cancel">Cancel</a>
+    <button type="submit" class="btn-save">Save</button>
+</div>
+</div>
+
+<!-- Modal -->
+<div id="modalRole1" 
+     class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+  <div class="bg-white p-6 rounded-2xl w-3/4 max-w-3xl shadow-lg relative">
+    <!-- Tombol close -->
+    <button class="absolute top-4 right-4 text-gray-500 hover:text-gray-700 text-2xl" 
+            onclick="closeModal('modalRole1')">&times;</button>
+
+    <!-- Header -->
+    <h3 class="text-xl font-semibold text-gray-800 mb-6">
+      Detail Aktivitas Karir
+    </h3>
+
+    <!-- Isi grid 2 kolom -->
+    <div class="grid grid-cols-2 gap-y-4 gap-x-8 text-gray-700">
+      <p><span class="font-normal">Nama Role</span><br><span class="font-semibold">Nama Role Sekarang</span></p>
+      <p><span class="font-normal">Regional/Direktorat</span><br><span class="font-semibold">Nama Direktorat</span></p>
+
+      <p><span class="font-normal">Unit/Sub Unit</span><br><span class="font-semibold">Band</span></p>
+      <p><span class="font-normal">Nama Sub Unit</span><br><span class="font-semibold">Band Level V</span></p>
+
+      <p><span class="font-normal">Deskripsi</span><br><span class="font-semibold">Tanggal Promosi</span></p>
+      <p><span class="font-normal">Deskripsi singkat aktivitas karir</span><br><span class="font-semibold">1 Maret 2023</span></p>
+
+      <p><span class="font-normal">Dokumen SK</span><br>
+         <a href="#" class="text-blue-600 hover:underline">Klik untuk Melihat</a>
+      </p>
+      <p><span class="font-normal">Dokumen Nota Dinas</span><br>
+         <a href="#" class="text-blue-600 hover:underline">Klik untuk Melihat</a>
+      </p>
     </div>
+  </div>
+</div>
 
     {{-- Modal Tambah Aktivitas --}}
     <div class="modal" id="tambahAktivitasModal">
@@ -3644,18 +3684,22 @@ document.querySelectorAll('.file-input').forEach(function(wrapper) {
         const tambahBtn = document.querySelectorAll(".btn-add");
         const modal = document.getElementById("tambahAktivitasModal");
 
-        tambahBtn.forEach(btn => {
-          btn.addEventListener("click", function(e) {
-            e.preventDefault();
-            modal.style.display = "flex"; // atau "block" sesuai CSS kamu
-          });
-        });
 
-        // Tutup modal kalau klik tombol close
-        document.querySelectorAll('[data-bs-dismiss="modal"]').forEach(btn => {
-          btn.addEventListener("click", function() {
-            modal.style.display = "none";
-          });
-        });
-      });
-    </script>
+  // Tutup modal kalau klik tombol close
+  document.querySelectorAll('[data-bs-dismiss="modal"]').forEach(btn => {
+    btn.addEventListener("click", function() {
+      modal.style.display = "none";
+    });
+  });
+});
+</script>
+<script>
+  function openModal(id) {
+    document.getElementById(id).classList.remove("hidden");
+  }
+
+  function closeModal(id) {
+    document.getElementById(id).classList.add("hidden");
+  }
+</script>
+
