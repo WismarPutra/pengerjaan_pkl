@@ -2050,8 +2050,8 @@ input[type="radio"]:checked + .emoji-btn {
             Tempat, Tanggal Lahir
             <a href="{{ route('employees.show', [
         'employee'          => $employee->id,
-        'sort_by_family'    => 'tanggal_lahir',
-        'sort_order_family' => ($sortByFamily == 'tanggal_lahir' && $sortOrderFamily == 'asc') ? 'desc' : 'asc'
+        'sort_by_family'    => 'ttl',
+        'sort_order_family' => ($sortByFamily == 'ttl' && $sortOrderFamily == 'asc') ? 'desc' : 'asc'
     ]) }}#keluarga">
               {!! $sortByFamily == 'ttl' ? '⇅' : '⇅' !!}
             </a>
@@ -2415,21 +2415,22 @@ input[type="radio"]:checked + .emoji-btn {
 
 
   <!-- 🔹 TAB CONTENT: EVALUASI PESERTA -->
-  <div id="pelatihan-peserta" class="tab-pane">
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-      <strong>Evaluasi Peserta terhadap Training</strong>
-      <button class="btn-isi" data-bs-toggle="modal" data-bs-target="#modalEvaluasiPeserta">
-        <i class="fas fa-pen"></i> Isi Evaluasi
-      </button>
-    </div>
-    <p>Keseluruhan Pengalaman Training</p><br>
-    <p>Hasil Pelatihan menambah pengetahuan saya</p><br>
-    <p>Saya mudah mengimplementasikan hasil pelatihan</p><br>
-    <p>Hasil pelatihan mempermudah pekerjaan saya</p><br>
-    <p>Saya konsisten menerapkan hasil pelatihan</p><br>
-    <p>Hasil pelatihan meningkatkan kinerja unit</p><br>
-    <p>Komentar:</p><br>
+<div id="pelatihan-peserta" class="tab-pane">
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+    <strong>Evaluasi Peserta terhadap Training</strong>
+    <button class="btn-isi" data-bs-toggle="modal" data-bs-target="#modalEvaluasiPeserta">
+      <i class="fas fa-pen"></i> Isi Evaluasi
+    </button>
   </div>
+
+  <p id="evEmoji">Keseluruhan Pengalaman Training</p><br>
+  <p id="evQ1">Hasil Pelatihan menambah pengetahuan saya</p><br>
+  <p id="evQ2">Saya mudah mengimplementasikan hasil pelatihan</p><br>
+  <p id="evQ3">Hasil pelatihan mempermudah pekerjaan saya</p><br>
+  <p id="evQ4">Saya konsisten menerapkan hasil pelatihan</p><br>
+  <p id="evQ5">Hasil pelatihan meningkatkan kinerja unit</p><br>
+  <p id="evKomentar">Komentar:</p><br>
+</div>
 
   <!-- 🔹 TAB CONTENT: EVALUASI ATASAN -->
   <div id="pelatihan-atasan" class="tab-pane">
@@ -2439,6 +2440,7 @@ input[type="radio"]:checked + .emoji-btn {
         <i class="fas fa-pen"></i> Isi Evaluasi
       </button>
     </div>
+    <div id="hasilEvaluasi"></div>
     <p>Hasil pelatihan yang diikuti, menambah pengetahuan & keterampilan staff Saudara</p><br>
     <p>Staff Saudara mengimplementasikan hasil pelatihan dalam tugas/pekerjaannya</p><br>
     <p>Dengan hasil pelatihan tersebut, banyak tugas dan kasus dipekerjakan unit staff Saudara yang bisa disolusikan</p><br>
@@ -2451,6 +2453,7 @@ input[type="radio"]:checked + .emoji-btn {
 <div class="modal fade" id="modalEvaluasiPeserta" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
+      <form id="evaluationForm">
       <div class="modal-header">
         <h5 class="modal-title"><strong>Nilai Pelatihan yang Anda Ikuti</strong></h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
@@ -2561,12 +2564,12 @@ input[type="radio"]:checked + .emoji-btn {
     <span class="label-kanan">Sangat Setuju</span>
   </div>
 </div>
-        <!-- Komentar -->
-        <div class="pertanyaan">
-          <label>Berikan komentar Anda *</label>
-          <textarea class="form-control" rows="3"></textarea>
-        </div>
-      </div>
+<!-- Komentar -->
+<div class="pertanyaan">
+  <label>Berikan komentar Anda *</label>
+  <textarea class="form-control" name="komentar" rows="3" required></textarea>
+</div>
+</div>
 
       <div class="modal-footer">
           <!-- Cancel otomatis nutup modal -->
@@ -2575,6 +2578,7 @@ input[type="radio"]:checked + .emoji-btn {
           <!-- Submit simpan data -->
           <button type="submit" class="btn-submit">Submit</button>
         </div>
+      </form>
     </div>
   </div>
 </div>
@@ -2584,105 +2588,107 @@ input[type="radio"]:checked + .emoji-btn {
 <div class="modal fade" id="modalEvaluasiAtasan" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title"><strong>Nilai Evaluasi Dampak Pelatihan (Atasan)</strong></h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-      </div>
-      <div class="modal-body">
-        <p>Mohon berikan evaluasi atas dampak dan penerapan pelatihan oleh staf di unit Anda.</p>
+      <form id="formEvaluasiAtasan"> <!-- ✅ Tambahkan form -->
+        <div class="modal-header">
+          <h5 class="modal-title"><strong>Nilai Evaluasi Dampak Pelatihan (Atasan)</strong></h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <p>Mohon berikan evaluasi atas dampak dan penerapan pelatihan oleh staf di unit Anda.</p>
 
-        <!-- Pertanyaan Skala 1–10 -->
-        <div class="pertanyaan">
-          <label>Hasil pelatihan menambah pengetahuan & keterampilan staff Saudara *</label>
-          <div class="skala d-flex justify-content-between align-items-center">
-            <span class="label-kiri">Tidak Setuju</span>
-            <div class="d-flex gap-2">
-              @for ($i = 1; $i <= 10; $i++)
-                <label class="text-center">
-                  <input type="radio" name="atasan_q1" value="{{ $i }}">
-                  <span>{{ $i }}</span>
-                </label>
-              @endfor
+          <!-- Pertanyaan Skala 1–10 -->
+          <div class="pertanyaan">
+            <label>Hasil pelatihan menambah pengetahuan & keterampilan staff Saudara *</label>
+            <div class="skala d-flex justify-content-between align-items-center">
+              <span class="label-kiri">Tidak Setuju</span>
+              <div class="d-flex gap-2">
+                @for ($i = 1; $i <= 10; $i++)
+                  <label class="text-center">
+                    <input type="radio" name="atasan_q1" value="{{ $i }}">
+                    <span>{{ $i }}</span>
+                  </label>
+                @endfor
+              </div>
+              <span class="label-kanan">Sangat Setuju</span>
             </div>
-            <span class="label-kanan">Sangat Setuju</span>
+          </div>
+
+          <div class="pertanyaan">
+            <label>Staff Saudara mengimplementasikan hasil pelatihan dalam tugas/pekerjaannya *</label>
+            <div class="skala d-flex justify-content-between align-items-center">
+              <span>Tidak Setuju</span>
+              <div class="d-flex gap-2">
+                @for ($i = 1; $i <= 10; $i++)
+                  <label class="text-center">
+                    <input type="radio" name="atasan_q2" value="{{ $i }}">
+                    <span>{{ $i }}</span>
+                  </label>
+                @endfor
+              </div>
+              <span>Sangat Setuju</span>
+            </div>
+          </div>
+
+          <div class="pertanyaan">
+            <label>Dengan hasil pelatihan tersebut, banyak tugas/kasus unit Saudara yang bisa disolusikan *</label>
+            <div class="skala d-flex justify-content-between align-items-center">
+              <span>Tidak Setuju</span>
+              <div class="d-flex gap-2">
+                @for ($i = 1; $i <= 10; $i++)
+                  <label class="text-center">
+                    <input type="radio" name="atasan_q3" value="{{ $i }}">
+                    <span>{{ $i }}</span>
+                  </label>
+                @endfor
+              </div>
+              <span>Sangat Setuju</span>
+            </div>
+          </div>
+
+          <div class="pertanyaan">
+            <label>Staff Saudara menerapkan hasil pelatihan secara konsisten *</label>
+            <div class="skala d-flex justify-content-between align-items-center">
+              <span>Tidak Setuju</span>
+              <div class="d-flex gap-2">
+                @for ($i = 1; $i <= 10; $i++)
+                  <label class="text-center">
+                    <input type="radio" name="atasan_q4" value="{{ $i }}">
+                    <span>{{ $i }}</span>
+                  </label>
+                @endfor
+              </div>
+              <span>Sangat Setuju</span>
+            </div>
+          </div>
+
+          <div class="pertanyaan">
+            <label>Hasil pelatihan meningkatkan performansi/kinerja unit Saudara *</label>
+            <div class="skala d-flex justify-content-between align-items-center">
+              <span>Tidak Setuju</span>
+              <div class="d-flex gap-2">
+                @for ($i = 1; $i <= 10; $i++)
+                  <label class="text-center">
+                    <input type="radio" name="atasan_q5" value="{{ $i }}">
+                    <span>{{ $i }}</span>
+                  </label>
+                @endfor
+              </div>
+              <span>Sangat Setuju</span>
+            </div>
+          </div>
+
+          <!-- Komentar -->
+          <div class="pertanyaan">
+            <label>Berikan komentar Anda *</label>
+            <textarea class="form-control" rows="3" name="atasan_komentar"></textarea>
           </div>
         </div>
 
-        <div class="pertanyaan">
-          <label>Staff Saudara mengimplementasikan hasil pelatihan dalam tugas/pekerjaannya *</label>
-          <div class="skala d-flex justify-content-between align-items-center">
-            <span>Tidak Setuju</span>
-            <div class="d-flex gap-2">
-              @for ($i = 1; $i <= 10; $i++)
-                <label class="text-center">
-                  <input type="radio" name="atasan_q2" value="{{ $i }}">
-                  <span>{{ $i }}</span>
-                </label>
-              @endfor
-            </div>
-            <span>Sangat Setuju</span>
-          </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          <button type="submit" class="btn btn-primary">Submit</button>
         </div>
-
-        <div class="pertanyaan">
-          <label>Dengan hasil pelatihan tersebut, banyak tugas/kasus unit Saudara yang bisa disolusikan *</label>
-          <div class="skala d-flex justify-content-between align-items-center">
-            <span>Tidak Setuju</span>
-            <div class="d-flex gap-2">
-              @for ($i = 1; $i <= 10; $i++)
-                <label class="text-center">
-                  <input type="radio" name="atasan_q3" value="{{ $i }}">
-                  <span>{{ $i }}</span>
-                </label>
-              @endfor
-            </div>
-            <span>Sangat Setuju</span>
-          </div>
-        </div>
-
-        <div class="pertanyaan">
-          <label>Staff Saudara menerapkan hasil pelatihan secara konsisten *</label>
-          <div class="skala d-flex justify-content-between align-items-center">
-            <span>Tidak Setuju</span>
-            <div class="d-flex gap-2">
-              @for ($i = 1; $i <= 10; $i++)
-                <label class="text-center">
-                  <input type="radio" name="atasan_q4" value="{{ $i }}">
-                  <span>{{ $i }}</span>
-                </label>
-              @endfor
-            </div>
-            <span>Sangat Setuju</span>
-          </div>
-        </div>
-
-        <div class="pertanyaan">
-          <label>Hasil pelatihan meningkatkan performansi/kinerja unit Saudara *</label>
-          <div class="skala d-flex justify-content-between align-items-center">
-            <span>Tidak Setuju</span>
-            <div class="d-flex gap-2">
-              @for ($i = 1; $i <= 10; $i++)
-                <label class="text-center">
-                  <input type="radio" name="atasan_q5" value="{{ $i }}">
-                  <span>{{ $i }}</span>
-                </label>
-              @endfor
-            </div>
-            <span>Sangat Setuju</span>
-          </div>
-        </div>
-
-        <!-- Komentar -->
-        <div class="pertanyaan">
-          <label>Berikan komentar Anda *</label>
-          <textarea class="form-control" rows="3" name="atasan_komentar"></textarea>
-        </div>
-      </div>
-
-      <div class="modal-footer">
-        <button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-        <button class="btn btn-primary">Submit</button>
-      </div>
+      </form>
     </div>
   </div>
 </div>
@@ -3176,4 +3182,110 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 });
 </script>
+<script>
+  //EVALUASI PESERTA
+  document.addEventListener("DOMContentLoaded", function() {
+    const form = document.getElementById("evaluationForm");
+
+    // mapping emoji
+    function labelEmoji(val) {
+      switch (val) {
+        case "sangat_suka": return "Sangat Suka";
+        case "cukup_baik": return "Cukup Baik";
+        case "kurang_baik": return "Kurang Baik";
+        default: return "-";
+      }
+    }
+
+    // mapping skala angka → keterangan
+    function labelSkala(val) {
+      if (!val) return "-";
+      const num = parseInt(val);
+      if (num >= 9) return `${num} (Sangat Setuju)`;
+      if (num >= 5) return `${num} (Setuju)`;
+      if (num <= 4) return `${num} (Tidak Setuju)`;
+      return `${num} (Kurang Baik)`;
+    }
+
+    form.addEventListener("submit", function(e) {
+      e.preventDefault();
+      const data = new FormData(form);
+
+      // update hasil evaluasi
+      document.getElementById("evEmoji").innerHTML =
+        `Keseluruhan Pengalaman Training <br><strong>${labelEmoji(data.get("emoji_rating"))}</strong>`;
+
+      document.getElementById("evQ1").innerHTML =
+        `Hasil Pelatihan menambah pengetahuan saya <br><strong>${labelSkala(data.get("q1"))}</strong>`;
+
+      document.getElementById("evQ2").innerHTML =
+        `Saya mudah mengimplementasikan hasil pelatihan <br><strong>${labelSkala(data.get("q2"))}</strong>`;
+
+      document.getElementById("evQ3").innerHTML =
+        `Hasil pelatihan mempermudah pekerjaan saya <br><strong>${labelSkala(data.get("q3"))}</strong>`;
+
+      document.getElementById("evQ4").innerHTML =
+        `Saya konsisten menerapkan hasil pelatihan <br><strong>${labelSkala(data.get("q4"))}</strong>`;
+
+      document.getElementById("evQ5").innerHTML =
+        `Hasil pelatihan meningkatkan kinerja unit <br><strong>${labelSkala(data.get("q5"))}</strong>`;
+
+      document.getElementById("evKomentar").innerHTML =
+        `Komentar: <br><strong>${data.get("komentar") || "-"}</strong>`;
+
+      // tutup modal
+      const modalEl = document.getElementById("modalEvaluasiPeserta");
+      const modal = bootstrap.Modal.getInstance(modalEl);
+      modal.hide();
+    });
+  });
+</script>
+<script>
+  //EVALUASI ATASAN
+  document.addEventListener("DOMContentLoaded", function() {
+    // mapping angka → label
+    function labelSkala(val) {
+      if (!val) return "-";
+      const num = parseInt(val);
+      if (num >= 9) return `${num} (Sangat Baik)`;
+      if (num >= 7) return `${num} (Baik)`;
+      if (num >= 4) return `${num} (Cukup Baik)`;
+      return `${num} (Kurang Baik)`;
+    }
+
+    // Tangani submit Evaluasi Atasan
+    const atasanForm = document.querySelector("#modalEvaluasiAtasan form");
+    atasanForm.addEventListener("submit", function(e) {
+      e.preventDefault();
+      const data = new FormData(atasanForm);
+
+      // update isi paragraf sesuai ID (biar rapi kasih ID di HTML)
+      document.querySelector("#pelatihan-atasan p:nth-of-type(1)").innerHTML =
+        `Hasil pelatihan menambah pengetahuan & keterampilan staff Saudara <br><strong>${labelSkala(data.get("atasan_q1"))}</strong>`;
+
+      document.querySelector("#pelatihan-atasan p:nth-of-type(2)").innerHTML =
+        `Staff Saudara mengimplementasikan hasil pelatihan dalam tugas/pekerjaannya <br><strong>${labelSkala(data.get("atasan_q2"))}</strong>`;
+
+      document.querySelector("#pelatihan-atasan p:nth-of-type(3)").innerHTML =
+        `Dengan hasil pelatihan tersebut, banyak tugas dan kasus dipekerjakan unit staff Saudara yang bisa disolusikan <br><strong>${labelSkala(data.get("atasan_q3"))}</strong>`;
+
+      document.querySelector("#pelatihan-atasan p:nth-of-type(4)").innerHTML =
+        `Staff Saudara menerapkan hasil dalam tugas/pekerjaan secara konsisten <br><strong>${labelSkala(data.get("atasan_q4"))}</strong>`;
+
+      document.querySelector("#pelatihan-atasan p:nth-of-type(5)").innerHTML =
+        `Hasil pelatihan yang diperoleh staff Saudara meningkatkan performansi/kinerja unit <br><strong>${labelSkala(data.get("atasan_q5"))}</strong>`;
+
+      document.querySelector("#pelatihan-atasan p:nth-of-type(6)").innerHTML =
+        `Komentar: <br><strong>${data.get("atasan_komentar") || "-"}</strong>`;
+
+      // tutup modal
+      const modalEl = document.getElementById("modalEvaluasiAtasan");
+      const modal = bootstrap.Modal.getInstance(modalEl);
+      modal.hide();
+    });
+  });
+</script>
+
+
+
 
