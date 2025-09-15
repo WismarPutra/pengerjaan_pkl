@@ -11,10 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('employee_documents', function (Blueprint $table) {
-            $table->enum('kategori', ['personal', 'lainnya'])
-                  ->default('personal')
-                  ->after('file_path');
+        Schema::create('training_files', function (Blueprint $table) {
+            $table->id();
+            $table->string('filename');
+            $table->string('path');
+            $table->timestamps();
         });
     }
 
@@ -23,8 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('employee_documents', function (Blueprint $table) {
-            $table->dropColumn('kategori');
-        });
+        Schema::dropIfExists('training_files');
     }
 };

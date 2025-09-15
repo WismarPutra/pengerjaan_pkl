@@ -3337,13 +3337,6 @@ document.querySelectorAll('.file-input').forEach(function(wrapper) {
     </script>
 
 
-
-
-
-
-
-
-
     <script>
       function showTab(tabId) {
         // Sembunyikan semua konten

@@ -815,7 +815,15 @@
       </div>
       <button class="export-btn"><i class="fas fa-upload"></i> Export</button>
       <button class="filter-btn" onclick="toggleFilter()"><i class="fas fa-sliders"></i> Filters</button>
-      <a href="{{ route('training.create') }}" class="create-btn" onclick="toggleCreate()"><i class="fas fa-plus"></i> Create</a>
+      <div class="dropdown-action" style="position: relative;">
+        <button class="create-btn">Tambah</button>
+        <!-- DROPDOWN ACTION -->
+        <div class="absolute right-0 w-40 bg-white border border-gray-200 rounded-lg shadow-lg hidden z-60">
+          <a href="{{ route('training.create') }}" class="create-btn" onclick="toggleCreate()"><i class="fas fa-plus"></i>Berdasarkan TNA</a>
+          <a href="{{ route('training.create') }}" class="create-btn" onclick="toggleCreate()"><i class="fas fa-plus"></i>Diluar TNA</a>
+        </div>
+
+      </div>
     </div>
   </div>
 
@@ -855,7 +863,6 @@
     <button class="tab-button active" onclick="showTab('sedangBerjalan')">Sedang Berjalan</button>
     <button class="tab-button" onclick="showTab('trainingNeedsAnalysis')">Training Needs Analysis</button>
     <button class="tab-button" onclick="showTab('selesai')">Selesai</button>
-
   </div>
 
   <!-- STATISTIK SEDANG BERJALAN-->
@@ -1015,10 +1022,6 @@
                 <a href="{{ route('training.show', $training->id) }}"
                   class="block px-4 py-2 text-xs text-gray-700 hover:bg-gray-100">
                   Detail
-                </a>
-                <a href="{{ route('training.edit', $training->id) }}"
-                  class="block px-4 py-2 text-xs text-gray-700 hover:bg-gray-100">
-                  Edit
                 </a>
                 <form action="{{ route('training.destroy', $training->id) }}" method="POST"
                   onsubmit="return confirm('Yakin ingin menghapus data ini?')">
@@ -1357,7 +1360,277 @@
 </div>
 
 
+<!-- SELESAI -->
 
+<div id="selesai" class="tab-content content-header-flex hidden" style="width:160vh; margin-left: 42vh; display:none;">
+  <!-- KONTEN UTAMA TRAININGS NEEDS-->
+  <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; flex-wrap: wrap;">
+    <div style="display: flex; flex-direction: column; gap: 6px;">
+      <!-- Baris 1: Home & Breadcrumb -->
+      <div style="display: flex; align-items: center; gap: 6px;">
+        <div class="breadcrumb-row">
+          <a href="{{ route('home') }}" class="btn-home" style="padding: 0; color: #696969;">
+            <i class="fas fa-house"></i>
+          </a>
+          <i class="fas fa-chevron-right breadcrumb-arrow"></i>
+          <a href="{{ url()->current() }}" class="breadcrumb-text">Training Management</a>
+        </div>
+      </div>
+      <h2 class="page-title">Training Management</h2>
+    </div>
+    <div class="right-section">
+      <div class="search-container">
+        <i class="fas fa-search search-icon"></i>
+        <input type="text" placeholder="Search by Name" class="search-bar" />
+      </div>
+      <button class="export-btn"><i class="fas fa-upload"></i> Export</button>
+      <button class="filter-btn" onclick="toggleFilter()"><i class="fas fa-sliders"></i> Filters</button>
+    </div>
+  </div>
+
+  <!-- FILTER MODAL -->
+  <div class="filter-modal" id="filterModal">
+    <div class="filter-header">
+      <span>Filter</span>
+      <button class="close-btn" onclick="toggleFilter()">&times;</button>
+    </div>
+    <div class="filter-section">
+      <label>Filter Name</label>
+      <a href="#" class="clear-link">Clear</a>
+      <select>
+        <option>Select one from filter</option>
+        <option>Option A</option>
+        <option>Option B</option>
+      </select>
+    </div>
+    <div class="filter-section">
+      <label>Filter Name</label>
+      <a href="#" class="clear-link">Clear</a>
+      <select>
+        <option>Select one from filter</option>
+        <option>Option A</option>
+        <option>Option B</option>
+      </select>
+    </div>
+    <div class="filter-footer">
+      <button class="reset-btn">Reset</button>
+      <button class="apply-btn">Apply</button>
+    </div>
+  </div>
+
+  <!-- NAVIGATION BUTTONS -->
+
+  <div class="tab-buttons">
+    <button class="tab-button active" onclick="showTab('sedangBerjalan')">Sedang Berjalan</button>
+    <button class="tab-button" onclick="showTab('trainingNeedsAnalysis')">Training Needs Analysis</button>
+    <button class="tab-button" onclick="showTab('selesai')">Selesai</button>
+  </div>
+
+  <div class="stat-boxes2 w-full">
+    <div class="px-3 py-2 stat-box2">
+      <div class="icon-circle blue"><i class="fas fa-user-group"></i></div>
+      <div class="stat-info">
+        <div class="stat-value font-bold">{{ $pelatihanTerlaksana }}</div>
+        <div class="stat-label">Total Pelatihan Terlaksana</div>
+      </div>
+    </div>
+
+    <div class="stat-box2 px-3 py-2 w-[100%]">
+      <div class="icon-circle cyan"><i class="fas fa-building"></i></div>
+      <div class="stat-info">
+        <div class="stat-value font-bold">{{$totalPartisipan}}</div>
+        <div class="stat-label">Total Partisipan</div>
+      </div>
+    </div>
+
+    <div class="stat-box2 px-3 py-2">
+      <div class="icon-circle purple"><i class="fas fa-file-lines"></i></div>
+      <div class="stat-info">
+        <div class="stat-value font-bold">{{ $totalNamaTraining }}</div>
+        <div class="stat-label">Total Learning Solutsion</div>
+      </div>
+    </div>
+
+    <div class="stat-box2 px-3 py-2">
+      <div class="icon-circle purple"><i class="fas fa-star"></i></div>
+      <div class="stat-info">
+        <div class="stat-value font-bold">{{ number_format($persenKelulusan, 2) }}%</div>
+        <div class="stat-label">Rata Rata Kelulusan</div>
+      </div>
+    </div>
+
+  </div>
+
+
+
+  <!-- TABEL MENAMPILKAN DATA SELESAI -->
+  <div class="overflow-x-scroll" style="max-width: 153vh;">
+    <table id="customers" style="min-width: 1100px;">
+      <tr>
+        <th class="sticky left-0 z-20 bg-gray-100 px-3 py-1 border-b">No</th>
+        <th class="px-3 py-1 text-right whitespace-nowrap">
+          Nama Training (Learning Solutsion)
+          <a href="{{ route('training.index', [
+          'sort_by_training'   => 'nama_training',
+          'sort_order_training'=> ($sortByTraining == 'nama_training' && $sortOrderTraining == 'asc') ? 'desc' : 'asc'
+      ]) }}#trainings">
+            {!! $sortByTraining == 'nama_training' ? '⇅' : '⇅' !!}
+        </th>
+        <th class="px-3 py-1 text-right whitespace-nowrap">
+          Status
+          <a href="{{ route('training.index', [
+          'sort_by_training'   => 'status',
+          'sort_order_training'=> ($sortByTraining == 'status' && $sortOrderTraining == 'asc') ? 'desc' : 'asc'
+      ]) }}#trainings">
+            {!! $sortByTraining == 'status' ? '⇅' : '⇅' !!}
+        </th>
+        <th class="px-3 py-1 text-right whitespace-nowrap">
+          Sertifikat
+          <a href="{{ route('training.index', [
+          'sort_by_training'   => 'sertifikat',
+          'sort_order_training'=> ($sortByTraining == 'sertifikat' && $sortOrderTraining == 'asc') ? 'desc' : 'asc'
+      ]) }}#trainings">
+            {!! $sortByTraining == 'sertifikat' ? '⇅' : '⇅' !!}
+        </th>
+        <th class="px-3 py-1 text-right whitespace-nowrap">
+          Kelulusan
+          <a href="{{ route('training.index', [
+          'sort_by_training'   => 'kelulusan',
+          'sort_order_training'=> ($sortByTraining == 'kelulusan' && $sortOrderTraining == 'asc') ? 'desc' : 'asc'
+      ]) }}#trainings">
+            {!! $sortByTraining == 'kelulusan' ? '⇅' : '⇅' !!}
+        </th>
+        <th class="px-3 py-1 text-right whitespace-nowrap">
+          Stream
+          <a href="{{ route('training.index', [
+          'sort_by_training'   => 'stream',
+          'sort_order_training'=> ($sortByTraining == 'stream' && $sortOrderTraining == 'asc') ? 'desc' : 'asc'
+      ]) }}#trainings">
+            {!! $sortByTraining == 'stream' ? '⇅' : '⇅' !!}
+        </th>
+        <th class="px-3 py-1 text-right whitespace-nowrap">
+          Keterangan
+          <a href="{{ route('training.index', [
+          'sort_by_training'   => 'keterangan',
+          'sort_order_training'=> ($sortByTraining == 'keterangan' && $sortOrderTraining == 'asc') ? 'desc' : 'asc'
+      ]) }}#trainings">
+            {!! $sortByTraining == 'keterangan' ? '⇅' : '⇅' !!}
+        </th>
+        <th class="px-3 py-1 text-right whitespace-nowrap">
+          Jumlah Peserta
+          <a href="{{ route('training.index', [
+          'sort_by_training'   => 'jumlah_peserta',
+          'sort_order_training'=> ($sortByTraining == 'jumlah_peserta' && $sortOrderTraining == 'asc') ? 'desc' : 'asc'
+      ]) }}#trainings">
+            {!! $sortByTraining == 'jumlah_peserta' ? '⇅' : '⇅' !!}
+        </th>
+        <th class="px-3 py-1 text-right whitespace-nowrap">
+          Tanggal Mulai
+          <a href="{{ route('training.index', [
+          'sort_by_training'   => 'tanggal_mulai',
+          'sort_order_training'=> ($sortByTraining == 'tanggal_mulai' && $sortOrderTraining == 'asc') ? 'desc' : 'asc'
+      ]) }}#trainings">
+            {!! $sortByTraining == 'tanggal_mulai' ? '⇅' : '⇅' !!}
+        </th>
+        <th class="px-3 py-1 text-right whitespace-nowrap">
+          Tanggal Selesai
+          <a href="{{ route('training.index', [
+          'sort_by_training'   => 'tanggal_selesai',
+          'sort_order_training'=> ($sortByTraining == 'tanggal_selesai' && $sortOrderTraining == 'asc') ? 'desc' : 'asc'
+      ]) }}#trainings">
+            {!! $sortByTraining == 'tanggal_selesai' ? '⇅' : '⇅' !!}
+        </th>
+        <th class="px-3 py-1 text-right whitespace-nowrap">
+          Tipe Training
+          <a href="{{ route('training.index', [
+          'sort_by_training'   => 'tipe_training',
+          'sort_order_training'=> ($sortByTraining == 'tipe_training' && $sortOrderTraining == 'asc') ? 'desc' : 'asc'
+      ]) }}#trainings">
+            {!! $sortByTraining == 'tipe_training' ? '⇅' : '⇅' !!}
+        </th>
+        <th class="px-3 py-1 text-right whitespace-nowrap">
+          Penyelenggara
+          <a href="{{ route('training.index', [
+          'sort_by_training'   => 'penyelenggara',
+          'sort_order_training'=> ($sortByTraining == 'penyelenggara' && $sortOrderTraining == 'asc') ? 'desc' : 'asc'
+      ]) }}#trainings">
+            {!! $sortByTraining == 'penyelenggara' ? '⇅' : '⇅' !!}
+        </th>
+        <th class="px-3 py-1 text-right whitespace-nowrap">
+          Metode Pelatihan
+          <a href="{{ route('training.index', [
+          'sort_by_training'   => 'metode_pelatihan',
+          'sort_order_training'=> ($sortByTraining == 'metode_pelatihan' && $sortOrderTraining == 'asc') ? 'desc' : 'asc'
+      ]) }}#trainings">
+            {!! $sortByTraining == 'metode_pelatihan' ? '⇅' : '⇅' !!}
+        </th>
+        <th class="px-3 py-1">
+          TNA/Non TNA
+          <a href="{{ route('training.index', [
+          'sort_by_training'   => 'tna',
+          'sort_order_training'=> ($sortByTraining == 'tna' && $sortOrderTraining == 'asc') ? 'desc' : 'asc'
+      ]) }}#trainings">
+            {!! $sortByTraining == 'tna' ? '⇅' : '⇅' !!}
+        </th>
+        <th class="sticky right-0 z-30 bg-gray-100 px-3 py-1 border-b">Actions</th>
+      </tr>
+      @foreach($trainingss as $training)
+      <tr>
+        <td class="sticky left-0 z-20 bg-gray-100 px-3 py-1 border-b">{{ $loop->iteration }}</td>
+        <td>{{ $training->nama_training }}</td>
+        <td>{{ $training->status }}</td>
+        <td>{{ $training->sertifikat }}</td>
+        <td>{{ $training->kelulusan }}</td>
+        <td>{{ $training->stream }}</td>
+        <td>{{ $training->keterangan }}</td>
+        <td>{{ $training->partisipan }}</td>
+        <td>{{ \Carbon\Carbon::parse($training->tanggal_mulai)->setTimezone('Asia/Jakarta')->format('d F Y H:i:s') }}</td>
+        <td>{{ \Carbon\Carbon::parse($training->tanggal_selesai)->setTimezone('Asia/Jakarta')->format('d F Y H:i:s') }}</td>
+        <td>{{ $training->tipe_training }}</td>
+        <td>{{ $training->penyelenggara }}</td>
+        <td>{{ $training->metode_pelatihan }}</td>
+        <td>{{ $training->tna }}</td>
+
+        <!-- Actions sticky kanan -->
+        <td class="sticky right-0 z-20 bg-white px-3 py-1 border-b">
+          <div class="dropdown-action" style="position: relative;">
+            <button class="horizontal-dots">&#x22EF;</button>
+            <!-- DropDown Action -->
+            <div class="absolute right-0 w-40 bg-white border border-gray-200 rounded-lg shadow-lg hidden z-60">
+              <a href="{{ route('training.show', $training->id) }}"
+                class="block px-4 py-2 text-xs text-gray-700 hover:bg-gray-100">
+                Detail
+              </a>
+            </div>
+          </div>
+        </td>
+      </tr>
+      @endforeach
+    </table>
+
+
+  </div>
+  <!-- MENGHITUNG TOTAL DATA YANG AKAN DITAMPILKAN -->
+  <div class="flex items-center gap-2 mt-5">
+    <span>Menampilkan</span>
+
+    <form method="GET" action="{{ route('training.index') }}">
+      <select
+        name="per_page"
+        id="#"
+        class="w-24 border-2 border-black rounded-md px-2 py-1"
+        onchange="this.form.submit()">
+        @for ($a = 1; $a <= 10; $a++)
+          <option value="{{ $a }}" {{ $perPage = $a ? 'selected' : '' }}>
+          {{ $a }}
+          </option>
+          @endfor
+      </select>
+    </form>
+
+    <span>entri dari {{ $totalTraining }} entri</span>
+  </div>
+</div>
 
 
 @endsection
@@ -1384,6 +1657,61 @@
     event.currentTarget.classList.add('active');
   }
 
+  document.addEventListener("DOMContentLoaded", () => {
+    // Cek apakah ada tab aktif tersimpan di localStorage
+    const activeTab = localStorage.getItem('activeTab');
+
+    if (activeTab && document.getElementById(activeTab)) {
+      // Aktifkan tab tersimpan
+      const btn = document.querySelector(`.tab-button[onclick*="${activeTab}"]`);
+      if (btn) btn.click();
+    } else {
+      // Default ke tab pertama
+      const firstBtn = document.querySelector('.tab-button');
+      if (firstBtn) firstBtn.click();
+    }
+  });
+
+
+  // saat halaman di-load ulang, cek hash
+  document.addEventListener("DOMContentLoaded", () => {
+    const hash = window.location.hash.substring(1); // hapus '#'
+    if (hash) {
+      const btn = document.querySelector(`.tab-button[onclick*="${hash}"]`);
+      if (btn) btn.click();
+    } else {
+      // default tab pertama
+      document.querySelector('.tab-button').click();
+    }
+  });
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const buttons = document.querySelectorAll(".horizontal-dots");
+
+    buttons.forEach(btn => {
+      btn.addEventListener("click", e => {
+        e.stopPropagation();
+
+        // Tutup semua dropdown lain
+        document.querySelectorAll("td .absolute").forEach(menu => {
+          if (menu !== btn.nextElementSibling) {
+            menu.classList.add("hidden");
+          }
+        });
+
+        // Toggle dropdown yg diklik
+        btn.nextElementSibling.classList.toggle("hidden");
+      });
+    });
+
+    // Tutup kalau klik di luar
+    document.addEventListener("click", () => {
+      document.querySelectorAll("td .absolute").forEach(menu => {
+        menu.classList.add("hidden");
+      });
+    });
+  });
+  
   document.addEventListener("DOMContentLoaded", () => {
     const buttons = document.querySelectorAll(".horizontal-dots");
 
