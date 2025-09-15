@@ -1669,101 +1669,105 @@
     margin: 0;
   }
 
-  /* Sub info (periode, direktorat, band) */
-  .sub-info {
-    font-size: 14px;
-    color: #4b5563;
-    margin: 0;
-  }
+.timeline-actions {
+  display: flex;
+  gap: 10px;
+}
 
-  /* Tanggal */
-  .promo-date {
-    font-size: 14px;
-    color: #374151;
-    margin: 0;
-  }
+/* Tombol Edit */
+.btn-edit {
+  background-color: white;
+  color: #2563EB;            /* biru */
+  border: 1.5px solid #2563EB;
+  padding: 6px 14px;
+  border-radius: 8px;
+  font-size: 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s;
+}
+.btn-edit:hover {
+  background-color: #2563EB;
+  color: white;
+}
+.dokumen-grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* 2 kolom */
+    gap: 20px 40px; /* jarak antar kolom dan baris */
+    margin-top: 15px;
+}
 
-  /* Deskripsi */
-  .description {
-    font-size: 14px;
-    color: #6b7280;
-    margin: 0;
-    line-height: 1.5;
-    text-align: justify;
-  }
-
-  /* Tombol edit/delete */
-  .timeline-content {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    /* biar tombol nempel bawah */
-  }
-
-  .timeline-actions {
-    margin-top: auto;
-    /* dorong tombol ke paling bawah */
-    display: flex;
-    justify-content: flex-end;
-    gap: 10px;
-  }
-
-
-  /* Save & Cancel di kanan bawah */
-  .form-actions {
-    margin-top: 30px;
-    display: flex;
-    justify-content: flex-end;
-    gap: 10px;
-  }
-
-  .btn-cancel {
-    background: #f3f4f6;
-    border: none;
-    color: #374151;
-    padding: 8px 16px;
-    border-radius: 6px;
-    cursor: pointer;
-  }
-
-  .btn-save {
-    background: #4f46e5;
-    border: none;
-    color: white;
-    padding: 8px 16px;
-    border-radius: 6px;
-    cursor: pointer;
-  }
-
-  /* Tombol Delete */
-  .btn-delete {
-    background-color: #FEE2E2;
-    /* merah muda lembut */
-    color: #DC2626;
-    /* merah tua */
-    border: none;
-    padding: 6px 14px;
-    border-radius: 8px;
-    font-size: 14px;
-    cursor: pointer;
+.file-input-sm {
     display: flex;
     align-items: center;
     gap: 6px;
-    transition: background 0.2s;
-  }
+}
 
-  .btn-delete:hover {
-    background-color: #DC2626;
+.file-input-sm .file-text {
+    flex: 1;
+    padding: 4px 6px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #fafafa;
+    font-size: 12px;
+    height: 28px;
+}
+
+.file-input-sm .file-btn {
+    padding: 4px 10px;
+    background-color: #4e6ef2;
     color: white;
-  }
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1.2;
+}
 
-  .timeline-header {
+.file-input-sm .file-btn:hover {
+    background-color: #3c57c8;
+}
+
+.dokumen-grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* 2 kolom */
+    gap: 20px 40px;
+    margin-top: 15px;
+}
+
+.file-input-sm {
     display: flex;
-    justify-content: space-between;
-    /* kiri: judul, kanan: tombol */
     align-items: center;
-    margin-bottom: 6px;
-  }
+    gap: 6px;
+}
+
+.file-input-sm .file-text {
+    flex: 1;
+    padding: 4px 6px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #fafafa;
+    font-size: 12px;
+    height: 28px;
+}
+
+.file-input-sm .file-btn {
+    padding: 4px 10px;
+    background-color: #4e6ef2;
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1.2;
+}
+
+.file-input-sm .file-btn:hover {
+    background-color: #3c57c8;
+}
+
 
   .timeline-actions {
     display: flex;
@@ -2545,52 +2549,38 @@
 
     <div class="tab-content" id="dokumen" style="display: none;">
       <div class="w-[140vh] p-4 bg-white rounded-lg shadow-sm">
-
+<form action="{{ route('employees.documents.upload', $employee->id) }}" 
+      method="POST" 
+      enctype="multipart/form-data">
+    @csrf
         <!-- Dokumen Personal -->
-        <h5 class="font-semibold text-gray-800 mb-3">Dokumen Personal</h5>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          @foreach($dokumenWajib as $field => $label)
-          <div class="flex justify-between items-center border-b pb-2">
-            <div>
-              <span class="font-medium text-gray-700">{{ $label }}</span><br>
 
-              @if($employee->$field)
-              {{-- Kalau sudah ada file --}}
-              <a href="{{ asset('storage/'.$employee->$field) }}" target="_blank" class="text-blue-600 text-sm font-medium hover:underline">
-                Klik untuk Melihat
-              </a>
-              @else
-              {{-- Kalau belum ada file, munculin upload --}}
-              <form action="{{ route('employee.updateDocuments', $employee->id) }}"
-                method="POST" enctype="multipart/form-data" class="flex items-center gap-2">
-                @csrf
-                @method('PUT')
+@php
+    $dokumens = [
+        'ktp' => 'KTP',
+        'kartu_keluarga' => 'Kartu Keluarga',
+        'npwp' => 'NPWP',
+        'bpjs_ketenagakerjaan' => 'BPJS Ketenagakerjaan',
+        'bpjs_kesehatan' => 'BPJS Kesehatan',
+        'nota_dinas' => 'Nota Dinas',
+    ];
+@endphp
 
-                <input type="file" name="{{ $field }}" id="{{ $field }}" class="hidden"
-                  accept=".jpg,.jpeg,.png,.pdf" onchange="this.form.submit()">
-
-                <label for="{{ $field }}"
-                  class="cursor-pointer bg-blue-500 text-white px-3 py-1 rounded text-sm">
-                  Upload
-                </label>
-              </form>
-              <span class="text-gray-400 text-sm">Belum ada file</span>
-              @endif
+<div class="dokumen-grid-2">
+    @foreach ($dokumens as $name => $label)
+        <div class="form-group">
+            <div class="label-group">
+                <label for="{{ $name }}File">{{ $label }}</label>
+                <label class="bintang">*</label>
             </div>
-
-            @if($employee->$field)
-            <form action="{{ route('employee.deleteDocument', [$employee->id, $field]) }}"
-              method="POST" onsubmit="return confirm('Yakin hapus file ini?')">
-              @csrf
-              @method('DELETE')
-              <button type="submit" class="text-gray-500 hover:text-red-600 ml-2">
-                <i class="bi bi-x-circle"></i>
-              </button>
-            </form>
-            @endif
-          </div>
-          @endforeach
+            <div class="file-input file-input-sm">
+                <input type="file" name="{{ $name }}" id="{{ $name }}File" hidden required>
+                <input type="text" class="file-text" id="{{ $name }}FileText" placeholder="Tambahkan file" readonly>
+                <label for="{{ $name }}File" class="file-btn">Select</label>
+            </div>
         </div>
+    @endforeach
+</div>
 
 
         <hr class="h-px my-8 bg-gray-200 border-0 dark:bg-gray-700">
@@ -2602,56 +2592,35 @@
           <button type="button" class="mb-4 px-4 py-2 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700">
             + Tambah
         </div>
+        @php
+    $dokumens_assessment = [
+        ['psikotest' => 'Hasil Psikotest', 'assessment_01' => 'Hasil Assessment 01'],
+        ['assessment_02' => 'Hasil Assessment 02', 'assessment_03' => 'Hasil Assessment 03'],
+    ];
+@endphp
 
-        <div class="grid grid-cols-2 gap-4">
-          @forelse($dokumenLainnya as $dokumen)
-          <div class="flex items-center justify-between border-b py-2">
-            <div class="flex items-center gap-3">
-              <span class="font-medium text-gray-700">{{ $dokumen }}</span>
-
-              @php
-              // pakai collection yang telah eager-loaded
-              $doc = $employee->documents->firstWhere('jenis_dokumen', $dokumen);
-              @endphp
-
-              @if($doc && $doc->file_path)
-              <a href="{{ asset('storage/'.$doc->file_path) }}" target="_blank"
-                class="text-blue-600 text-sm font-medium hover:underline ml-2">
-                Lihat File
-              </a>
-              @else
-              <span class="text-gray-400 text-sm ml-2">Belum ada file</span>
-              @endif
+<div class="dokumen-grid-2">
+    @foreach ($dokumens_assessment as $row)
+        @foreach ($row as $name => $label)
+            <div class="form-group">
+                <label for="{{ $name }}File">{{ $label }}</label>
+                <div class="file-input file-input-sm">
+                    <input type="file" name="{{ $name }}" id="{{ $name }}File" hidden required>
+                    <input type="text" class="file-text" id="{{ $name }}FileText" placeholder="Belum ada file" readonly>
+                    <label for="{{ $name }}File" class="file-btn">Upload</label>
+                </div>
             </div>
+        @endforeach
+    @endforeach
+</div>
 
-            <form action="{{ route('employees.documents.upload', $employee->id) }}" method="POST" enctype="multipart/form-data" class="shrink-0">
-              @csrf
-              <input type="hidden" name="jenis_dokumen" value="{{ $dokumen }}">
-              <input type="hidden" name="kategori" value="lainnya">
-              {{-- gunakan md5 agar id valid tanpa perlu Str::slug --}}
-              <input type="file" name="file" class="hidden" onchange="this.form.submit()" id="upload-{{ md5($dokumen) }}">
-              <label for="upload-{{ md5($dokumen) }}" class="cursor-pointer bg-blue-600 text-white px-3 py-1 rounded text-sm hover:bg-blue-700">
-                Upload
-              </label>
-            </form>
-          </div>
-          @empty
-          <p class="text-gray-500">Tidak ada template dokumen lainnya.</p>
-          @endforelse
-        </div>
-
-        <!-- Action Buttons -->
-        <div class="flex justify-end gap-3 mt-6">
-          <a href="{{ route('employees.index') }}" class="px-6 py-2 rounded-lg bg-gray-200 text-gray-700 hover:bg-gray-300">
-            Cancel
-          </a>
-          <button type="submit" class="px-6 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700">
-            Save
-          </button>
-        </div>
-
-      </div>
+      {{-- === Action Button === --}}
+    <div class="flex justify-end mt-4">
+        <button type="button" class="btn btn-secondary" onclick="window.history.back()">Cancel</button>
+        <button type="submit" class="btn btn-primary ml-2">Save</button>
     </div>
+
+  </form>
 
 
     <!-- MODAL TAMBAH ANAK -->
@@ -3261,6 +3230,17 @@
     </div>
 
 
+
+<script>
+document.querySelectorAll('.file-input').forEach(function(wrapper) {
+    let fileInput = wrapper.querySelector('input[type="file"]');
+    let fileText = wrapper.querySelector('.file-text');
+
+    fileInput.addEventListener('change', function() {
+        fileText.value = fileInput.files.length > 0 ? fileInput.files[0].name : '';
+    });
+});
+</script>
 
     <script>
       function removeFile(field) {

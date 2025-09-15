@@ -2824,20 +2824,50 @@ input[type="radio"]:checked + .emoji-btn {
     <div class="content6">
       <div class="left-content6">
         <h4 class="content-info6">Dokumen Personal</h4>
+
         <p class="info1">KTP</p>
-        <a href="#" class="ktp-link">Klik untuk Melihat</a>
+        @if($employee->ktp)
+          <a href="{{ asset('storage/'.$employee->ktp) }}" target="_blank" class="ktp-link">Klik untuk Melihat</a>
+        @else
+          <span class="text-muted">Belum ada file</span>
+        @endif
+
         <p class="info1">BPJS Kesehatan</p>
-        <a href="#" class="ktp-link">Klik untuk Melihat</a>
+        @if($employee->bpjs_kesehatan)
+          <a href="{{ asset('storage/'.$employee->bpjs_kesehatan) }}" target="_blank" class="ktp-link">Klik untuk Melihat</a>
+        @else
+          <span class="text-muted">Belum ada file</span>
+        @endif
+
         <p class="info1">NPWP</p>
-        <a href="#" class="ktp-link">Klik untuk Melihat</a>
+        @if($employee->npwp)
+          <a href="{{ asset('storage/'.$employee->npwp) }}" target="_blank" class="ktp-link">Klik untuk Melihat</a>
+        @else
+          <span class="text-muted">Belum ada file</span>
+        @endif
       </div>
+
       <div class="right-content6">
         <p class="info1">Kartu Keluarga</p>
-        <a href="#" class="ktp-link">Klik untuk Melihat</a>
+        @if($employee->kartu_keluarga)
+          <a href="{{ asset('storage/'.$employee->kartu_keluarga) }}" target="_blank" class="ktp-link">Klik untuk Melihat</a>
+        @else
+          <span class="text-muted">Belum ada file</span>
+        @endif
+
         <p class="info1">BPJS Ketenagakerjaan</p>
-        <a href="#" class="ktp-link">Klik untuk Melihat</a>
+        @if($employee->bpjs_ketenagakerjaan)
+          <a href="{{ asset('storage/'.$employee->bpjs_ketenagakerjaan) }}" target="_blank" class="ktp-link">Klik untuk Melihat</a>
+        @else
+          <span class="text-muted">Belum ada file</span>
+        @endif
+
         <p class="info1">Nota Dinas</p>
-        <a href="#" class="ktp-link">Klik untuk Melihat</a>
+        @if($employee->nota_dinas)
+          <a href="{{ asset('storage/'.$employee->nota_dinas) }}" target="_blank" class="ktp-link">Klik untuk Melihat</a>
+        @else
+          <span class="text-muted">Belum ada file</span>
+        @endif
       </div>
     </div>
 
@@ -2846,19 +2876,40 @@ input[type="radio"]:checked + .emoji-btn {
     <div class="content7">
       <div class="left-content7">
         <h4 class="content-info7">Dokumen Lainnya</h4>
+
         <p class="info1">Hasil Psikotest</p>
-        <a href="#" class="ktp-link">Klik untuk Melihat</a>
+        @if($employee->psikotest)
+          <a href="{{ asset('storage/'.$employee->psikotest) }}" target="_blank" class="ktp-link">Klik untuk Melihat</a>
+        @else
+          <span class="text-muted">Belum ada file</span>
+        @endif
+
         <p class="info1">Hasil Assessment 02</p>
-        <a href="#" class="ktp-link">Klik untuk Melihat</a>
+        @if($employee->assessment_02)
+          <a href="{{ asset('storage/'.$employee->assessment_02) }}" target="_blank" class="ktp-link">Klik untuk Melihat</a>
+        @else
+          <span class="text-muted">Belum ada file</span>
+        @endif
       </div>
+
       <div class="right-content7">
         <p class="info1">Hasil Assessment 01</p>
-        <a href="#" class="ktp-link">Klik untuk Melihat</a>
+        @if($employee->assessment_01)
+          <a href="{{ asset('storage/'.$employee->assessment_01) }}" target="_blank" class="ktp-link">Klik untuk Melihat</a>
+        @else
+          <span class="text-muted">Belum ada file</span>
+        @endif
+
         <p class="info1">Hasil Assessment 03</p>
-        <a href="#" class="ktp-link">Klik untuk Melihat</a>
+        @if($employee->assessment_03)
+          <a href="{{ asset('storage/'.$employee->assessment_03) }}" target="_blank" class="ktp-link">Klik untuk Melihat</a>
+        @else
+          <span class="text-muted">Belum ada file</span>
+        @endif
       </div>
     </div>
-  </div>
+</div>
+
 
 
   <!-- CLUSTER MODAL -->

@@ -406,40 +406,37 @@ public function viewPayslip($filename)
     }
 
 
-public function updateDocuments(Request $request, $employee_id)
+public function updateDocuments(Request $request, $id)
 {
-    $employee = Employee::findOrFail($employee_id);
+    $employee = Employee::findOrFail($id);
 
-    // daftar field dokumen wajib (harus sama dengan yang di blade)
-    $dokumenWajib = [
+    // daftar dokumen
+    $documents = [
         'ktp',
         'kartu_keluarga',
         'npwp',
-        'bpjs_kesehatan',
         'bpjs_ketenagakerjaan',
-        'nota_dinas',
+        'bpjs_kesehatan',
+        'nota_dinas'
     ];
 
-    foreach ($dokumenWajib as $field) {
-        if ($request->hasFile($field)) {
-            // hapus file lama kalau ada
-            if ($employee->$field && \Storage::exists('public/documents/' . $employee->$field)) {
-                \Storage::delete('public/documents/' . $employee->$field);
-            }
+    foreach ($documents as $doc) {
+        if ($request->hasFile($doc)) {
+            $path = $request->file($doc)->store('documents', 'public');
 
-            // simpan file baru
-            $file = $request->file($field);
-            $filename = $field . '_' . time() . '.' . $file->getClientOriginalExtension();
-            $file->storeAs('public/documents', $filename);
-
-            // update field di database
-            $employee->$field = $filename;
+            EmployeeDocument::updateOrCreate(
+                [
+                    'employee_id'   => $employee->id,
+                    'jenis_dokumen' => $doc,
+                ],
+                [
+                    'file_path' => $path,
+                ]
+            );
         }
     }
 
-    $employee->save();
-
-    return back()->with('success', 'Dokumen berhasil diperbarui.');
+    return redirect()->back()->with('success', 'Dokumen berhasil diperbarui.');
 }
 
 
@@ -471,29 +468,38 @@ public function deleteFile($id, $field)
     return back()->with('success', ucfirst($field).' berhasil dihapus.');
 }
 
-public function uploadDocument(Request $request, $employeeId)
+public function uploadDocument(Request $request, $id)
 {
-    $request->validate([
-        'file' => 'required|mimes:pdf,jpg,jpeg,png|max:2048',
-        'jenis_dokumen' => 'required',
-        'kategori' => 'required|in:personal,lainnya',
-    ]);
+    $employee = Employee::findOrFail($id);
 
-    $path = $request->file('file')->store('documents', 'public');
+    // daftar field dokumen dari form
+    $dokumens = [
+        'ktp',
+        'kartu_keluarga',
+        'npwp',
+        'bpjs_ketenagakerjaan',
+        'bpjs_kesehatan',
+        'nota_dinas',
+        'psikotest',
+        'assessment_01',
+        'assessment_02',
+        'assessment_03',
+    ];
 
-    EmployeeDocument::updateOrCreate(
-        [
-            'employee_id' => $employeeId,
-            'jenis_dokumen' => $request->jenis_dokumen,
-            'kategori' => $request->kategori,
-        ],
-        [
-            'file_path' => $path,
-        ]
-    );
+    foreach ($dokumens as $field) {
+        if ($request->hasFile($field)) {
+            $path = $request->file($field)->store('documents', 'public');
+            $employee->$field = $path; // pastikan kolom ini ada di tabel employees
+        }
+    }
 
-    return back()->with('success', 'Dokumen berhasil diupload.');
+    $employee->save();
+
+    return redirect()->route('employees.show', $employee->id)
+                 ->with('success', 'Dokumen berhasil diupload');
+
 }
+
 
 
 
