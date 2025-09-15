@@ -26,7 +26,7 @@ class TrainingController extends Controller
         $pelatihanDijadwalkan = Training::where('status', 'scheduled')->count();
 
         $tanggalMulai = Training::orderBy('tanggal_mulai', 'desc')->get();
-        $perPage = $request->get('per_page', 5);
+        $perPage = $request->get('per_page', 10);
         $totalBiaya = Training::sum('total_biaya');
         $biaya = Training::sum('biaya');
         $totalNamaTraining = Training::count('nama_training');
@@ -74,7 +74,35 @@ class TrainingController extends Controller
         $sortOrderTraining = $sortOrderTraining === 'asc' ? 'asc' : 'desc';
 
         $training = Training::orderBy($sortByTraining, $sortOrderTraining)->get();
-        return view('training.index', compact('training', 'totalPartisipan', 'tna', 'persenTna', 'nonTna', 'pelatihanBerjalan', 'pelatihanDijadwalkan', 'tanggalMulai', 'totalTraining', 'perPage', 'trainings', 'totalBiaya', 'biaya', 'totalNamaTraining', 'sortByTraining', 'sortOrderTraining'));
+
+        $sortBy = $request->input('sort_by_training', 'id');
+        $sortOrder = $request->input('sort_order_training', 'asc');
+
+        $trainingss= Training::orderBy($sortBy, $sortOrder)->paginate($perPage);
+        return view(
+            'training.index',
+            compact(
+                'training',
+                'trainingss',
+                'totalPartisipan',
+                'tna',
+                'persenTna',
+                'nonTna',
+                'pelatihanBerjalan',
+                'pelatihanDijadwalkan',
+                'tanggalMulai',
+                'totalTraining',
+                'perPage',
+                'trainings',
+                'totalBiaya',
+                'biaya',
+                'totalNamaTraining',
+                'sortByTraining',
+                'sortBy',
+                'sortOrder',
+                'sortOrderTraining'
+            )
+        );
     }
 
 
