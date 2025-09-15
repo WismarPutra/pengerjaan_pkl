@@ -1581,19 +1581,21 @@
 
   /* Tombol Tambah */
   .btn-add {
-  background-color: #3B82F6; /* biru ala Figma */
-  color: #fff;
-  font-weight: 600;
-  border: none;
-  border-radius: 8px;
-  padding: 8px 16px;
-  cursor: pointer;
-  transition: background-color 0.2s;
-}
+    background-color: #3B82F6;
+    /* biru ala Figma */
+    color: #fff;
+    font-weight: 600;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 16px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
 
-.btn-add:hover {
-  background-color: #2563EB; /* biru lebih gelap waktu hover */
-}
+  .btn-add:hover {
+    background-color: #2563EB;
+    /* biru lebih gelap waktu hover */
+  }
 
   /* Tombol Cancel */
   .btn-cancel {
@@ -1632,151 +1634,162 @@
   }
 
   /* Timeline container */
-.timeline-container, .timeline-container1 {
-  margin-top: 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
+  .timeline-container,
+  .timeline-container1 {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
 
-/* Tahun di sebelah kiri */
-.timeline-year, .timeline-year1 {
-  font-weight: 700;
-  font-size: 16px;
-  color: #2563eb; /* biru Shopee-like */
-  margin-bottom: 8px;
-}
+  /* Tahun di sebelah kiri */
+  .timeline-year,
+  .timeline-year1 {
+    font-weight: 700;
+    font-size: 16px;
+    color: #2563eb;
+    /* biru Shopee-like */
+    margin-bottom: 8px;
+  }
 
-/* Isi konten */
-.timeline-content {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  padding: 10px 0;
-}
+  /* Isi konten */
+  .timeline-content {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 10px 0;
+  }
 
-/* Judul role */
-.role-title, .role-title1 {
-  font-size: 16px;
-  font-weight: 600;
-  color: #111827;
-  margin: 0;
-}
+  /* Judul role */
+  .role-title,
+  .role-title1 {
+    font-size: 16px;
+    font-weight: 600;
+    color: #111827;
+    margin: 0;
+  }
 
-/* Sub info (periode, direktorat, band) */
-.sub-info {
-  font-size: 14px;
-  color: #4b5563;
-  margin: 0;
-}
+  /* Sub info (periode, direktorat, band) */
+  .sub-info {
+    font-size: 14px;
+    color: #4b5563;
+    margin: 0;
+  }
 
-/* Tanggal */
-.promo-date {
-  font-size: 14px;
-  color: #374151;
-  margin: 0;
-}
+  /* Tanggal */
+  .promo-date {
+    font-size: 14px;
+    color: #374151;
+    margin: 0;
+  }
 
-/* Deskripsi */
-.description {
-  font-size: 14px;
-  color: #6b7280;
-  margin: 0;
-  line-height: 1.5;
-  text-align: justify;
-}
+  /* Deskripsi */
+  .description {
+    font-size: 14px;
+    color: #6b7280;
+    margin: 0;
+    line-height: 1.5;
+    text-align: justify;
+  }
 
-/* Tombol edit/delete */
-.timeline-content {
-  display: flex;
-  flex-direction: column;
-  height: 100%; /* biar tombol nempel bawah */
-}
+  /* Tombol edit/delete */
+  .timeline-content {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    /* biar tombol nempel bawah */
+  }
 
-.timeline-actions {
-  margin-top: auto; /* dorong tombol ke paling bawah */
-  display: flex;
-  justify-content: flex-end;
-  gap: 10px;
-}
+  .timeline-actions {
+    margin-top: auto;
+    /* dorong tombol ke paling bawah */
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+  }
 
 
-/* Save & Cancel di kanan bawah */
-.form-actions {
-  margin-top: 30px;
-  display: flex;
-  justify-content: flex-end;
-  gap: 10px;
-}
+  /* Save & Cancel di kanan bawah */
+  .form-actions {
+    margin-top: 30px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+  }
 
-.btn-cancel {
-  background: #f3f4f6;
-  border: none;
-  color: #374151;
-  padding: 8px 16px;
-  border-radius: 6px;
-  cursor: pointer;
-}
+  .btn-cancel {
+    background: #f3f4f6;
+    border: none;
+    color: #374151;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+  }
 
-.btn-save {
-  background: #4f46e5;
-  border: none;
-  color: white;
-  padding: 8px 16px;
-  border-radius: 6px;
-  cursor: pointer;
-}
+  .btn-save {
+    background: #4f46e5;
+    border: none;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+  }
 
-/* Tombol Delete */
-.btn-delete {
-  background-color: #FEE2E2;  /* merah muda lembut */
-  color: #DC2626;            /* merah tua */
-  border: none;
-  padding: 6px 14px;
-  border-radius: 8px;
-  font-size: 14px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  transition: background 0.2s;
-}
-.btn-delete:hover {
-  background-color: #DC2626;
-  color: white;
-}
+  /* Tombol Delete */
+  .btn-delete {
+    background-color: #FEE2E2;
+    /* merah muda lembut */
+    color: #DC2626;
+    /* merah tua */
+    border: none;
+    padding: 6px 14px;
+    border-radius: 8px;
+    font-size: 14px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: background 0.2s;
+  }
 
-.timeline-header {
-  display: flex;
-  justify-content: space-between; /* kiri: judul, kanan: tombol */
-  align-items: center;
-  margin-bottom: 6px;
-}
+  .btn-delete:hover {
+    background-color: #DC2626;
+    color: white;
+  }
 
-.timeline-actions {
-  display: flex;
-  gap: 10px;
-}
+  .timeline-header {
+    display: flex;
+    justify-content: space-between;
+    /* kiri: judul, kanan: tombol */
+    align-items: center;
+    margin-bottom: 6px;
+  }
 
-/* Tombol Edit */
-.btn-edit {
-  background-color: white;
-  color: #2563EB;            /* biru */
-  border: 1.5px solid #2563EB;
-  padding: 6px 14px;
-  border-radius: 8px;
-  font-size: 14px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  transition: all 0.2s;
-}
-.btn-edit:hover {
-  background-color: #2563EB;
-  color: white;
-}
+  .timeline-actions {
+    display: flex;
+    gap: 10px;
+  }
 
+  /* Tombol Edit */
+  .btn-edit {
+    background-color: white;
+    color: #2563EB;
+    /* biru */
+    border: 1.5px solid #2563EB;
+    padding: 6px 14px;
+    border-radius: 8px;
+    font-size: 14px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.2s;
+  }
+
+  .btn-edit:hover {
+    background-color: #2563EB;
+    color: white;
+  }
 </style>
 
 <div class="navbar" style="z-index:1;">
@@ -2472,38 +2485,38 @@
                   <div id="dropdownActions-{{ $cluster->id }}"
                     class="hidden absolute right-0 mt-2 w-32 bg-white rounded-lg shadow-md border border-gray-200 z-50">
                     <!-- Tombol baru -->
-                  <div class="relative inline-block text-left">
-  <!-- Tombol Action -->
-  <button type="button" 
-          onclick="toggleDropdown('actionMenuCluster{{ $cluster->id }}')" 
-          class="px-3 py-2 bg-gray-200 rounded">
-    Action
-  </button>
+                    <div class="relative inline-block text-left">
+                      <!-- Tombol Action -->
+                      <button type="button"
+                        onclick="toggleDropdown('actionMenuCluster{{ $cluster->id }}')"
+                        class="px-3 py-2 bg-gray-200 rounded">
+                        Action
+                      </button>
 
-  <!-- Dropdown Menu -->
-  <div id="actionMenuCluster{{ $cluster->id }}" 
-       class="hidden absolute right-0 mt-2 w-48 bg-white rounded shadow-lg z-50">
-    
-    <!-- Edit -->
-    <button type="button"
-      onclick="openEditClusterPopup('{{ $cluster->id }}', '{{ $cluster->periodeCluster }}', '{{ $cluster->tahunCluster }}', '{{ $cluster->talentCluster }}')"
-      class="block w-full text-left px-4 py-2 text-sm hover:bg-gray-100">
-      Edit
-    </button>
+                      <!-- Dropdown Menu -->
+                      <div id="actionMenuCluster{{ $cluster->id }}"
+                        class="hidden absolute right-0 mt-2 w-48 bg-white rounded shadow-lg z-50">
 
-    <!-- Delete -->
-    <form action="{{ route('employees.clusters.destroy', [$employee->id, $cluster->id]) }}" 
-          method="POST"
-          onsubmit="return confirm('Yakin ingin menghapus cluster ini?')">
-      @csrf
-      @method('DELETE')
-      <button type="submit" 
-              class="block w-full text-left px-4 py-2 text-sm hover:bg-gray-100">
-        Delete
-      </button>
-    </form>
-  </div>
-</div>
+                        <!-- Edit -->
+                        <button type="button"
+                          onclick="openEditClusterPopup('{{ $cluster->id }}', '{{ $cluster->periodeCluster }}', '{{ $cluster->tahunCluster }}', '{{ $cluster->talentCluster }}')"
+                          class="block w-full text-left px-4 py-2 text-sm hover:bg-gray-100">
+                          Edit
+                        </button>
+
+                        <!-- Delete -->
+                        <form action="{{ route('employees.clusters.destroy', [$employee->id, $cluster->id]) }}"
+                          method="POST"
+                          onsubmit="return confirm('Yakin ingin menghapus cluster ini?')">
+                          @csrf
+                          @method('DELETE')
+                          <button type="submit"
+                            class="block w-full text-left px-4 py-2 text-sm hover:bg-gray-100">
+                            Delete
+                          </button>
+                        </form>
+                      </div>
+                    </div>
               </td>
             </tr>
             @empty
@@ -2514,19 +2527,19 @@
           </tbody>
         </table>
         <div class="flex justify-end gap-2 mt-4">
-  <form action="" method="POST">
-    @csrf
-    <button type="submit" class="bg-gray-300 px-4 py-2 rounded">Cancel</button>
-  </form>
+          <form action="" method="POST">
+            @csrf
+            <button type="submit" class="bg-gray-300 px-4 py-2 rounded">Cancel</button>
+          </form>
 
-  <form action="" method="POST">
-    @csrf
-    <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded">Save</button>
-  </form>
-</div>
+          <form action="" method="POST">
+            @csrf
+            <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded">Save</button>
+          </form>
+        </div>
       </div>
     </div>
-    
+
 
     <!-- DOKUMEN DI HALAMAN EDIT -->
 
@@ -2535,49 +2548,49 @@
 
         <!-- Dokumen Personal -->
         <h5 class="font-semibold text-gray-800 mb-3">Dokumen Personal</h5>
-<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-  @foreach($dokumenWajib as $field => $label)
-  <div class="flex justify-between items-center border-b pb-2">
-    <div>
-      <span class="font-medium text-gray-700">{{ $label }}</span><br>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          @foreach($dokumenWajib as $field => $label)
+          <div class="flex justify-between items-center border-b pb-2">
+            <div>
+              <span class="font-medium text-gray-700">{{ $label }}</span><br>
 
-      @if($employee->$field)
-        {{-- Kalau sudah ada file --}}
-        <a href="{{ asset('storage/'.$employee->$field) }}" target="_blank" class="text-blue-600 text-sm font-medium hover:underline">
-          Klik untuk Melihat
-        </a>
-      @else
-        {{-- Kalau belum ada file, munculin upload --}}
-        <form action="{{ route('employee.updateDocuments', $employee->id) }}" 
-              method="POST" enctype="multipart/form-data" class="flex items-center gap-2">
-          @csrf
-          @method('PUT')
+              @if($employee->$field)
+              {{-- Kalau sudah ada file --}}
+              <a href="{{ asset('storage/'.$employee->$field) }}" target="_blank" class="text-blue-600 text-sm font-medium hover:underline">
+                Klik untuk Melihat
+              </a>
+              @else
+              {{-- Kalau belum ada file, munculin upload --}}
+              <form action="{{ route('employee.updateDocuments', $employee->id) }}"
+                method="POST" enctype="multipart/form-data" class="flex items-center gap-2">
+                @csrf
+                @method('PUT')
 
-          <input type="file" name="{{ $field }}" id="{{ $field }}" class="hidden" 
-                 accept=".jpg,.jpeg,.png,.pdf" onchange="this.form.submit()">
+                <input type="file" name="{{ $field }}" id="{{ $field }}" class="hidden"
+                  accept=".jpg,.jpeg,.png,.pdf" onchange="this.form.submit()">
 
-          <label for="{{ $field }}" 
-                 class="cursor-pointer bg-blue-500 text-white px-3 py-1 rounded text-sm">
-            Upload
-          </label>
-        </form>
-        <span class="text-gray-400 text-sm">Belum ada file</span>
-      @endif
-    </div>
+                <label for="{{ $field }}"
+                  class="cursor-pointer bg-blue-500 text-white px-3 py-1 rounded text-sm">
+                  Upload
+                </label>
+              </form>
+              <span class="text-gray-400 text-sm">Belum ada file</span>
+              @endif
+            </div>
 
-    @if($employee->$field)
-    <form action="{{ route('employee.deleteDocument', [$employee->id, $field]) }}" 
-          method="POST" onsubmit="return confirm('Yakin hapus file ini?')">
-      @csrf
-      @method('DELETE')
-      <button type="submit" class="text-gray-500 hover:text-red-600 ml-2">
-        <i class="bi bi-x-circle"></i>
-      </button>
-    </form>
-    @endif
-  </div>
-  @endforeach
-</div>
+            @if($employee->$field)
+            <form action="{{ route('employee.deleteDocument', [$employee->id, $field]) }}"
+              method="POST" onsubmit="return confirm('Yakin hapus file ini?')">
+              @csrf
+              @method('DELETE')
+              <button type="submit" class="text-gray-500 hover:text-red-600 ml-2">
+                <i class="bi bi-x-circle"></i>
+              </button>
+            </form>
+            @endif
+          </div>
+          @endforeach
+        </div>
 
 
         <hr class="h-px my-8 bg-gray-200 border-0 dark:bg-gray-700">
@@ -2591,41 +2604,41 @@
         </div>
 
         <div class="grid grid-cols-2 gap-4">
-  @forelse($dokumenLainnya as $dokumen)
-    <div class="flex items-center justify-between border-b py-2">
-      <div class="flex items-center gap-3">
-        <span class="font-medium text-gray-700">{{ $dokumen }}</span>
+          @forelse($dokumenLainnya as $dokumen)
+          <div class="flex items-center justify-between border-b py-2">
+            <div class="flex items-center gap-3">
+              <span class="font-medium text-gray-700">{{ $dokumen }}</span>
 
-        @php
-          // pakai collection yang telah eager-loaded
-          $doc = $employee->documents->firstWhere('jenis_dokumen', $dokumen);
-        @endphp
+              @php
+              // pakai collection yang telah eager-loaded
+              $doc = $employee->documents->firstWhere('jenis_dokumen', $dokumen);
+              @endphp
 
-        @if($doc && $doc->file_path)
-          <a href="{{ asset('storage/'.$doc->file_path) }}" target="_blank"
-             class="text-blue-600 text-sm font-medium hover:underline ml-2">
-            Lihat File
-          </a>
-        @else
-          <span class="text-gray-400 text-sm ml-2">Belum ada file</span>
-        @endif
-      </div>
+              @if($doc && $doc->file_path)
+              <a href="{{ asset('storage/'.$doc->file_path) }}" target="_blank"
+                class="text-blue-600 text-sm font-medium hover:underline ml-2">
+                Lihat File
+              </a>
+              @else
+              <span class="text-gray-400 text-sm ml-2">Belum ada file</span>
+              @endif
+            </div>
 
-      <form action="{{ route('employees.documents.upload', $employee->id) }}" method="POST" enctype="multipart/form-data" class="shrink-0">
-        @csrf
-        <input type="hidden" name="jenis_dokumen" value="{{ $dokumen }}">
-        <input type="hidden" name="kategori" value="lainnya">
-        {{-- gunakan md5 agar id valid tanpa perlu Str::slug --}}
-        <input type="file" name="file" class="hidden" onchange="this.form.submit()" id="upload-{{ md5($dokumen) }}">
-        <label for="upload-{{ md5($dokumen) }}" class="cursor-pointer bg-blue-600 text-white px-3 py-1 rounded text-sm hover:bg-blue-700">
-          Upload
-        </label>
-      </form>
-    </div>
-  @empty
-    <p class="text-gray-500">Tidak ada template dokumen lainnya.</p>
-  @endforelse
-</div>
+            <form action="{{ route('employees.documents.upload', $employee->id) }}" method="POST" enctype="multipart/form-data" class="shrink-0">
+              @csrf
+              <input type="hidden" name="jenis_dokumen" value="{{ $dokumen }}">
+              <input type="hidden" name="kategori" value="lainnya">
+              {{-- gunakan md5 agar id valid tanpa perlu Str::slug --}}
+              <input type="file" name="file" class="hidden" onchange="this.form.submit()" id="upload-{{ md5($dokumen) }}">
+              <label for="upload-{{ md5($dokumen) }}" class="cursor-pointer bg-blue-600 text-white px-3 py-1 rounded text-sm hover:bg-blue-700">
+                Upload
+              </label>
+            </form>
+          </div>
+          @empty
+          <p class="text-gray-500">Tidak ada template dokumen lainnya.</p>
+          @endforelse
+        </div>
 
         <!-- Action Buttons -->
         <div class="flex justify-end gap-3 mt-6">
@@ -2809,445 +2822,445 @@
       </div>
     </div>
 
-   <div id="editClusterModal" class="hidden fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-  <div class="bg-white rounded-lg shadow-lg p-6 w-[600px]">
-    <h3 class="text-lg font-bold mb-4">Edit Talent Cluster</h3>
+    <div id="editClusterModal" class="hidden fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+      <div class="bg-white rounded-lg shadow-lg p-6 w-[600px]">
+        <h3 class="text-lg font-bold mb-4">Edit Talent Cluster</h3>
 
-    <form id="editClusterForm" method="POST">
-      @csrf
-      @method('PUT')
+        <form id="editClusterForm" method="POST">
+          @csrf
+          @method('PUT')
 
-      <div class="mb-3">
-        <label>Periode</label>
-        <select id="editPeriodeCluster" name="periodeCluster" class="w-full border p-2">
-          <option value="Q1">Q1</option>
-          <option value="Q2">Q2</option>
-          <option value="Q3">Q3</option>
-          <option value="Q4">Q4</option>
-        </select>
+          <div class="mb-3">
+            <label>Periode</label>
+            <select id="editPeriodeCluster" name="periodeCluster" class="w-full border p-2">
+              <option value="Q1">Q1</option>
+              <option value="Q2">Q2</option>
+              <option value="Q3">Q3</option>
+              <option value="Q4">Q4</option>
+            </select>
+          </div>
+
+          <div class="mb-3">
+            <label>Tahun</label>
+            <input type="month" id="editTahunCluster" name="tahunCluster" class="w-full border p-2" />
+          </div>
+
+          <div class="mb-3">
+            <label>Talent Cluster</label>
+            <select id="editTalentCluster" name="talentCluster" class="w-full border p-2">
+              <option value="Potential Employee">Potential Employee</option>
+              <option value="Promotable Employee">Promotable Employee</option>
+            </select>
+          </div>
+
+          <div class="flex justify-end gap-2">
+            <button type="button" onclick="closeEditClusterPopup()" class="px-4 py-2 bg-gray-300 rounded">Cancel</button>
+            <button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded">Update</button>
+          </div>
+        </form>
       </div>
-
-      <div class="mb-3">
-        <label>Tahun</label>
-        <input type="month" id="editTahunCluster" name="tahunCluster" class="w-full border p-2" />
-      </div>
-
-      <div class="mb-3">
-        <label>Talent Cluster</label>
-        <select id="editTalentCluster" name="talentCluster" class="w-full border p-2">
-          <option value="Potential Employee">Potential Employee</option>
-          <option value="Promotable Employee">Promotable Employee</option>
-        </select>
-      </div>
-
-      <div class="flex justify-end gap-2">
-        <button type="button" onclick="closeEditClusterPopup()" class="px-4 py-2 bg-gray-300 rounded">Cancel</button>
-        <button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded">Update</button>
-      </div>
-    </form>
-  </div>
-</div>
+    </div>
 
 
 
     <!-- AKTIVITAS CAREER -->
 
     <div class="tab-content" id="karir" style="display: none;">
-  <!-- Bagian Aktivitas Karir -->
-  <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; flex-wrap: wrap;">
-    <h2 class="left-section9">Aktivitas Karir</h2>
-    <button type="button" class="btn-add">+ Tambah</button>
-  </div>
+      <!-- Bagian Aktivitas Karir -->
+      <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; flex-wrap: wrap;">
+        <h2 class="left-section9">Aktivitas Karir</h2>
+        <button type="button" class="btn-add">+ Tambah</button>
+      </div>
 
-  <div class="timeline-container">
-    <div class="timeline-group">
-      <div class="timeline-item new">
-        <div class="timeline-year">2023</div>
-        <div class="timeline-content">
-          <h4 class="role-title">Nama Role Sekarang</h4>
-          <p class="sub-info">Maret 2023 - Sekarang (3 Tahun 1 Bulan) • Nama Direktorat • Band Level V</p>
-          <p class="promo-date">Tanggal Promosi: 1 Maret 2023</p>
-          <p class="description">
-            Lorem, ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus error eveniet culpa eos cupiditate doloribus impedit aliquid saepe aut nobis, consequuntur ex fuga consectetur quasi dolorum eum. Blanditiis, quibusdam incidunt?
-          </p>
+      <div class="timeline-container">
+        <div class="timeline-group">
+          <div class="timeline-item new">
+            <div class="timeline-year">2023</div>
+            <div class="timeline-content">
+              <h4 class="role-title">Nama Role Sekarang</h4>
+              <p class="sub-info">Maret 2023 - Sekarang (3 Tahun 1 Bulan) • Nama Direktorat • Band Level V</p>
+              <p class="promo-date">Tanggal Promosi: 1 Maret 2023</p>
+              <p class="description">
+                Lorem, ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus error eveniet culpa eos cupiditate doloribus impedit aliquid saepe aut nobis, consequuntur ex fuga consectetur quasi dolorum eum. Blanditiis, quibusdam incidunt?
+              </p>
 
-          <!-- tombol action -->
-          <div class="timeline-actions">
-            <button class="btn-delete">
-              <i class="fa-solid fa-trash"></i> Delete
-            </button>
-            <button class="btn-edit">
-              <i class="fa-solid fa-pen"></i> Edit
-            </button>
+              <!-- tombol action -->
+              <div class="timeline-actions">
+                <button class="btn-delete">
+                  <i class="fa-solid fa-trash"></i> Delete
+                </button>
+                <button class="btn-edit">
+                  <i class="fa-solid fa-pen"></i> Edit
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="timeline-item old">
+            <div class="timeline-year1">2020</div>
+            <div class="timeline-content">
+              <h4 class="role-title1">PJ Role ABC</h4>
+              <p class="sub-info">Januari 2020 - Februari 2023 (3 Tahun 2 Bulan) • Nama Direktorat • Band Level V</p>
+              <p class="promo-date">Tanggal Menjadi PJ: 3 Feb 2021</p>
+              <p class="description">
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Praesentium illo alias ut impedit nihil eum molestias cupiditate eligendi numquam! Quae ex non quis autem esse! Eveniet nemo culpa porro nisi!
+              </p>
+
+              <!-- tombol action -->
+              <div class="timeline-actions">
+                <button class="btn-delete">
+                  <i class="fa-solid fa-trash"></i> Delete
+                </button>
+                <button class="btn-edit">
+                  <i class="fa-solid fa-pen"></i> Edit
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="timeline-item old">
+            <div class="timeline-year1">2011</div>
+            <div class="timeline-content">
+              <h4 class="role-title1">Staff Posisi ABC</h4>
+              <p class="sub-info">Januari 2011 - Desember 2020 (8 Tahun 11 Bulan) • Nama Direktorat • Band Level V</p>
+              <p class="promo-date">Tanggal Karyawan Tetap: 1 Januari 2011</p>
+              <p class="description">
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Maiores ad reprehenderit nesciunt cumque iste accusantium, eligendi quidem dolorum. Impedit facilis molestias quibusdam. Earum laborum ea, eligendi molestias in eos error.
+              </p>
+
+              <!-- tombol action -->
+              <div class="timeline-actions">
+                <button class="btn-delete">
+                  <i class="fa-solid fa-trash"></i> Delete
+                </button>
+                <button class="btn-edit">
+                  <i class="fa-solid fa-pen"></i> Edit
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
 
-      <div class="timeline-item old">
-        <div class="timeline-year1">2020</div>
-        <div class="timeline-content">
-          <h4 class="role-title1">PJ Role ABC</h4>
-          <p class="sub-info">Januari 2020 - Februari 2023 (3 Tahun 2 Bulan) • Nama Direktorat • Band Level V</p>
-          <p class="promo-date">Tanggal Menjadi PJ: 3 Feb 2021</p>
-          <p class="description">
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Praesentium illo alias ut impedit nihil eum molestias cupiditate eligendi numquam! Quae ex non quis autem esse! Eveniet nemo culpa porro nisi!
-          </p>
+      <hr class="divider">
 
-          <!-- tombol action -->
-          <div class="timeline-actions">
-            <button class="btn-delete">
-              <i class="fa-solid fa-trash"></i> Delete
-            </button>
-            <button class="btn-edit">
-              <i class="fa-solid fa-pen"></i> Edit
-            </button>
+      <!-- Bagian Histori Pekerjaan -->
+      <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; flex-wrap: wrap;">
+        <h2 class="left-section10">Histori Pekerjaan Sebelumnya</h2>
+        <button class="btn-add">+ Tambah</button>
+      </div>
+
+      <div class="timeline-container1">
+        <div class="timeline-group">
+          <div class="timeline-item old">
+            <div class="timeline-year1">2010</div>
+            <div class="timeline-content">
+              <h4 class="role-title1">Role Pekerjaan Sebelumnya</h4>
+              <p class="sub-info">PT Nama Perusahaan</p>
+              <p class="promo-date">April 2010 - Desember 2010 (9 Bulan)</p>
+              <p class="description">
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Id adipisci eligendi animi ad ipsa alias officiis veritatis! Perferendis veniam voluptates, omnis porro, architecto mollitia laudantium laborum rerum rem vel assumenda.
+              </p>
+
+              <!-- tombol action -->
+              <div class="timeline-actions">
+                <button class="btn-delete">
+                  <i class="fa-solid fa-trash"></i> Delete
+                </button>
+                <button class="btn-edit">
+                  <i class="fa-solid fa-pen"></i> Edit
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="timeline-item old">
+            <div class="timeline-year1">2010</div>
+            <div class="timeline-content">
+              <h4 class="role-title1">Role Pekerjaan Sebelumnya</h4>
+              <p class="sub-info">PT Nama Perusahaan</p>
+              <p class="promo-date">Januari 2010 - Maret 2010 (3 Bulan)</p>
+              <p class="description">
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolorum soluta quaerat at accusamus repudiandae consequatur eum ut perferendis blanditiis dicta laboriosam rem incidunt hic iste itaque quidem vitae, deleniti possimus.
+              </p>
+
+              <!-- tombol action -->
+              <div class="timeline-actions">
+                <button class="btn-delete">
+                  <i class="fa-solid fa-trash"></i> Delete
+                </button>
+                <button class="btn-edit">
+                  <i class="fa-solid fa-pen"></i> Edit
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
 
-      <div class="timeline-item old">
-        <div class="timeline-year1">2011</div>
-        <div class="timeline-content">
-          <h4 class="role-title1">Staff Posisi ABC</h4>
-          <p class="sub-info">Januari 2011 - Desember 2020 (8 Tahun 11 Bulan) • Nama Direktorat • Band Level V</p>
-          <p class="promo-date">Tanggal Karyawan Tetap: 1 Januari 2011</p>
-          <p class="description">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Maiores ad reprehenderit nesciunt cumque iste accusantium, eligendi quidem dolorum. Impedit facilis molestias quibusdam. Earum laborum ea, eligendi molestias in eos error.
-          </p>
-
-          <!-- tombol action -->
-          <div class="timeline-actions">
-            <button class="btn-delete">
-              <i class="fa-solid fa-trash"></i> Delete
-            </button>
-            <button class="btn-edit">
-              <i class="fa-solid fa-pen"></i> Edit
-            </button>
-          </div>
-        </div>
+      <!-- Save / Cancel di bawah -->
+      <div class="form-actions">
+        <button class="btn-cancel">Cancel</button>
+        <button class="btn-save">Save</button>
       </div>
     </div>
-  </div>
 
-  <hr class="divider">
-
-  <!-- Bagian Histori Pekerjaan -->
-  <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; flex-wrap: wrap;">
-    <h2 class="left-section10">Histori Pekerjaan Sebelumnya</h2>
-    <button class="btn-add">+ Tambah</button>
-  </div>
-
-  <div class="timeline-container1">
-    <div class="timeline-group">
-      <div class="timeline-item old">
-        <div class="timeline-year1">2010</div>
-        <div class="timeline-content">
-          <h4 class="role-title1">Role Pekerjaan Sebelumnya</h4>
-          <p class="sub-info">PT Nama Perusahaan</p>
-          <p class="promo-date">April 2010 - Desember 2010 (9 Bulan)</p>
-          <p class="description">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Id adipisci eligendi animi ad ipsa alias officiis veritatis! Perferendis veniam voluptates, omnis porro, architecto mollitia laudantium laborum rerum rem vel assumenda.
-          </p>
-
-          <!-- tombol action -->
-          <div class="timeline-actions">
-           <button class="btn-delete">
-              <i class="fa-solid fa-trash"></i> Delete
-            </button>
-            <button class="btn-edit">
-              <i class="fa-solid fa-pen"></i> Edit
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <div class="timeline-item old">
-        <div class="timeline-year1">2010</div>
-        <div class="timeline-content">
-          <h4 class="role-title1">Role Pekerjaan Sebelumnya</h4>
-          <p class="sub-info">PT Nama Perusahaan</p>
-          <p class="promo-date">Januari 2010 - Maret 2010 (3 Bulan)</p>
-          <p class="description">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolorum soluta quaerat at accusamus repudiandae consequatur eum ut perferendis blanditiis dicta laboriosam rem incidunt hic iste itaque quidem vitae, deleniti possimus.
-          </p>
-
-          <!-- tombol action -->
-          <div class="timeline-actions">
-            <button class="btn-delete">
-              <i class="fa-solid fa-trash"></i> Delete
-            </button>
-            <button class="btn-edit">
-              <i class="fa-solid fa-pen"></i> Edit
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Save / Cancel di bawah -->
-  <div class="form-actions">
-    <button class="btn-cancel">Cancel</button>
-    <button class="btn-save">Save</button>
-  </div>
-</div>
-
-{{-- Modal Tambah Aktivitas --}}
-<div class="modal" id="tambahAktivitasModal">
-    <div class="modal-dialog">
+    {{-- Modal Tambah Aktivitas --}}
+    <div class="modal" id="tambahAktivitasModal">
+      <div class="modal-dialog">
         <form action="{{ route('employee.career.store', $employee->id) }}" method="POST" enctype="multipart/form-data" class="modal-content">
-            @csrf
-            <div class="content6">
-                <div class="left-content6">
-                    <h5>Tambah Aktivitas Karir</h5>
-                </div>
-                
-                <div class="right-content6">
-
-                    <a href="javascript:void(0)" class="addInfo-btn" id="openInfo">
-                        <i class="fas fa-plus"></i>Tambah Informasi Lain
-                    </a>
-
-                    <button data-bs-dismiss="modal" class="close-button">
-                        <i class="fas fa-circle-xmark"></i>
-                    </button>
-                </div>
+          @csrf
+          <div class="content6">
+            <div class="left-content6">
+              <h5>Tambah Aktivitas Karir</h5>
             </div>
-            <div class="form-grid1">
-                <div class="form-group">
-                    <div class="label-group">
-                        <label>Nama Role</label>
-                        <label class="bintang">*</label>
-                    </div>
-                    <input type="text" name="nama_role" class="form-control" required>
-                </div>
 
-                <div class="form-group">
-                    <div class="label-group">
-                        <label>Regional/Direktorat</label>
-                        <label class="bintang">*</label>
-                    </div>
-                    <select name="regional_direktorat" class="form-control1"  required>
-                        <option disabled selected value=""></option>
-                        <option value="blablabla">blablabla</option>
-                        <option value="claclacla">claclacla</option>
-                        <option value="dladladla">dladladla</option>
-                    </select>
-                </div>
+            <div class="right-content6">
 
-                <div class="form-group">
-                    <div class="label-group">
-                        <label>Unit/Sub Direktorat</label>
-                        <label class="bintang">*</label>
-                    </div>
-                    <select name="unitSub" class="form-control1"  required>
-                        <option disabled selected value=""></option>
-                        <option value="blablabla">blablabla</option>
-                        <option value="claclacla">claclacla</option>
-                        <option value="dladladla">dladladla</option>
-                    </select>
-                </div>
+              <a href="javascript:void(0)" class="addInfo-btn" id="openInfo">
+                <i class="fas fa-plus"></i>Tambah Informasi Lain
+              </a>
 
-                <div class="form-group">
-                    <div class="label-group">
-                        <label>Band</label>
-                        <label class="bintang">*</label>
-                    </div>
-                    <select name="band_posisi" class="form-control1"  required>
-                        <option disabled selected value=""></option>
-                        <option value="band level V">Band Level V</option>
-                        <option value="claclacla">claclacla</option>
-                        <option value="dladladla">dladladla</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <div class="label-group">
-                        <label>Deskripsi</label>
-                        <label class="bintang">*</label>
-                    </div>
-                    <input type="text" name="deskripsi" class="form-control" required>
-                </div>
-
-                <div class="form-group">
-                    <div class="label-group">
-                        <label>Status PJ</label>
-                        <label class="bintang">*</label>
-                    </div>
-                    <select name="statusPJ" class="form-control1"  required>
-                        <option disabled selected value=""></option>
-                        <option value="blablabla">blablabla</option>
-                        <option value="claclacla">claclacla</option>
-                        <option value="dladladla">dladladla</option>
-                    </select>
-                </div>
-
-
-                <!-- container untuk field tambahan -->
-                <div id="extraFields"></div>
-
+              <button data-bs-dismiss="modal" class="close-button">
+                <i class="fas fa-circle-xmark"></i>
+              </button>
             </div>
-            <div class="form-buttons">
-                <button type="button" class="cancel" data-bs-dismiss="modal">Cancel</button>
-                <button type="submit" class="submit">Tambah</button>
+          </div>
+          <div class="form-grid1">
+            <div class="form-group">
+              <div class="label-group">
+                <label>Nama Role</label>
+                <label class="bintang">*</label>
+              </div>
+              <input type="text" name="nama_role" class="form-control" required>
             </div>
-            
+
+            <div class="form-group">
+              <div class="label-group">
+                <label>Regional/Direktorat</label>
+                <label class="bintang">*</label>
+              </div>
+              <select name="regional_direktorat" class="form-control1" required>
+                <option disabled selected value=""></option>
+                <option value="blablabla">blablabla</option>
+                <option value="claclacla">claclacla</option>
+                <option value="dladladla">dladladla</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <div class="label-group">
+                <label>Unit/Sub Direktorat</label>
+                <label class="bintang">*</label>
+              </div>
+              <select name="unitSub" class="form-control1" required>
+                <option disabled selected value=""></option>
+                <option value="blablabla">blablabla</option>
+                <option value="claclacla">claclacla</option>
+                <option value="dladladla">dladladla</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <div class="label-group">
+                <label>Band</label>
+                <label class="bintang">*</label>
+              </div>
+              <select name="band_posisi" class="form-control1" required>
+                <option disabled selected value=""></option>
+                <option value="band level V">Band Level V</option>
+                <option value="claclacla">claclacla</option>
+                <option value="dladladla">dladladla</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <div class="label-group">
+                <label>Deskripsi</label>
+                <label class="bintang">*</label>
+              </div>
+              <input type="text" name="deskripsi" class="form-control" required>
+            </div>
+
+            <div class="form-group">
+              <div class="label-group">
+                <label>Status PJ</label>
+                <label class="bintang">*</label>
+              </div>
+              <select name="statusPJ" class="form-control1" required>
+                <option disabled selected value=""></option>
+                <option value="blablabla">blablabla</option>
+                <option value="claclacla">claclacla</option>
+                <option value="dladladla">dladladla</option>
+              </select>
+            </div>
+
+
+            <!-- container untuk field tambahan -->
+            <div id="extraFields"></div>
+
+          </div>
+          <div class="form-buttons">
+            <button type="button" class="cancel" data-bs-dismiss="modal">Cancel</button>
+            <button type="submit" class="submit">Tambah</button>
+          </div>
+
         </form>
+      </div>
     </div>
-</div>
 
-{{-- Modal Detail Aktivitas Karir --}}
-<div class="modal" id="detailAktivitasModal">
-    <div class="modal-dialog">
+    {{-- Modal Detail Aktivitas Karir --}}
+    <div class="modal" id="detailAktivitasModal">
+      <div class="modal-dialog">
         <div class="modal-content">
-            <div class="content6">
-                <div class="left-content6">
-                <h5>Detail Aktivitas Karir</h5>
-                </div>
-                    
-                <div class="right-content6">
-                    <button data-bs-dismiss="modal" class="close-button">
-                        <i class="fas fa-circle-xmark"></i>
-                    </button>
-                </div>
+          <div class="content6">
+            <div class="left-content6">
+              <h5>Detail Aktivitas Karir</h5>
             </div>
-            @foreach($career as $item)
-                <div class="form-grid">
-                    <div class="form-group">
-                        <h4>Nama Role</h4>
-                        <p>{{ $item->nama_role }}</p>
-                    </div>
 
-                    <div class="form-group">
-                        <h4>Regional/Direktorat</h4>
-                        <p>{{ $item->regional_direktorat }}</p>
-                    </div>
+            <div class="right-content6">
+              <button data-bs-dismiss="modal" class="close-button">
+                <i class="fas fa-circle-xmark"></i>
+              </button>
+            </div>
+          </div>
+          @foreach($career as $item)
+          <div class="form-grid">
+            <div class="form-group">
+              <h4>Nama Role</h4>
+              <p>{{ $item->nama_role }}</p>
+            </div>
 
-                    <div class="form-group">
-                        <h4>Unit/Sub Unit</h4>
-                        <p>{{ $item->unitSub }}</p>
-                    </div>
+            <div class="form-group">
+              <h4>Regional/Direktorat</h4>
+              <p>{{ $item->regional_direktorat }}</p>
+            </div>
 
-                    <div class="form-group">
-                        <h4>Band</h4>
-                        <p>{{ $item->band_posisi }}</p>
-                    </div>
+            <div class="form-group">
+              <h4>Unit/Sub Unit</h4>
+              <p>{{ $item->unitSub }}</p>
+            </div>
 
-                    <div class="form-group">
-                        <h4>Deskripsi</h4>
-                        <p>{{ $item->deskripsi }}</p>
-                    </div>
+            <div class="form-group">
+              <h4>Band</h4>
+              <p>{{ $item->band_posisi }}</p>
+            </div>
 
-                    @if($item->tanggalKDMP)
-                        <div class="form-group">
-                            <h4>Tanggal Promosi</h4>
-                            <p>{{ \Carbon\Carbon::parse($item->tanggalKDMP)->format('d F Y') }}</p>
-                        </div>
-                    @endif
+            <div class="form-group">
+              <h4>Deskripsi</h4>
+              <p>{{ $item->deskripsi }}</p>
+            </div>
 
-                    @if($item->tanggalBand)
-                        <div class="form-group">
-                            <h4>Tanggal Band Posisi Terakhir</h4>
-                            <p>{{ \Carbon\Carbon::parse($item->tanggalBand)->format('d F Y') }}</p>
-                        </div>
-                    @endif
+            @if($item->tanggalKDMP)
+            <div class="form-group">
+              <h4>Tanggal Promosi</h4>
+              <p>{{ \Carbon\Carbon::parse($item->tanggalKDMP)->format('d F Y') }}</p>
+            </div>
+            @endif
 
-                    @if($item->tanggalTKWT)
-                        <div class="form-group">
-                            <h4>Tanggal TKWT</h4>
-                            <p>{{ \Carbon\Carbon::parse($item->tanggalTKWT)->format('d F Y') }}</p>
-                        </div>
-                    @endif
+            @if($item->tanggalBand)
+            <div class="form-group">
+              <h4>Tanggal Band Posisi Terakhir</h4>
+              <p>{{ \Carbon\Carbon::parse($item->tanggalBand)->format('d F Y') }}</p>
+            </div>
+            @endif
+
+            @if($item->tanggalTKWT)
+            <div class="form-group">
+              <h4>Tanggal TKWT</h4>
+              <p>{{ \Carbon\Carbon::parse($item->tanggalTKWT)->format('d F Y') }}</p>
+            </div>
+            @endif
 
 
-                    @if($item->dokumenSK)
-                        <div class="form-group">
-                            <h4>Dokumen SK</h4>
-                            <a href="{{ asset('storage/'.$item->dokumenSK) }}" target="_blank">Klik Untuk Melihat</a>                    
-                        </div>
-                    @endif
+            @if($item->dokumenSK)
+            <div class="form-group">
+              <h4>Dokumen SK</h4>
+              <a href="{{ asset('storage/'.$item->dokumenSK) }}" target="_blank">Klik Untuk Melihat</a>
+            </div>
+            @endif
 
-                    @if($item->dokumen_nota_dinas)
-                        <div class="form-group">
-                            <h4>Dokumen Nota Dinas</h4>
-                            <a href="{{ asset('storage/'.$item->dokumen_nota_dinas) }}" target="_blank">Klik Untuk Melihat</a>                    
-                        </div>
-                    @endif
+            @if($item->dokumen_nota_dinas)
+            <div class="form-group">
+              <h4>Dokumen Nota Dinas</h4>
+              <a href="{{ asset('storage/'.$item->dokumen_nota_dinas) }}" target="_blank">Klik Untuk Melihat</a>
+            </div>
+            @endif
 
-                    @if($item->dokumen_lainnya)
-                        <div class="form-group">
-                            <h4>Dokumen Lainnya</h4>
-                            <a href="{{ asset('storage/'.$item->dokumen_lainnya) }}" target="_blank">Klik Untuk Melihat</a>                    
-                        </div>
-                    @endif
-                </div>
-            @endforeach
+            @if($item->dokumen_lainnya)
+            <div class="form-group">
+              <h4>Dokumen Lainnya</h4>
+              <a href="{{ asset('storage/'.$item->dokumen_lainnya) }}" target="_blank">Klik Untuk Melihat</a>
+            </div>
+            @endif
+          </div>
+          @endforeach
         </div>
-    </div>
-</div>
-
-
-<div class="modal fade" id="infoModal">
-  <div class="modal-dialog">
-    <div class="modal-content p-3">
-      <div class="form-check">
-        <input class="form-check-input info-option" type="checkbox" name="tanggalKDMP" value="Tanggal KDMP" id="info1">
-        <label class="form-check-label" for="info1">Tanggal KDMP</label>
-      </div>
-      <div class="form-check">
-        <input class="form-check-input info-option" type="checkbox" name="tanggalTKWT" value="Tanggal TKWT" id="info2">
-        <label class="form-check-label" for="info2">Tanggal TKWT</label>
-      </div>
-      <div class="form-check">
-        <input class="form-check-input info-option" type="checkbox" name="tanggal_akhirTKWT" value="Tanggal Akhir TKWT" id="info3">
-        <label class="form-check-label" for="info3">Tanggal Akhir TKWT</label>
-      </div>
-      <div class="form-check">
-        <input class="form-check-input info-option" type="checkbox" name="tanggal_mutasi" value="Tanggal Mutasi" id="info4">
-        <label class="form-check-label" for="info4">Tanggal Mutasi</label>
-      </div>
-      <div class="form-check">
-        <input class="form-check-input info-option" type="checkbox" name="tanggalPJ" value="Tanggal PJ" id="info5">
-        <label class="form-check-label" for="info5">Tanggal PJ</label>
-      </div>
-      <div class="form-check">
-        <input class="form-check-input info-option" type="checkbox" name="tanggal_lepasPJ" value="Tanggal Lepas PJ" id="info6">
-        <label class="form-check-label" for="info6">Tanggal Lepas PJ</label>
-      </div>
-      <div class="form-check">
-        <input class="form-check-input info-option" type="checkbox" name="tanggalBand" value="Tanggal Band Posisi Terakhir" id="info7">
-        <label class="form-check-label" for="info7">Tanggal Band Posisi Terakhir</label>
-      </div>
-      <div class="form-check">
-        <input class="form-check-input info-option" type="checkbox" name="tanggal_pensiun" value="Tanggal Pensiun" id="info8">
-        <label class="form-check-label" for="info8">Tanggal Pensiun</label>
-      </div>
-      <div class="form-check">
-        <input class="form-check-input info-option" type="checkbox" name="tanggal_akhir_kontrak" value="Tanggal Akhir Kontrak" id="info9">
-        <label class="form-check-label" for="info9">Tanggal Akhir Kontrak</label>
-      </div>
-      <div class="form-check">
-        <input class="form-check-input info-option" type="checkbox" name="dokumenSK" value="Dokumen SK" id="info10">
-        <label class="form-check-label" for="info10">Dokumen SK</label>
-      </div>
-      <div class="form-check">
-        <input class="form-check-input info-option" type="checkbox" name="dokumen_nota_dinas" value="Dokumen Nota Dinas" id="info11">
-        <label class="form-check-label" for="info11">Dokumen Nota Dinas</label>
-      </div>
-      <div class="form-check">
-        <input class="form-check-input info-option" type="checkbox" name="dokumen_lainnya" value="Dokumen Lainnya" id="info12">
-        <label class="form-check-label" for="info12">Dokumen Lainnya</label>
-      </div>
-
-      <div class="buttons1">
-        <button type="button" class="cancel1" data-bs-dismiss="modal">Cancel</button>
-        <button type="button" class="simpan1" id="saveInfo">Simpan</button>
       </div>
     </div>
-  </div>
-</div>
 
-    
+
+    <div class="modal fade" id="infoModal">
+      <div class="modal-dialog">
+        <div class="modal-content p-3">
+          <div class="form-check">
+            <input class="form-check-input info-option" type="checkbox" name="tanggalKDMP" value="Tanggal KDMP" id="info1">
+            <label class="form-check-label" for="info1">Tanggal KDMP</label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input info-option" type="checkbox" name="tanggalTKWT" value="Tanggal TKWT" id="info2">
+            <label class="form-check-label" for="info2">Tanggal TKWT</label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input info-option" type="checkbox" name="tanggal_akhirTKWT" value="Tanggal Akhir TKWT" id="info3">
+            <label class="form-check-label" for="info3">Tanggal Akhir TKWT</label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input info-option" type="checkbox" name="tanggal_mutasi" value="Tanggal Mutasi" id="info4">
+            <label class="form-check-label" for="info4">Tanggal Mutasi</label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input info-option" type="checkbox" name="tanggalPJ" value="Tanggal PJ" id="info5">
+            <label class="form-check-label" for="info5">Tanggal PJ</label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input info-option" type="checkbox" name="tanggal_lepasPJ" value="Tanggal Lepas PJ" id="info6">
+            <label class="form-check-label" for="info6">Tanggal Lepas PJ</label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input info-option" type="checkbox" name="tanggalBand" value="Tanggal Band Posisi Terakhir" id="info7">
+            <label class="form-check-label" for="info7">Tanggal Band Posisi Terakhir</label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input info-option" type="checkbox" name="tanggal_pensiun" value="Tanggal Pensiun" id="info8">
+            <label class="form-check-label" for="info8">Tanggal Pensiun</label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input info-option" type="checkbox" name="tanggal_akhir_kontrak" value="Tanggal Akhir Kontrak" id="info9">
+            <label class="form-check-label" for="info9">Tanggal Akhir Kontrak</label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input info-option" type="checkbox" name="dokumenSK" value="Dokumen SK" id="info10">
+            <label class="form-check-label" for="info10">Dokumen SK</label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input info-option" type="checkbox" name="dokumen_nota_dinas" value="Dokumen Nota Dinas" id="info11">
+            <label class="form-check-label" for="info11">Dokumen Nota Dinas</label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input info-option" type="checkbox" name="dokumen_lainnya" value="Dokumen Lainnya" id="info12">
+            <label class="form-check-label" for="info12">Dokumen Lainnya</label>
+          </div>
+
+          <div class="buttons1">
+            <button type="button" class="cancel1" data-bs-dismiss="modal">Cancel</button>
+            <button type="button" class="simpan1" id="saveInfo">Simpan</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
 
     <script>
       function removeFile(field) {
@@ -3268,40 +3281,40 @@
       }
     </script>
 
-  <script>
-  // Toggle dropdown
-  function toggleDropdown(id) {
-    const menu = document.getElementById(id);
-    menu.classList.toggle('hidden');
-  }
-
-  // Tutup dropdown kalau klik di luar
-  document.addEventListener('click', function(e) {
-    const dropdowns = document.querySelectorAll('[id^="actionMenuCluster"]');
-    dropdowns.forEach(menu => {
-      if (!menu.parentElement.contains(e.target)) {
-        menu.classList.add('hidden');
+    <script>
+      // Toggle dropdown
+      function toggleDropdown(id) {
+        const menu = document.getElementById(id);
+        menu.classList.toggle('hidden');
       }
-    });
-  });
 
-  // Buka modal edit cluster
-  function openEditClusterPopup(clusterId, periode, tahun, cluster) {
-    document.getElementById('editPeriodeCluster').value = periode;
-    document.getElementById('editTahunCluster').value = tahun;
-    document.getElementById('editTalentCluster').value = cluster;
+      // Tutup dropdown kalau klik di luar
+      document.addEventListener('click', function(e) {
+        const dropdowns = document.querySelectorAll('[id^="actionMenuCluster"]');
+        dropdowns.forEach(menu => {
+          if (!menu.parentElement.contains(e.target)) {
+            menu.classList.add('hidden');
+          }
+        });
+      });
 
-    let form = document.getElementById('editClusterForm');
-    form.action = `/employees/{{ $employee->id }}/clusters/${clusterId}`;
+      // Buka modal edit cluster
+      function openEditClusterPopup(clusterId, periode, tahun, cluster) {
+        document.getElementById('editPeriodeCluster').value = periode;
+        document.getElementById('editTahunCluster').value = tahun;
+        document.getElementById('editTalentCluster').value = cluster;
 
-    document.getElementById('editClusterModal').classList.remove('hidden');
-  }
+        let form = document.getElementById('editClusterForm');
+        form.action = `/employees/{{ $employee->id }}/clusters/${clusterId}`;
 
-  // Tutup modal edit cluster
-  function closeEditClusterPopup() {
-    document.getElementById('editClusterModal').classList.add('hidden');
-  }
-</script>
+        document.getElementById('editClusterModal').classList.remove('hidden');
+      }
+
+      // Tutup modal edit cluster
+      function closeEditClusterPopup() {
+        document.getElementById('editClusterModal').classList.add('hidden');
+      }
+    </script>
 
 
 
@@ -3372,7 +3385,7 @@
       }
     </script>
 
-  
+
 
 
 
@@ -3647,22 +3660,22 @@
       }
     </script>
     <script>
-document.addEventListener("DOMContentLoaded", function() {
-  const tambahBtn = document.querySelectorAll(".btn-add"); 
-  const modal = document.getElementById("tambahAktivitasModal");
+      document.addEventListener("DOMContentLoaded", function() {
+        const tambahBtn = document.querySelectorAll(".btn-add");
+        const modal = document.getElementById("tambahAktivitasModal");
 
-  tambahBtn.forEach(btn => {
-    btn.addEventListener("click", function(e) {
-      e.preventDefault();
-      modal.style.display = "flex"; // atau "block" sesuai CSS kamu
-    });
-  });
+        tambahBtn.forEach(btn => {
+          btn.addEventListener("click", function(e) {
+            e.preventDefault();
+            modal.style.display = "flex"; // atau "block" sesuai CSS kamu
+          });
+        });
 
-  // Tutup modal kalau klik tombol close
-  document.querySelectorAll('[data-bs-dismiss="modal"]').forEach(btn => {
-    btn.addEventListener("click", function() {
-      modal.style.display = "none";
-    });
-  });
-});
-</script>
+        // Tutup modal kalau klik tombol close
+        document.querySelectorAll('[data-bs-dismiss="modal"]').forEach(btn => {
+          btn.addEventListener("click", function() {
+            modal.style.display = "none";
+          });
+        });
+      });
+    </script>
