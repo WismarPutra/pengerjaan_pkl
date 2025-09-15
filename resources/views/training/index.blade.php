@@ -991,7 +991,7 @@
           </th>
           <th class="sticky right-0 z-30 bg-gray-100 px-3 py-1 border-b">Actions</th>
         </tr>
-        @foreach($training as $training)
+        @foreach($trainingss as $training)
         <tr>
           <td class="sticky left-0 z-20 bg-gray-100 px-3 py-1 border-b">{{ $loop->iteration }}</td>
           <td>{{ $training->nama_training }}</td>
@@ -1049,7 +1049,7 @@
           class="w-24 border-2 border-black rounded-md px-2 py-1"
           onchange="this.form.submit()">
           @for ($i = 1; $i <= 10; $i++)
-            <option value="{{ $i }}" {{ $perPage == $i ? 'selected' : '' }}>
+            <option value="{{ $i }}" {{ $perPage = $i ? 'selected' : '' }}>
             {{ $i }}
             </option>
             @endfor
@@ -1061,10 +1061,10 @@
   </div>
 </div>
 
+
 <!-- TRAINING NEEDS ANALYSIS -->
 
-<div id="trainingNeedsAnalysis" class="tab-content content-header-flex overflow-x-hidden" style="width:160vh; margin-left: 42vh;">
-
+<div id="trainingNeedsAnalysis" class="tab-content content-header-flex hidden" style="width:160vh; margin-left: 42vh; display:none;">
   <!-- KONTEN UTAMA TRAININGS NEEDS-->
   <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; flex-wrap: wrap;">
     <div style="display: flex; flex-direction: column; gap: 6px;">
@@ -1087,7 +1087,7 @@
       </div>
       <button class="export-btn"><i class="fas fa-upload"></i> Export</button>
       <button class="filter-btn" onclick="toggleFilter()"><i class="fas fa-sliders"></i> Filters</button>
-      <a href="{{ route('training.create') }}" class="create-btn" onclick="toggleCreate()"><i class="fas fa-download"></i>Import</a>
+      <a href="{{ route('training.create') }}" class="create-btn"><i class="fas fa-download"></i>Import</a>
     </div>
   </div>
 
@@ -1341,12 +1341,12 @@
     <form method="GET" action="{{ route('training.index') }}">
       <select
         name="per_page"
-        id="per_page"
+        id="#"
         class="w-24 border-2 border-black rounded-md px-2 py-1"
         onchange="this.form.submit()">
-        @for ($i = 1; $i <= 10; $i++)
-          <option value="{{ $i }}" {{ $perPage == $i ? 'selected' : '' }}>
-          {{ $i }}
+        @for ($a = 1; $a <= 10; $a++)
+          <option value="{{ $a }}" {{ $perPage = $a ? 'selected' : '' }}>
+          {{ $a }}
           </option>
           @endfor
       </select>
