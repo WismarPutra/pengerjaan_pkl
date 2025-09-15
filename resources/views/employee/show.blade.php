@@ -3247,9 +3247,9 @@ document.addEventListener('DOMContentLoaded', function() {
     function labelSkala(val) {
       if (!val) return "-";
       const num = parseInt(val);
-      if (num >= 9) return `${num} (Sangat Baik)`;
-      if (num >= 7) return `${num} (Baik)`;
-      if (num >= 4) return `${num} (Cukup Baik)`;
+      if (num >= 9) return `${num} (Sangat Setuju)`;
+      if (num >= 5) return `${num} (Setuju)`;
+      if (num <= 4) return `${num} (Tidak Setuju)`;
       return `${num} (Kurang Baik)`;
     }
 
