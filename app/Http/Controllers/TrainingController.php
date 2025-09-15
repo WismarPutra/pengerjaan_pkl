@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Training;
+use Illuminate\Support\Facades\DB;
 
 class TrainingController extends Controller
 {
@@ -20,10 +21,18 @@ class TrainingController extends Controller
         $totalTraining = Training::count();
         $persenTna = $totalTraining > 0 ? ($tna / $totalTraining) * 100 : 0;
 
+        //Kelulusan
+        $kelulusan = Training::where('kelulusan', 'uploaded')->count();
+
+        //Total Kelulusan
+        $totalKelulusan = Training::count();
+        $persenKelulusan = $totalKelulusan > 0 ? ($kelulusan / $totalKelulusan) * 100 : 0;
+
 
         //Status
         $pelatihanBerjalan = Training::where('status', 'On Going')->count();
         $pelatihanDijadwalkan = Training::where('status', 'scheduled')->count();
+        $pelatihanTerlaksana = Training::where('status', 'completed')->count();
 
         $tanggalMulai = Training::orderBy('tanggal_mulai', 'desc')->get();
         $perPage = $request->get('per_page', 10);
@@ -44,6 +53,7 @@ class TrainingController extends Controller
             'nama_training',
             'status',
             'stream',
+            'keterangan',
             'keterangan',
             'partisipan',
             'tanggal_mulai',
@@ -78,7 +88,7 @@ class TrainingController extends Controller
         $sortBy = $request->input('sort_by_training', 'id');
         $sortOrder = $request->input('sort_order_training', 'asc');
 
-        $trainingss= Training::orderBy($sortBy, $sortOrder)->paginate($perPage);
+        $trainingss = Training::orderBy($sortBy, $sortOrder)->paginate($perPage);
         return view(
             'training.index',
             compact(
@@ -87,6 +97,7 @@ class TrainingController extends Controller
                 'totalPartisipan',
                 'tna',
                 'persenTna',
+                'persenKelulusan',
                 'nonTna',
                 'pelatihanBerjalan',
                 'pelatihanDijadwalkan',
@@ -100,7 +111,8 @@ class TrainingController extends Controller
                 'sortByTraining',
                 'sortBy',
                 'sortOrder',
-                'sortOrderTraining'
+                'sortOrderTraining',
+                'pelatihanTerlaksana',
             )
         );
     }
@@ -182,5 +194,23 @@ class TrainingController extends Controller
         $training->delete();
 
         return redirect()->route('training.index')->with('success', 'Training berhasil dihapus.');
+    }
+
+    public function upload(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|file|mimes:xlsx,xls,csv,pdf,docx|max:2048'
+        ]);
+
+        $file = $request->file('file');
+        $filename = time() . '_' . $file->getClientOriginalName();
+        $path = $file->storeAs('uploads/training', $filename, 'public');
+
+        DB::table('training_files')->insert([
+            'filename'   => $filename,
+            'path'       => $path,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
     }
 }

@@ -29,6 +29,7 @@ class Training extends Model
         'status',
         'stream',
         'keterangan',
+        'sertifikat',
         'tna',
         'nama',
         'nama_posisi',

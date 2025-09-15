@@ -4,7 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\DJM;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str; 
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\DB; 
 
 
 class DJMController extends Controller
