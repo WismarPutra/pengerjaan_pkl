@@ -30,6 +30,17 @@ class Employee extends Model
         'jurusan',
         'institusi_pendidikan',
         'tahun_lulus',
+        // tambahkan kolom dokumen
+    'ktp',
+    'kartu_keluarga',
+    'npwp',
+    'bpjs_ketenagakerjaan',
+    'bpjs_kesehatan',
+    'nota_dinas',
+    'psikotest',
+    'assessment_01',
+    'assessment_02',
+    'assessment_03',
     ];
 
     public function CareerActivity()
