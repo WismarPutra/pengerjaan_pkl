@@ -1774,26 +1774,181 @@
     gap: 10px;
   }
 
-  /* Tombol Edit */
-  .btn-edit {
-    background-color: white;
-    color: #2563EB;
-    /* biru */
-    border: 1.5px solid #2563EB;
-    padding: 6px 14px;
-    border-radius: 8px;
-    font-size: 14px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    transition: all 0.2s;
-  }
+  /* Tombol Tambah (biru solid) */
+.btn-add {
+  background-color: #3B82F6;   /* biru figma */
+  color: #fff;
+  font-size: 14px;
+  font-weight: 500;
+  padding: 8px 18px;
+  border-radius: 8px;
+  border: none;
+  transition: background-color 0.2s ease;
+}
+.btn-add:hover {
+  background-color: #2563EB;   /* biru lebih gelap */
+}
 
-  .btn-edit:hover {
-    background-color: #2563EB;
-    color: white;
-  }
+/* Tombol Delete (merah outline) */
+.btn-delete {
+  background-color: #fff;
+  color: #DC2626;              /* merah figma */
+  border: 1px solid #DC2626;
+  font-size: 14px;
+  font-weight: 500;
+  padding: 6px 14px;
+  border-radius: 6px;
+  margin-right: 6px;
+  transition: all 0.2s ease;
+}
+.btn-delete:hover {
+  background-color: #DC2626;
+  color: #fff;
+}
+
+/* Tombol Edit (biru outline) */
+.btn-edit {
+  background-color: #fff;
+  color: #3B82F6;              /* biru figma */
+  border: 1px solid #3B82F6;
+  font-size: 14px;
+  font-weight: 500;
+  padding: 6px 14px;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+}
+.btn-edit:hover {
+  background-color: #3B82F6;
+  color: #fff;
+}
+
+.timeline-actions {
+  display: flex;
+  justify-content: flex-end; /* dorong semua isi ke kanan */
+  gap: 8px; /* kasih jarak antar tombol */
+}
+
+.timeline-actions .btn-delete,
+.timeline-actions .btn-edit {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.btn-delete {
+  background: #e74c3c;
+  color: #fff;
+}
+
+.btn-edit {
+  background: #3498db;
+  color: #fff;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end; /* dorong isi ke kanan */
+  gap: 10px; /* kasih jarak antar tombol */
+  margin-top: 15px; /* biar ada spasi dari form */
+}
+
+.form-actions .btn-cancel,
+.form-actions .btn-save {
+  padding: 8px 16px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-cancel {
+  background: #ccc;
+  color: #333;
+  text-decoration: none; /* untuk <a> */
+}
+
+.btn-save {
+  background: #3498db;
+  color: #fff;
+}
+
+.info-dropdown {
+  position: absolute;
+  top: 60px;
+  right: 20px;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 15px;
+  width: 280px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  z-index: 1050;
+}
+
+.info-dropdown h6 {
+  margin-top: 0;
+  margin-bottom: 10px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.dropdown-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.btn-cancel {
+  background: #f1f1f1;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.btn-save {
+  background: #3b82f6; /* biru */
+  color: #fff;
+  border: none;
+  padding: 6px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.file-upload-wrapper {
+  display: flex;
+  align-items: center;
+  border: 1px solid #ddddddff;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #f9f9f9;
+}
+
+.file-upload-text {
+  flex: 1;
+  padding: 10px;
+  font-size: 14px;
+  color: #888;
+}
+
+.file-upload-btn {
+  background: #3b82f6; /* biru */
+  color: #fff;
+  border: none;
+  padding: 10px 16px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.file-upload-btn:hover {
+  background: #2563eb;
+}
+
+.file-upload-input {
+  display: none;
+}
+
 </style>
 
 <div class="navbar" style="z-index:1;">
@@ -2551,83 +2706,81 @@
     <!-- DOKUMEN DI HALAMAN EDIT -->
 
     <div class="tab-content" id="dokumen" style="display: none;">
-      <div class="w-[140vh] p-4 bg-white rounded-lg shadow-sm">
-<form action="{{ route('employees.documents.upload', $employee->id) }}" 
-      method="POST" 
-      enctype="multipart/form-data">
-    @csrf
-        <!-- Dokumen Personal -->
+  <div class="w-[140vh] p-4 bg-white rounded-lg shadow-sm">
+    <form action="{{ route('employees.documents.upload', $employee->id) }}" 
+          method="POST" 
+          enctype="multipart/form-data">
+      @csrf
+      <!-- Dokumen Personal -->
+      @php
+          $dokumens = [
+              'ktp' => 'KTP',
+              'kartu_keluarga' => 'Kartu Keluarga',
+              'npwp' => 'NPWP',
+              'bpjs_ketenagakerjaan' => 'BPJS Ketenagakerjaan',
+              'bpjs_kesehatan' => 'BPJS Kesehatan',
+              'nota_dinas' => 'Nota Dinas',
+          ];
+      @endphp
 
-@php
-    $dokumens = [
-        'ktp' => 'KTP',
-        'kartu_keluarga' => 'Kartu Keluarga',
-        'npwp' => 'NPWP',
-        'bpjs_ketenagakerjaan' => 'BPJS Ketenagakerjaan',
-        'bpjs_kesehatan' => 'BPJS Kesehatan',
-        'nota_dinas' => 'Nota Dinas',
-    ];
-@endphp
+      <div class="dokumen-grid-2">
+          @foreach ($dokumens as $name => $label)
+              <div class="form-group">
+                  <div class="label-group">
+                      <label for="{{ $name }}File">{{ $label }}</label>
+                      <label class="bintang">*</label>
+                  </div>
+                  <div class="file-input file-input-sm">
+                      <input type="file" name="{{ $name }}" id="{{ $name }}File" hidden required>
+                      <input type="text" class="file-text" id="{{ $name }}FileText" placeholder="Tambahkan file" readonly>
+                      <label for="{{ $name }}File" class="file-btn">Select</label>
+                  </div>
+              </div>
+          @endforeach
+      </div>
 
-<div class="dokumen-grid-2">
-    @foreach ($dokumens as $name => $label)
-        <div class="form-group">
-            <div class="label-group">
-                <label for="{{ $name }}File">{{ $label }}</label>
-                <label class="bintang">*</label>
-            </div>
-            <div class="file-input file-input-sm">
-                <input type="file" name="{{ $name }}" id="{{ $name }}File" hidden required>
-                <input type="text" class="file-text" id="{{ $name }}FileText" placeholder="Tambahkan file" readonly>
-                <label for="{{ $name }}File" class="file-btn">Select</label>
-            </div>
-        </div>
-    @endforeach
-</div>
+      <hr class="h-px my-8 bg-gray-200 border-0 dark:bg-gray-700">
 
+      <div class="flex align-middle justify-between">
+        <!-- Dokumen Lainnya -->
+        <h5 class="font-semibold text-gray-800 mb-3">Dokumen Lainnya</h5>
+        <!-- Tombol Tambah -->
+        <button type="button" class="mb-4 px-4 py-2 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700">
+          + Tambah
+        </button>
+      </div>
 
-        <hr class="h-px my-8 bg-gray-200 border-0 dark:bg-gray-700">
+      @php
+          $dokumens_assessment = [
+              ['psikotest' => 'Hasil Psikotest', 'assessment_01' => 'Hasil Assessment 01'],
+              ['assessment_02' => 'Hasil Assessment 02', 'assessment_03' => 'Hasil Assessment 03'],
+          ];
+      @endphp
 
-        <div class="flex align-middle justify-between">
-          <!-- Dokumen Lainnya -->
-          <h5 class="font-semibold text-gray-800 mb-3">Dokumen Lainnya</h5>
-          <!-- Tombol Tambah -->
-          <button type="button" class="mb-4 px-4 py-2 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700">
-            + Tambah
-        </div>
-        @php
-    $dokumens_assessment = [
-        ['psikotest' => 'Hasil Psikotest', 'assessment_01' => 'Hasil Assessment 01'],
-        ['assessment_02' => 'Hasil Assessment 02', 'assessment_03' => 'Hasil Assessment 03'],
-    ];
-@endphp
-
-<div class="dokumen-grid-2">
-    @foreach ($dokumens_assessment as $row)
-        @foreach ($row as $name => $label)
-            <div class="form-group">
-                <label for="{{ $name }}File">{{ $label }}</label>
-                <div class="file-input file-input-sm">
-                    <input type="file" name="{{ $name }}" id="{{ $name }}File" hidden required>
-                    <input type="text" class="file-text" id="{{ $name }}FileText" placeholder="Belum ada file" readonly>
-                    <label for="{{ $name }}File" class="file-btn">Upload</label>
-                </div>
-            </div>
-        @endforeach
-    @endforeach
-</div>
+      <div class="dokumen-grid-2">
+          @foreach ($dokumens_assessment as $row)
+              @foreach ($row as $name => $label)
+                  <div class="form-group">
+                      <label for="{{ $name }}File">{{ $label }}</label>
+                      <div class="file-input file-input-sm">
+                          <input type="file" name="{{ $name }}" id="{{ $name }}File" hidden required>
+                          <input type="text" class="file-text" id="{{ $name }}FileText" placeholder="Belum ada file" readonly>
+                          <label for="{{ $name }}File" class="file-btn">Upload</label>
+                      </div>
+                  </div>
+              @endforeach
+          @endforeach
+      </div>
 
       {{-- === Action Button === --}}
-    <div class="flex justify-end mt-4">
-        <button type="button" class="btn btn-secondary" onclick="window.history.back()">Cancel</button>
-        <button type="submit" class="btn btn-primary ml-2">Save</button>
-    </div>
+      <div class="flex justify-end mt-4">
+          <button type="button" class="btn btn-secondary" onclick="window.history.back()">Cancel</button>
+          <button type="submit" class="btn btn-primary ml-2">Save</button>
+      </div>
+    </form>
 
-  </form>
-
-
-    <!-- MODAL TAMBAH ANAK -->
-
+    <!-- Semua modal (anak, cluster, edit cluster) tetap di sini -->
+    {{-- MODAL TAMBAH ANAK --}}
     <div id="addModal" class="hidden fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50" style="padding-left:400px; padding-top:60px;">
       <div class="bg-white rounded-2xl shadow-lg w-full max-w-3xl p-6">
         <!-- Header -->
@@ -2731,8 +2884,8 @@
       </div>
     </div>
 
-    <!-- CLUSTER TAMBAH MODAL -->
-    <div id="addClusterModal">
+    {{-- MODAL CLUSTER TAMBAH --}}
+     <div id="addClusterModal">
       <div class="modal-content">
         <div class="">
           <div class="">
@@ -2794,6 +2947,7 @@
       </div>
     </div>
 
+    {{-- MODAL CLUSTER EDIT --}}
     <div id="editClusterModal" class="hidden fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
       <div class="bg-white rounded-lg shadow-lg p-6 w-[600px]">
         <h3 class="text-lg font-bold mb-4">Edit Talent Cluster</h3>
@@ -2832,18 +2986,19 @@
         </form>
       </div>
     </div>
+  </div>
+</div>
 
 
 
     <!-- AKTIVITAS CAREER -->
 
-    <div class="tab-content" id="karir" style="display: none;">
-      <!-- Bagian Aktivitas Karir -->
-      <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; flex-wrap: wrap;">
-        <h2 class="left-section9">Aktivitas Karir</h2>
-        <button type="button" class="btn-add">+ Tambah</button>
-      </div>
-
+<div class="tab-content" id="karir">
+  <!-- Bagian Aktivitas Karir -->
+  <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; flex-wrap: wrap;">
+    <h2 class="left-section9">Aktivitas Karir</h2>
+   <button type="button" class="btn-add" data-bs-toggle="modal" data-bs-target="#tambahAktivitasModal">+ Tambah</button>
+  </div>
 
   <div class="timeline-container">
     <div class="timeline-group">
@@ -2851,14 +3006,13 @@
         <div class="timeline-year">2023</div>
         <div class="timeline-content">
           <h4 class="role-title text-blue-600 cursor-pointer" onclick="openModal('modalRole1')">
-        Nama Role Sekarang
-      </h4>
-      <p class="sub-info">Maret 2023 - Sekarang (3 Tahun 1 Bulan) • Nama Direktorat • Band Level V</p>
-      <p class="promo-date">Tanggal Promosi: 1 Maret 2023</p>
-      <p class="description">
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus error eveniet...
-      </p>
-
+            Nama Role Sekarang
+          </h4>
+          <p class="sub-info">Maret 2023 - Sekarang (3 Tahun 1 Bulan) • Nama Direktorat • Band Level V</p>
+          <p class="promo-date">Tanggal Promosi: 1 Maret 2023</p>
+          <p class="description">
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus error eveniet...
+          </p>
 
           <!-- tombol action -->
           <div class="timeline-actions">
@@ -2869,408 +3023,338 @@
               <i class="fa-solid fa-pen"></i> Edit
             </button>
           </div>
+        </div>
+      </div>
 
-          <div class="timeline-item old">
-            <div class="timeline-year1">2020</div>
-            <div class="timeline-content">
-              <h4 class="role-title1">PJ Role ABC</h4>
-              <p class="sub-info">Januari 2020 - Februari 2023 (3 Tahun 2 Bulan) • Nama Direktorat • Band Level V</p>
-              <p class="promo-date">Tanggal Menjadi PJ: 3 Feb 2021</p>
-              <p class="description">
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Praesentium illo alias ut impedit nihil eum molestias cupiditate eligendi numquam! Quae ex non quis autem esse! Eveniet nemo culpa porro nisi!
-              </p>
+      <div class="timeline-item old">
+        <div class="timeline-year1">2020</div>
+        <div class="timeline-content">
+          <h4 class="role-title1">PJ Role ABC</h4>
+          <p class="sub-info">Januari 2020 - Februari 2023 (3 Tahun 2 Bulan) • Nama Direktorat • Band Level V</p>
+          <p class="promo-date">Tanggal Menjadi PJ: 3 Feb 2021</p>
+          <p class="description">
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Praesentium illo alias ut impedit nihil eum molestias cupiditate eligendi numquam! Quae ex non quis autem esse! Eveniet nemo culpa porro nisi!
+          </p>
 
-              <!-- tombol action -->
-              <div class="timeline-actions">
-                <button class="btn-delete">
-                  <i class="fa-solid fa-trash"></i> Delete
-                </button>
-                <button class="btn-edit">
-                  <i class="fa-solid fa-pen"></i> Edit
-                </button>
-              </div>
-            </div>
-          </div>
-
-          <div class="timeline-item old">
-            <div class="timeline-year1">2011</div>
-            <div class="timeline-content">
-              <h4 class="role-title1">Staff Posisi ABC</h4>
-              <p class="sub-info">Januari 2011 - Desember 2020 (8 Tahun 11 Bulan) • Nama Direktorat • Band Level V</p>
-              <p class="promo-date">Tanggal Karyawan Tetap: 1 Januari 2011</p>
-              <p class="description">
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Maiores ad reprehenderit nesciunt cumque iste accusantium, eligendi quidem dolorum. Impedit facilis molestias quibusdam. Earum laborum ea, eligendi molestias in eos error.
-              </p>
-
-              <!-- tombol action -->
-              <div class="timeline-actions">
-                <button class="btn-delete">
-                  <i class="fa-solid fa-trash"></i> Delete
-                </button>
-                <button class="btn-edit">
-                  <i class="fa-solid fa-pen"></i> Edit
-                </button>
-              </div>
-            </div>
+          <!-- tombol action -->
+          <div class="timeline-actions">
+            <button class="btn-delete">
+              <i class="fa-solid fa-trash"></i> Delete
+            </button>
+            <button class="btn-edit">
+              <i class="fa-solid fa-pen"></i> Edit
+            </button>
           </div>
         </div>
       </div>
 
-      <hr class="divider">
+      <div class="timeline-item old">
+        <div class="timeline-year1">2011</div>
+        <div class="timeline-content">
+          <h4 class="role-title1">Staff Posisi ABC</h4>
+          <p class="sub-info">Januari 2011 - Desember 2020 (8 Tahun 11 Bulan) • Nama Direktorat • Band Level V</p>
+          <p class="promo-date">Tanggal Karyawan Tetap: 1 Januari 2011</p>
+          <p class="description">
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Maiores ad reprehenderit nesciunt cumque iste accusantium, eligendi quidem dolorum. Impedit facilis molestias quibusdam. Earum laborum ea, eligendi molestias in eos error.
+          </p>
 
-      <!-- Bagian Histori Pekerjaan -->
-      <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; flex-wrap: wrap;">
-        <h2 class="left-section10">Histori Pekerjaan Sebelumnya</h2>
-        <button class="btn-add">+ Tambah</button>
-      </div>
-
-      <div class="timeline-container1">
-        <div class="timeline-group">
-          <div class="timeline-item old">
-            <div class="timeline-year1">2010</div>
-            <div class="timeline-content">
-              <h4 class="role-title1">Role Pekerjaan Sebelumnya</h4>
-              <p class="sub-info">PT Nama Perusahaan</p>
-              <p class="promo-date">April 2010 - Desember 2010 (9 Bulan)</p>
-              <p class="description">
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Id adipisci eligendi animi ad ipsa alias officiis veritatis! Perferendis veniam voluptates, omnis porro, architecto mollitia laudantium laborum rerum rem vel assumenda.
-              </p>
-
-              <!-- tombol action -->
-              <div class="timeline-actions">
-                <button class="btn-delete">
-                  <i class="fa-solid fa-trash"></i> Delete
-                </button>
-                <button class="btn-edit">
-                  <i class="fa-solid fa-pen"></i> Edit
-                </button>
-              </div>
-            </div>
+          <!-- tombol action -->
+          <div class="timeline-actions">
+            <button class="btn-delete">
+              <i class="fa-solid fa-trash"></i> Delete
+            </button>
+            <button class="btn-edit">
+              <i class="fa-solid fa-pen"></i> Edit
+            </button>
           </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
-          <div class="timeline-item old">
-            <div class="timeline-year1">2010</div>
-            <div class="timeline-content">
-              <h4 class="role-title1">Role Pekerjaan Sebelumnya</h4>
-              <p class="sub-info">PT Nama Perusahaan</p>
-              <p class="promo-date">Januari 2010 - Maret 2010 (3 Bulan)</p>
-              <p class="description">
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolorum soluta quaerat at accusamus repudiandae consequatur eum ut perferendis blanditiis dicta laboriosam rem incidunt hic iste itaque quidem vitae, deleniti possimus.
-              </p>
+  <hr class="divider">
 
-              <!-- tombol action -->
-              <div class="timeline-actions">
-                <button class="btn-delete">
-                  <i class="fa-solid fa-trash"></i> Delete
-                </button>
-                <button class="btn-edit">
-                  <i class="fa-solid fa-pen"></i> Edit
-                </button>
-              </div>
-            </div>
+  <!-- Bagian Histori Pekerjaan -->
+  <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; flex-wrap: wrap;">
+    <h2 class="left-section10">Histori Pekerjaan Sebelumnya</h2>
+    <button class="btn-add">+ Tambah</button>
+  </div>
+
+  <div class="timeline-container1">
+    <div class="timeline-group">
+      <div class="timeline-item old">
+        <div class="timeline-year1">2010</div>
+        <div class="timeline-content">
+          <h4 class="role-title1">Role Pekerjaan Sebelumnya</h4>
+          <p class="sub-info">PT Nama Perusahaan</p>
+          <p class="promo-date">April 2010 - Desember 2010 (9 Bulan)</p>
+          <p class="description">
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Id adipisci eligendi animi ad ipsa alias officiis veritatis! Perferendis veniam voluptates, omnis porro, architecto mollitia laudantium laborum rerum rem vel assumenda.
+          </p>
+
+          <!-- tombol action -->
+          <div class="timeline-actions">
+            <button class="btn-delete">
+              <i class="fa-solid fa-trash"></i> Delete
+            </button>
+            <button class="btn-edit">
+              <i class="fa-solid fa-pen"></i> Edit
+            </button>
           </div>
         </div>
       </div>
 
+      <div class="timeline-item old">
+        <div class="timeline-year1">2010</div>
+        <div class="timeline-content">
+          <h4 class="role-title1">Role Pekerjaan Sebelumnya</h4>
+          <p class="sub-info">PT Nama Perusahaan</p>
+          <p class="promo-date">Januari 2010 - Maret 2010 (3 Bulan)</p>
+          <p class="description">
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolorum soluta quaerat at accusamus repudiandae consequatur eum ut perferendis blanditiis dicta laboriosam rem incidunt hic iste itaque quidem vitae, deleniti possimus.
+          </p>
+
+          <!-- tombol action -->
+          <div class="timeline-actions">
+            <button class="btn-delete">
+              <i class="fa-solid fa-trash"></i> Delete
+            </button>
+            <button class="btn-edit">
+              <i class="fa-solid fa-pen"></i> Edit
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <!-- Save / Cancel di bawah -->
   <div class="form-actions">
     <a href="{{ route('employees.show', $employee->id) }}" class="btn-cancel">Cancel</a>
     <button type="submit" class="btn-save">Save</button>
-</div>
+  </div>
 </div>
 
-<!-- Modal -->
-<div id="modalRole1" 
-     class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+<!-- Modal Detail Aktivitas Karir -->
+<div id="modalRole1" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
   <div class="bg-white p-6 rounded-2xl w-3/4 max-w-3xl shadow-lg relative">
-    <!-- Tombol close -->
-    <button class="absolute top-4 right-4 text-gray-500 hover:text-gray-700 text-2xl" 
-            onclick="closeModal('modalRole1')">&times;</button>
+    <button class="absolute top-4 right-4 text-gray-500 hover:text-gray-700 text-2xl" onclick="closeModal('modalRole1')">&times;</button>
+    <h3 class="text-xl font-semibold text-gray-800 mb-6">Detail Aktivitas Karir</h3>
 
-    <!-- Header -->
-    <h3 class="text-xl font-semibold text-gray-800 mb-6">
-      Detail Aktivitas Karir
-    </h3>
-
-    <!-- Isi grid 2 kolom -->
     <div class="grid grid-cols-2 gap-y-4 gap-x-8 text-gray-700">
       <p><span class="font-normal">Nama Role</span><br><span class="font-semibold">Nama Role Sekarang</span></p>
       <p><span class="font-normal">Regional/Direktorat</span><br><span class="font-semibold">Nama Direktorat</span></p>
-
       <p><span class="font-normal">Unit/Sub Unit</span><br><span class="font-semibold">Band</span></p>
       <p><span class="font-normal">Nama Sub Unit</span><br><span class="font-semibold">Band Level V</span></p>
-
       <p><span class="font-normal">Deskripsi</span><br><span class="font-semibold">Tanggal Promosi</span></p>
       <p><span class="font-normal">Deskripsi singkat aktivitas karir</span><br><span class="font-semibold">1 Maret 2023</span></p>
-
-      <p><span class="font-normal">Dokumen SK</span><br>
-         <a href="#" class="text-blue-600 hover:underline">Klik untuk Melihat</a>
-      </p>
-      <p><span class="font-normal">Dokumen Nota Dinas</span><br>
-         <a href="#" class="text-blue-600 hover:underline">Klik untuk Melihat</a>
-      </p>
+      <p><span class="font-normal">Dokumen SK</span><br><a href="#" class="text-blue-600 hover:underline">Klik untuk Melihat</a></p>
+      <p><span class="font-normal">Dokumen Nota Dinas</span><br><a href="#" class="text-blue-600 hover:underline">Klik untuk Melihat</a></p>
     </div>
   </div>
 </div>
 
-    {{-- Modal Tambah Aktivitas --}}
-    <div class="modal" id="tambahAktivitasModal">
-      <div class="modal-dialog">
-        <form action="{{ route('employee.career.store', $employee->id) }}" method="POST" enctype="multipart/form-data" class="modal-content">
-          @csrf
-          <div class="content6">
-            <div class="left-content6">
-              <h5>Tambah Aktivitas Karir</h5>
-            </div>
-
-            <div class="right-content6">
-
-              <a href="javascript:void(0)" class="addInfo-btn" id="openInfo">
-                <i class="fas fa-plus"></i>Tambah Informasi Lain
-              </a>
-
-              <button data-bs-dismiss="modal" class="close-button">
-                <i class="fas fa-circle-xmark"></i>
-              </button>
-            </div>
-          </div>
-          <div class="form-grid1">
-            <div class="form-group">
-              <div class="label-group">
-                <label>Nama Role</label>
-                <label class="bintang">*</label>
-              </div>
-              <input type="text" name="nama_role" class="form-control" required>
-            </div>
-
-            <div class="form-group">
-              <div class="label-group">
-                <label>Regional/Direktorat</label>
-                <label class="bintang">*</label>
-              </div>
-              <select name="regional_direktorat" class="form-control1" required>
-                <option disabled selected value=""></option>
-                <option value="blablabla">blablabla</option>
-                <option value="claclacla">claclacla</option>
-                <option value="dladladla">dladladla</option>
-              </select>
-            </div>
-
-            <div class="form-group">
-              <div class="label-group">
-                <label>Unit/Sub Direktorat</label>
-                <label class="bintang">*</label>
-              </div>
-              <select name="unitSub" class="form-control1" required>
-                <option disabled selected value=""></option>
-                <option value="blablabla">blablabla</option>
-                <option value="claclacla">claclacla</option>
-                <option value="dladladla">dladladla</option>
-              </select>
-            </div>
-
-            <div class="form-group">
-              <div class="label-group">
-                <label>Band</label>
-                <label class="bintang">*</label>
-              </div>
-              <select name="band_posisi" class="form-control1" required>
-                <option disabled selected value=""></option>
-                <option value="band level V">Band Level V</option>
-                <option value="claclacla">claclacla</option>
-                <option value="dladladla">dladladla</option>
-              </select>
-            </div>
-
-            <div class="form-group">
-              <div class="label-group">
-                <label>Deskripsi</label>
-                <label class="bintang">*</label>
-              </div>
-              <input type="text" name="deskripsi" class="form-control" required>
-            </div>
-
-            <div class="form-group">
-              <div class="label-group">
-                <label>Status PJ</label>
-                <label class="bintang">*</label>
-              </div>
-              <select name="statusPJ" class="form-control1" required>
-                <option disabled selected value=""></option>
-                <option value="blablabla">blablabla</option>
-                <option value="claclacla">claclacla</option>
-                <option value="dladladla">dladladla</option>
-              </select>
-            </div>
-
-
-            <!-- container untuk field tambahan -->
-            <div id="extraFields"></div>
-
-          </div>
-          <div class="form-buttons">
-            <button type="button" class="cancel" data-bs-dismiss="modal">Cancel</button>
-            <button type="submit" class="submit">Tambah</button>
-          </div>
-
-        </form>
-      </div>
-    </div>
-
-    {{-- Modal Detail Aktivitas Karir --}}
-    <div class="modal" id="detailAktivitasModal">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="content6">
-            <div class="left-content6">
-              <h5>Detail Aktivitas Karir</h5>
-            </div>
-
-            <div class="right-content6">
-              <button data-bs-dismiss="modal" class="close-button">
-                <i class="fas fa-circle-xmark"></i>
-              </button>
-            </div>
-          </div>
-          @foreach($career as $item)
-          <div class="form-grid">
-            <div class="form-group">
-              <h4>Nama Role</h4>
-              <p>{{ $item->nama_role }}</p>
-            </div>
-
-            <div class="form-group">
-              <h4>Regional/Direktorat</h4>
-              <p>{{ $item->regional_direktorat }}</p>
-            </div>
-
-            <div class="form-group">
-              <h4>Unit/Sub Unit</h4>
-              <p>{{ $item->unitSub }}</p>
-            </div>
-
-            <div class="form-group">
-              <h4>Band</h4>
-              <p>{{ $item->band_posisi }}</p>
-            </div>
-
-            <div class="form-group">
-              <h4>Deskripsi</h4>
-              <p>{{ $item->deskripsi }}</p>
-            </div>
-
-            @if($item->tanggalKDMP)
-            <div class="form-group">
-              <h4>Tanggal Promosi</h4>
-              <p>{{ \Carbon\Carbon::parse($item->tanggalKDMP)->format('d F Y') }}</p>
-            </div>
-            @endif
-
-            @if($item->tanggalBand)
-            <div class="form-group">
-              <h4>Tanggal Band Posisi Terakhir</h4>
-              <p>{{ \Carbon\Carbon::parse($item->tanggalBand)->format('d F Y') }}</p>
-            </div>
-            @endif
-
-            @if($item->tanggalTKWT)
-            <div class="form-group">
-              <h4>Tanggal TKWT</h4>
-              <p>{{ \Carbon\Carbon::parse($item->tanggalTKWT)->format('d F Y') }}</p>
-            </div>
-            @endif
-
-
-            @if($item->dokumenSK)
-            <div class="form-group">
-              <h4>Dokumen SK</h4>
-              <a href="{{ asset('storage/'.$item->dokumenSK) }}" target="_blank">Klik Untuk Melihat</a>
-            </div>
-            @endif
-
-            @if($item->dokumen_nota_dinas)
-            <div class="form-group">
-              <h4>Dokumen Nota Dinas</h4>
-              <a href="{{ asset('storage/'.$item->dokumen_nota_dinas) }}" target="_blank">Klik Untuk Melihat</a>
-            </div>
-            @endif
-
-            @if($item->dokumen_lainnya)
-            <div class="form-group">
-              <h4>Dokumen Lainnya</h4>
-              <a href="{{ asset('storage/'.$item->dokumen_lainnya) }}" target="_blank">Klik Untuk Melihat</a>
-            </div>
-            @endif
-          </div>
-          @endforeach
+{{-- Modal Tambah Aktivitas --}}
+<div class="modal" id="tambahAktivitasModal">
+  <div class="modal-dialog">
+    <form action="{{ route('employee.career.store', $employee->id) }}" method="POST" enctype="multipart/form-data" class="modal-content">
+      @csrf
+      <div class="content6">
+        <div class="left-content6">
+          <h5>Tambah Aktivitas Karir</h5>
+        </div>
+        <div class="right-content6">
+          <a href="javascript:void(0)" class="addInfo-btn" id="openInfo"><i class="fas fa-plus"></i>Tambah Informasi Lain</a>
+          <button data-bs-dismiss="modal" class="close-button"><i class="fas fa-circle-xmark"></i>
+        </button>
         </div>
       </div>
-    </div>
+
+      <div id="infoDropdown" class="info-dropdown" style="display:none;">
+  <h6>Tambah Informasi Lain</h6>
+  <div class="dropdown-content">
+    <label><input type="checkbox" name="tanggal_kdmp"> Tanggal KDMP</label><br>
+    <label><input type="checkbox" name="tanggal_tkwt"> Tanggal TKIWT</label><br>
+    <label><input type="checkbox" name="tanggal_akhir_tkwt"> Tanggal Akhir TKIWT</label><br>
+    <label><input type="checkbox" name="tanggal_mutasi"> Tanggal Mutasi</label><br>
+    <label><input type="checkbox" name="tanggal_pj"> Tanggal PJ</label><br>
+    <label><input type="checkbox" name="tanggal_lepas_pj"> Tanggal Lepas PJ</label><br>
+    <label><input type="checkbox" name="band_posisi_terakhir"> Tanggal Band Posisi Terakhir</label><br>
+    <label><input type="checkbox" name="tanggal_pensiun"> Tanggal Pensiun</label><br>
+    <label><input type="checkbox" name="tanggal_akhir_kontrak"> Tanggal Akhir Kontrak</label><br>
+    <label><input type="checkbox" name="dokumen_sk"> Dokumen SK</label><br>
+  <label><input type="checkbox" name="dokumen_nota_dinas"> Dokumen Nota Dinas</label><br>
+  <label><input type="checkbox" name="dokumen_lainnya"> Dokumen Lainnya</label><br>
+  </div>
+
+  <div class="dropdown-actions">
+    <button type="button" class="btn-cancel" id="closeDropdown">Cancel</button>
+    <button type="button" class="btn-save">Simpan</button>
+  </div>
+</div>
+
+      <div class="form-grid1">
+        <div class="form-group">
+          <div class="label-group">
+            <label>Nama Role</label><label class="bintang">*</label>
+          </div>
+          <input type="text" name="nama_role" class="form-control" required>
+        </div>
+
+        <div class="form-group">
+          <div class="label-group">
+            <label>Regional/Direktorat</label><label class="bintang">*</label>
+          </div>
+          <select name="regional_direktorat" class="form-control1" required>
+            <option disabled selected value=""></option>
+            <option value="blablabla">blablabla</option>
+            <option value="claclacla">claclacla</option>
+            <option value="dladladla">dladladla</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <div class="label-group">
+            <label>Unit/Sub Direktorat</label><label class="bintang">*</label>
+          </div>
+          <select name="unitSub" class="form-control1" required>
+            <option disabled selected value=""></option>
+            <option value="blablabla">blablabla</option>
+            <option value="claclacla">claclacla</option>
+            <option value="dladladla">dladladla</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <div class="label-group">
+            <label>Band</label><label class="bintang">*</label>
+          </div>
+          <select name="band_posisi" class="form-control1" required>
+            <option disabled selected value=""></option>
+            <option value="band level V">Band Level V</option>
+            <option value="claclacla">claclacla</option>
+            <option value="dladladla">dladladla</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <div class="label-group">
+            <label>Deskripsi</label><label class="bintang">*</label>
+          </div>
+          <input type="text" name="deskripsi" class="form-control" required>
+        </div>
+
+        <div class="form-group">
+          <div class="label-group">
+            <label>Status PJ</label><label class="bintang">*</label>
+          </div>
+          <select name="statusPJ" class="form-control1" required>
+            <option disabled selected value=""></option>
+            <option value="blablabla">blablabla</option>
+            <option value="claclacla">claclacla</option>
+            <option value="dladladla">dladladla</option>
+          </select>
+        </div>
+
+        <!-- container untuk field tambahan -->
+        <div id="extraFields"></div>
+      </div>
+
+      <div class="form-buttons">
+        <button type="button" class="cancel" data-bs-dismiss="modal">Cancel</button>
+        <button type="submit" class="submit">Tambah</button>
+      </div>
+    </form>
+  </div>
+</div>
 
 
-    <div class="modal fade" id="infoModal">
-      <div class="modal-dialog">
-        <div class="modal-content p-3">
-          <div class="form-check">
-            <input class="form-check-input info-option" type="checkbox" name="tanggalKDMP" value="Tanggal KDMP" id="info1">
-            <label class="form-check-label" for="info1">Tanggal KDMP</label>
-          </div>
-          <div class="form-check">
-            <input class="form-check-input info-option" type="checkbox" name="tanggalTKWT" value="Tanggal TKWT" id="info2">
-            <label class="form-check-label" for="info2">Tanggal TKWT</label>
-          </div>
-          <div class="form-check">
-            <input class="form-check-input info-option" type="checkbox" name="tanggal_akhirTKWT" value="Tanggal Akhir TKWT" id="info3">
-            <label class="form-check-label" for="info3">Tanggal Akhir TKWT</label>
-          </div>
-          <div class="form-check">
-            <input class="form-check-input info-option" type="checkbox" name="tanggal_mutasi" value="Tanggal Mutasi" id="info4">
-            <label class="form-check-label" for="info4">Tanggal Mutasi</label>
-          </div>
-          <div class="form-check">
-            <input class="form-check-input info-option" type="checkbox" name="tanggalPJ" value="Tanggal PJ" id="info5">
-            <label class="form-check-label" for="info5">Tanggal PJ</label>
-          </div>
-          <div class="form-check">
-            <input class="form-check-input info-option" type="checkbox" name="tanggal_lepasPJ" value="Tanggal Lepas PJ" id="info6">
-            <label class="form-check-label" for="info6">Tanggal Lepas PJ</label>
-          </div>
-          <div class="form-check">
-            <input class="form-check-input info-option" type="checkbox" name="tanggalBand" value="Tanggal Band Posisi Terakhir" id="info7">
-            <label class="form-check-label" for="info7">Tanggal Band Posisi Terakhir</label>
-          </div>
-          <div class="form-check">
-            <input class="form-check-input info-option" type="checkbox" name="tanggal_pensiun" value="Tanggal Pensiun" id="info8">
-            <label class="form-check-label" for="info8">Tanggal Pensiun</label>
-          </div>
-          <div class="form-check">
-            <input class="form-check-input info-option" type="checkbox" name="tanggal_akhir_kontrak" value="Tanggal Akhir Kontrak" id="info9">
-            <label class="form-check-label" for="info9">Tanggal Akhir Kontrak</label>
-          </div>
-          <div class="form-check">
-            <input class="form-check-input info-option" type="checkbox" name="dokumenSK" value="Dokumen SK" id="info10">
-            <label class="form-check-label" for="info10">Dokumen SK</label>
-          </div>
-          <div class="form-check">
-            <input class="form-check-input info-option" type="checkbox" name="dokumen_nota_dinas" value="Dokumen Nota Dinas" id="info11">
-            <label class="form-check-label" for="info11">Dokumen Nota Dinas</label>
-          </div>
-          <div class="form-check">
-            <input class="form-check-input info-option" type="checkbox" name="dokumen_lainnya" value="Dokumen Lainnya" id="info12">
-            <label class="form-check-label" for="info12">Dokumen Lainnya</label>
-          </div>
-
-          <div class="buttons1">
-            <button type="button" class="cancel1" data-bs-dismiss="modal">Cancel</button>
-            <button type="button" class="simpan1" id="saveInfo">Simpan</button>
-          </div>
+{{-- Modal Detail Aktivitas Karir --}}
+<div class="modal" id="detailAktivitasModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="content6">
+        <div class="left-content6">
+          <h5>Detail Aktivitas Karir</h5>
+        </div>
+        <div class="right-content6">
+          <button data-bs-dismiss="modal" class="close-button"><i class="fas fa-circle-xmark"></i></button>
         </div>
       </div>
+
+      @foreach($career as $item)
+      <div class="form-grid">
+        <div class="form-group">
+          <h4>Nama Role</h4>
+          <p>{{ $item->nama_role }}</p>
+        </div>
+
+        <div class="form-group">
+          <h4>Regional/Direktorat</h4>
+          <p>{{ $item->regional_direktorat }}</p>
+        </div>
+
+        <div class="form-group">
+          <h4>Unit/Sub Unit</h4>
+          <p>{{ $item->unitSub }}</p>
+        </div>
+
+        <div class="form-group">
+          <h4>Band</h4>
+          <p>{{ $item->band_posisi }}</p>
+        </div>
+
+        <div class="form-group">
+          <h4>Deskripsi</h4>
+          <p>{{ $item->deskripsi }}</p>
+        </div>
+
+        @if($item->tanggalKDMP)
+        <div class="form-group">
+          <h4>Tanggal Promosi</h4>
+          <p>{{ \Carbon\Carbon::parse($item->tanggalKDMP)->format('d F Y') }}</p>
+        </div>
+        @endif
+
+        @if($item->tanggalBand)
+        <div class="form-group">
+          <h4>Tanggal Band Posisi Terakhir</h4>
+          <p>{{ \Carbon\Carbon::parse($item->tanggalBand)->format('d F Y') }}</p>
+        </div>
+        @endif
+
+        @if($item->tanggalTKWT)
+        <div class="form-group">
+          <h4>Tanggal TKWT</h4>
+          <p>{{ \Carbon\Carbon::parse($item->tanggalTKWT)->format('d F Y') }}</p>
+        </div>
+        @endif
+
+        @if($item->dokumenSK)
+        <div class="form-group">
+          <h4>Dokumen SK</h4>
+          <a href="{{ asset('storage/'.$item->dokumenSK) }}" target="_blank">Klik Untuk Melihat</a>
+        </div>
+        @endif
+
+        @if($item->dokumen_nota_dinas)
+        <div class="form-group">
+          <h4>Dokumen Nota Dinas</h4>
+          <a href="{{ asset('storage/'.$item->dokumen_nota_dinas) }}" target="_blank">Klik Untuk Melihat</a>
+        </div>
+        @endif
+
+        @if($item->dokumen_lainnya)
+        <div class="form-group">
+          <h4>Dokumen Lainnya</h4>
+          <a href="{{ asset('storage/'.$item->dokumen_lainnya) }}" target="_blank">Klik Untuk Melihat</a>
+        </div>
+        @endif
+      </div>
+      @endforeach
     </div>
-
-
-
+  </div>
+</div>
 <script>
 document.querySelectorAll('.file-input').forEach(function(wrapper) {
     let fileInput = wrapper.querySelector('input[type="file"]');
@@ -3687,12 +3771,130 @@ document.querySelectorAll('.file-input').forEach(function(wrapper) {
 });
 </script>
 <script>
-  function openModal(id) {
-    document.getElementById(id).classList.remove("hidden");
+  // Fungsi buka modal
+  function openModal(modalId) {
+      const modal = document.getElementById(modalId);
+      if (modal) {
+          modal.classList.remove('hidden');
+      }
   }
 
-  function closeModal(id) {
-    document.getElementById(id).classList.add("hidden");
+  // Fungsi tutup modal
+  function closeModal(modalId) {
+      const modal = document.getElementById(modalId);
+      if (modal) {
+          modal.classList.add('hidden');
+      }
   }
+
+  // Tombol + Tambah untuk membuka modal tambah aktivitas
+  document.querySelectorAll('.btn-add').forEach(button => {
+      button.addEventListener('click', function() {
+          const tambahModal = document.getElementById('tambahAktivitasModal');
+          if (tambahModal) {
+              tambahModal.classList.remove('hidden');
+          }
+      });
+  });
+
+  // Tombol close di modal Tambah Aktivitas
+  document.querySelectorAll('#tambahAktivitasModal .close-button, #tambahAktivitasModal .cancel').forEach(btn => {
+      btn.addEventListener('click', function() {
+          const tambahModal = document.getElementById('tambahAktivitasModal');
+          if (tambahModal) {
+              tambahModal.classList.add('hidden');
+          }
+      });
+  });
+
+  // Tombol close di modal Detail Aktivitas
+  document.querySelectorAll('#detailAktivitasModal .close-button').forEach(btn => {
+      btn.addEventListener('click', function() {
+          const detailModal = document.getElementById('detailAktivitasModal');
+          if (detailModal) {
+              detailModal.classList.add('hidden');
+          }
+      });
+  });
 </script>
+<script>
+  // BAGIAN DROPDOWN (EDIT AKTIVITAS KARIR)
+  const openBtn = document.getElementById("openInfo");
+  const dropdown = document.getElementById("infoDropdown");
+  const closeBtn = document.getElementById("closeDropdown");
+  const saveBtn = dropdown.querySelector(".btn-save");
+  const extraContainer = document.getElementById("extraFields");
+
+  // buka/tutup dropdown
+  openBtn.addEventListener("click", function () {
+    dropdown.style.display = dropdown.style.display === "none" ? "block" : "none";
+  });
+
+  // cancel
+  closeBtn.addEventListener("click", function () {
+    dropdown.style.display = "none";
+  });
+
+  // save
+  saveBtn.addEventListener("click", function () {
+    const checkboxes = dropdown.querySelectorAll('input[type="checkbox"]');
+
+    checkboxes.forEach(cb => {
+      const fieldId = "field_" + cb.name;
+
+      if (cb.checked) {
+        // kalau dicentang dan field belum ada → tambahkan
+        if (!document.getElementById(fieldId)) {
+          let newField = document.createElement("div");
+          newField.className = "form-group";
+          newField.id = fieldId;
+
+          // tentukan tipe input berdasarkan nama
+          if (cb.name.startsWith("dokumen")) {
+  newField.innerHTML = `
+    <div class="label-group"><label>${cb.labels[0].innerText}</label></div>
+    <div class="file-upload-wrapper">
+      <span class="file-upload-text">Tambahkan File</span>
+      <button type="button" class="file-upload-btn">Select File</button>
+      <input type="file" name="${cb.name}" class="file-upload-input">
+    </div>
+  `;
+
+  extraContainer.appendChild(newField);
+
+  // event handling untuk file input
+  const fileInput = newField.querySelector(".file-upload-input");
+  const fileText = newField.querySelector(".file-upload-text");
+  const fileBtn = newField.querySelector(".file-upload-btn");
+
+  fileBtn.addEventListener("click", () => fileInput.click());
+  fileInput.addEventListener("change", () => {
+    fileText.textContent = fileInput.files.length > 0
+      ? fileInput.files[0].name
+      : "Tambahkan File";
+  });
+
+} else {
+  newField.innerHTML = `
+    <div class="label-group"><label>${cb.labels[0].innerText}</label></div>
+    <input type="date" name="${cb.name}" class="form-control">
+  `;
+  extraContainer.appendChild(newField);
+}
+
+
+          extraContainer.appendChild(newField);
+        }
+      } else {
+        // kalau tidak dicentang → hapus field yang ada
+        let existing = document.getElementById(fieldId);
+        if (existing) existing.remove();
+      }
+    });
+
+    dropdown.style.display = "none"; // tutup setelah simpan
+  });
+</script>
+
+
 
