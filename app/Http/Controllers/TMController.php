@@ -88,20 +88,15 @@ class TMController extends Controller
    $trainings = Training::orderBy($sortByTraining, $sortOrderTraining)->get();
 
         // ---- Cluster (Career Activity) ----
-        $clusters = CareerActivity::where('employee_id', $employee->id)
-            ->selectRaw('
-            MONTHNAME(tanggalKDMP) as periode,
-            YEAR(tanggalKDMP) as year,
-            unitSub as cluster
-        ')
-            ->orderBy('year', 'desc')
-            ->orderByRaw('MONTH(tanggalKDMP) desc')
-            ->get();
+        $career = CareerActivity::where('employee_id', $employee->id)
+    ->orderByRaw('YEAR(tanggalKDMP) DESC')
+    ->orderByRaw('MONTH(tanggalKDMP) DESC')
+    ->get();
 
         return view('employee.show', compact(
             'employee',
             'payslips',
-            'clusters',
+            'career',
             'talentClusters',
             'families',
             'trainings', 
@@ -149,7 +144,7 @@ class TMController extends Controller
         // Data career tetap
         $career = CareerActivity::where('employee_id', $id)
             ->orderByRaw('YEAR(tanggalKDMP) DESC')
-            ->get();
+            ->get();    
 
 
         $dokumenWajib = [

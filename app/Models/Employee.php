@@ -43,11 +43,6 @@ class Employee extends Model
     'assessment_03',
     ];
 
-    public function CareerActivity()
-    {
-        return $this->hasMany(CareerActivity::class, 'employee_id');
-    }
-
     public function families()
     {
         return $this->hasMany(EmployeeFamily::class, 'employee_id');
