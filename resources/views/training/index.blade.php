@@ -815,12 +815,13 @@
       </div>
       <button class="export-btn"><i class="fas fa-upload"></i> Export</button>
       <button class="filter-btn" onclick="toggleFilter()"><i class="fas fa-sliders"></i> Filters</button>
+
       <div class="dropdown-action" style="position: relative;">
-        <button class="create-btn">Tambah</button>
+        <button class="buttonTambah create-btn">Tambah</button>
         <!-- DROPDOWN ACTION -->
-        <div class="absolute right-0 w-40 bg-white border border-gray-200 rounded-lg shadow-lg hidden z-60">
-          <a href="{{ route('training.create') }}" class="create-btn" onclick="toggleCreate()"><i class="fas fa-plus"></i>Berdasarkan TNA</a>
-          <a href="{{ route('training.create') }}" class="create-btn" onclick="toggleCreate()"><i class="fas fa-plus"></i>Diluar TNA</a>
+        <div class="absolute right-0 w-40 bg-white border border-gray-200 rounded-lg shadow-lg hidden z-60" style="padding:10px 0 0 0;">
+          <a class="block px-4 py-2 text-xs text-gray-700 hover:bg-gray-100" style="cursor: pointer;" onclick="toggleCreate()">Berdasarkan TNA</a>
+          <a href="{{ route('training.create') }}" class="block px-4 py-2 text-xs text-gray-700 hover:bg-gray-100">Diluar TNA</a>
         </div>
 
       </div>
@@ -903,7 +904,104 @@
     </div>
 
 
+
+    <!-- Tambah Data Berdasarkan TNA -->
+
+    <div id="tambahBTNA" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+      <div class="bg-white w-[150vh] p-6 rounded-lg shadow-lg w-80 text-center">
+        <div class="flex justify-between w-[97%] right-section" style="margin-bottom:20px;">
+          <h1 class="font-extrabold text-lg">Tambah Proses Rekrutment</h1>
+          <div class="flex w-[59vh] justify-between">
+            <div class="search-container">
+              <i class="fas fa-search search-icon"></i>
+              <input type="text" placeholder="Search by Name" class="search-bar" />
+            </div>
+            <button class="filter-btn" onclick="toggleFilter()"><i class="fas fa-sliders"></i> Filters</button>
+            <button onclick="closeAddClusterModal('tambahBTNA')" class="close-button w-[20px] h-[30px] text-xl" style="color: #696969;">
+              <i class="fas fa-circle-xmark"></i>
+            </button>
+          </div>
+
+          <div class="overflow-x-scroll" style="max-width: 153vh;">
+            <table id="customers" style="min-width: 1100px;">
+              <tr>
+                <th class="sticky left-0 z-20 bg-gray-100 px-3 py-1 border-b">No</th>
+                <th class="px-3 py-1 text-right whitespace-nowrap">
+                  Tahun
+                  <a href="{{ route('training.index', [
+          'sort_by_training'   => 'tanggal_mulai',
+          'sort_order_training'=> ($sortByTraining == 'tanggal_mulai' && $sortOrderTraining == 'asc') ? 'desc' : 'asc']) }}#trainings">
+                    {!! $sortByTraining == 'tanggal_mulai' ? '⇅' : '⇅' !!}
+                </th>
+                <th class="px-3 py-1 text-right whitespace-nowrap">
+                  Learning Solutsion
+                  <a href="{{ route('training.index', [
+          'sort_by_training'   => 'nama_training',
+          'sort_order_training'=> ($sortByTraining == 'nama_training' && $sortOrderTraining == 'asc') ? 'desc' : 'asc']) }}#trainings">
+                    {!! $sortByTraining == 'nama_training' ? '⇅' : '⇅' !!}
+                </th>
+                <th class="px-3 py-1 text-right whitespace-nowrap">
+                  Stream
+                  <a href="{{ route('training.index', [
+          'sort_by_training'   => 'stream',
+          'sort_order_training'=> ($sortByTraining == 'stream' && $sortOrderTraining == 'asc') ? 'desc' : 'asc'
+      ]) }}#trainings">
+                    {!! $sortByTraining == 'stream' ? '⇅' : '⇅' !!}
+                </th>
+                <th class="px-3 py-1 text-right whitespace-nowrap">
+                  Keterangan
+                  <a href="{{ route('training.index', [
+          'sort_by_training'   => 'keterangan',
+          'sort_order_training'=> ($sortByTraining == 'keterangan' && $sortOrderTraining == 'asc') ? 'desc' : 'asc'
+      ]) }}#trainings">
+                    {!! $sortByTraining == 'keterangan' ? '⇅' : '⇅' !!}
+                </th>
+                <th class="px-3 py-1 text-right whitespace-nowrap">
+                  Prioritas
+                  <a href="{{ route('training.index', [
+          'sort_by_training'   => 'prioritas',
+          'sort_order_training'=> ($sortByTraining == 'prioritas' && $sortOrderTraining == 'asc') ? 'desc' : 'asc'
+      ]) }}#trainings">
+                    {!! $sortByTraining == 'prioritas' ? '⇅' : '⇅' !!}
+                </th>
+                <th class="px-3 py-1">
+                  Peserta Terencana(TNA)
+                  <a href="{{ route('training.index', [
+          'sort_by_training'   => 'tna',
+          'sort_order_training'=> ($sortByTraining == 'tna' && $sortOrderTraining == 'asc') ? 'desc' : 'asc'
+      ]) }}#trainings">
+                    {!! $sortByTraining == 'tna' ? '⇅' : '⇅' !!}
+                </th>
+                <th class="sticky right-0 z-30 bg-gray-100 px-3 py-1 border-b">Actions</th>
+              </tr>
+
+              @foreach($trainingss as $training)
+              <tr>
+                <td class="sticky left-0 z-20 bg-gray-100 px-3 py-1 border-b">{{ $loop->iteration }}</td>
+                <td>{{ \Carbon\Carbon::parse($training->tanggal_mulai)->format('Y') }}</td>
+                <td>{{ $training->nama_training }}</td>
+                <td>{{ $training->stream }}</td>
+                <td>{{ $training->keterangan }}</td>
+                <td>{{ $training->prioritas }}</td>
+                <td>{{ $training->tna }}</td>
+
+                <!-- Actions sticky kanan -->
+                <td class="sticky right-0 z-20 bg-white px-3 py-1 border-b">
+                  <div class="dropdown-action" style="position: relative;">
+                    <button class="bg-blue-700 rounded-md px-4 py-3"><a href="{{ route('training.create')}}" style="color:white;">Pilih</a></button>
+                  </div>
+                </td>
+              </tr>
+              @endforeach
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
     <!-- TABEL MENAMPILKAN DATA SEDANG BERJALAN -->
+
     <div class="overflow-x-scroll" style="max-width: 153vh;">
       <table id="customers" style="min-width: 1100px;">
         <tr>
@@ -1641,6 +1739,15 @@
     modal.style.display = modal.style.display === "block" ? "none" : "block";
   }
 
+  function toggleCreate() {
+    document.getElementById("tambahBTNA").classList.remove("hidden");
+    document.getElementById("tambahBTNA").classList.add("flex");
+  }
+
+  function closeAddClusterModal(tnaId) {
+    document.getElementById(tnaId).classList.add('hidden');
+  }
+
   function showTab(tabId) {
     // Sembunyikan semua konten
     const tabs = document.querySelectorAll('.tab-content');
@@ -1711,16 +1818,19 @@
       });
     });
   });
-  
+
+  // =============================================
+  // Untuk Tambah navigasi di sedang berjalan
+
   document.addEventListener("DOMContentLoaded", () => {
-    const buttons = document.querySelectorAll(".horizontal-dots");
+    const buttons = document.querySelectorAll(".buttonTambah");
 
     buttons.forEach(btn => {
       btn.addEventListener("click", e => {
         e.stopPropagation();
 
         // Tutup semua dropdown lain
-        document.querySelectorAll("td .absolute").forEach(menu => {
+        document.querySelectorAll(".absolute").forEach(menu => {
           if (menu !== btn.nextElementSibling) {
             menu.classList.add("hidden");
           }
@@ -1733,7 +1843,7 @@
 
     // Tutup kalau klik di luar
     document.addEventListener("click", () => {
-      document.querySelectorAll("td .absolute").forEach(menu => {
+      document.querySelectorAll(".absolute").forEach(menu => {
         menu.classList.add("hidden");
       });
     });
