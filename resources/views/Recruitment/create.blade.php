@@ -764,6 +764,10 @@ textarea.form-control {
   flex-direction: column;
 }
 
+.d-none {
+  display: none !important;
+}
+
 
 </style>
 
@@ -1253,9 +1257,9 @@ function nextStep(currentStep) {
     let firstInvalid = null;
 
     inputs.forEach(function(input) {
-        let errorMsg = input.parentElement.querySelector(".error-msg");
+        let wrapper = input.closest(".form-group");
+        let errorMsg = wrapper ? wrapper.querySelector(".error-msg") : null;
 
-        // 🔹 Validasi khusus file input
         if (input.type === "file") {
             if (input.files.length === 0) {
                 input.classList.add("is-invalid");
@@ -1263,7 +1267,7 @@ function nextStep(currentStep) {
                     let small = document.createElement("small");
                     small.classList.add("error-msg", "text-danger");
                     small.innerText = "File wajib diunggah";
-                    input.parentElement.appendChild(small);
+                    wrapper.appendChild(small);
                 }
                 valid = false;
                 if (!firstInvalid) firstInvalid = input;
@@ -1271,16 +1275,14 @@ function nextStep(currentStep) {
                 input.classList.remove("is-invalid");
                 if (errorMsg) errorMsg.remove();
             }
-        } 
-        // 🔹 Validasi untuk input teks, select, textarea
-        else {
+        } else {
             if (!input.value.trim()) {
                 input.classList.add("is-invalid");
                 if (!errorMsg) {
                     let small = document.createElement("small");
                     small.classList.add("error-msg", "text-danger");
                     small.innerText = "Field ini wajib diisi";
-                    input.parentElement.appendChild(small);
+                    wrapper.appendChild(small);
                 }
                 valid = false;
                 if (!firstInvalid) firstInvalid = input;
@@ -1292,21 +1294,23 @@ function nextStep(currentStep) {
     });
 
     if (!valid) {
-        // fokus ke field pertama yang error
+      console.log("❌ Ada field kosong, stop pindah step");
         if (firstInvalid) {
             firstInvalid.scrollIntoView({ behavior: "smooth", block: "center" });
             firstInvalid.focus();
         }
-        return; 
+        return; // stop pindah
     }
 
-    // 🔹 Jika semua valid, lanjut step
+    // ✅ kalau valid → pindah step
     currentStepContent.classList.add("d-none");
-
     let nextStepContent = document.getElementById("step-content-" + (currentStep + 1));
     if (nextStepContent) {
         nextStepContent.classList.remove("d-none");
     }
+    if (nextStep === 3) {
+          showPreview();
+      }
 }
 </script>
 
@@ -1322,17 +1326,6 @@ function nextStep(currentStep) {
 
 
 <script>
-  function nextStep(currentStep) {
-      document.getElementById("step-content-" + currentStep).classList.add("d-none");
-      var nextStep = currentStep + 1;
-      document.getElementById("step-content-" + nextStep).classList.remove("d-none");
-
-      // jika masuk step 3 → tampilkan preview
-      if (nextStep === 3) {
-          showPreview();
-      }
-  }
-
   function prevStep(currentStep) {
       document.getElementById("step-content-" + currentStep).classList.add("d-none");
       var prevStep = currentStep - 1;
