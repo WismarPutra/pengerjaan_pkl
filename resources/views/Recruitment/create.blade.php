@@ -846,37 +846,32 @@ textarea.form-control {
     @endphp
 
     <div class="progress-container">
-      <div class="step {{ $currentStep > 1 ? 'completed' : ($currentStep == 1 ? 'active' : 'pending') }}">
-          <div class="circle">
-              <div class="circle2">
-                {!! $currentStep > 1 ? '<i class="fas fa-check"></i>' : '1' !!}
-              </div> 
-          </div>
-          <div class="label">Detail Posisi</div>
-      </div>
-
-      <div class="line {{ $currentStep > 1 ? 'completed' : ($currentStep == 1 ? 'active' : 'pending') }}"></div>
-
-      <div class="step {{ $currentStep > 2 ? 'completed' : ($currentStep == 2 ? 'active' : 'pending') }}">
-          <div class="circle">
-              <div class="circle2">
-                {!! $currentStep > 2 ? '<i class="fas fa-check"></i>' : '2' !!}
-              </div> 
-          </div>
-          <div class="label">Kualifikasi</div>
-      </div>
-
-      <div class="line"></div>
-
-      <div class="step {{ $currentStep == 3 ? 'active' : 'pending' }}">
-          <div class="circle">
-              <div class="circle2">
-                {!! $currentStep == 3 ? '3' : '3' !!}
-              </div> 
-          </div>
-          <div class="label">Finalisasi</div>
-      </div>
+    <div class="step active">
+        <div class="circle">
+            <div class="circle2">1</div>
+        </div>
+        <div class="label">Detail Posisi</div>
     </div>
+
+    <div class="line"></div>
+
+    <div class="step pending">
+        <div class="circle">
+            <div class="circle2">2</div>
+        </div>
+        <div class="label">Kualifikasi</div>
+    </div>
+
+    <div class="line"></div>
+
+    <div class="step pending">
+        <div class="circle">
+            <div class="circle2">3</div>
+        </div>
+        <div class="label">Finalisasi</div>
+    </div>
+</div>
+
 
     @if ($errors->any())
         <div class="alert alert-danger">
@@ -1294,7 +1289,7 @@ function nextStep(currentStep) {
     });
 
     if (!valid) {
-      console.log("❌ Ada field kosong, stop pindah step");
+        console.log("❌ Ada field kosong, stop pindah step");
         if (firstInvalid) {
             firstInvalid.scrollIntoView({ behavior: "smooth", block: "center" });
             firstInvalid.focus();
@@ -1304,97 +1299,136 @@ function nextStep(currentStep) {
 
     // ✅ kalau valid → pindah step
     currentStepContent.classList.add("d-none");
-    let nextStepContent = document.getElementById("step-content-" + (currentStep + 1));
+    let nextStep = currentStep + 1;
+    let nextStepContent = document.getElementById("step-content-" + nextStep);
     if (nextStepContent) {
         nextStepContent.classList.remove("d-none");
     }
-    if (nextStep === 3) {
-          showPreview();
-      }
+
+    // update progress bar
+    updateStepper(nextStep);
+
+    // kalau masuk step 3 → tampilkan preview
+    if (currentStep === 2) {
+        showPreview();
+    }
+}
+
+function prevStep(currentStep) {
+    document.getElementById("step-content-" + currentStep).classList.add("d-none");
+    let prevStep = currentStep - 1;
+    document.getElementById("step-content-" + prevStep).classList.remove("d-none");
+
+    // update progress bar
+    updateStepper(prevStep);
+}
+
+// 🔹 Update progress bar sesuai step
+function updateStepper(step) {
+    let steps = document.querySelectorAll(".progress-container .step");
+    let lines = document.querySelectorAll(".progress-container .line");
+
+    steps.forEach((el, index) => {
+        let stepNumber = index + 1;
+        el.classList.remove("active", "completed", "pending");
+
+        if (stepNumber < step) {
+            el.classList.add("completed");
+        } else if (stepNumber === step) {
+            el.classList.add("active");
+        } else {
+            el.classList.add("pending");
+        }
+    });
+
+    // update garis antar step
+    lines.forEach((line, index) => {
+        line.classList.remove("completed", "active");
+        if (index < step - 1) {
+            line.classList.add("completed");
+        } else if (index === step - 1) {
+            line.classList.add("active");
+        }
+    });
+}
+
+// 🔹 Preview data di step 3
+function showPreview() {
+    // Detail Posisi
+    document.getElementById("previewNamaPosisi").innerText = document.getElementById("namaPosisi").value;
+    document.getElementById("previewRegionalDirektorat").innerText = document.getElementById("regionalDirektorat").value;
+    document.getElementById("previewUnitSub").innerText = document.getElementById("unitSub").value;
+    document.getElementById("previewBandPosisi").innerText = document.getElementById("band_posisi").value;
+    document.getElementById("previewStatusKepegawaian").innerText = document.getElementById("status_kepegawaian").value;
+    document.getElementById("previewLokasiPekerjaan").innerText = document.getElementById("lokasi_pekerjaan").value;
+    document.getElementById("previewMedisNonMedis").innerText = document.getElementById("medis_non_medis").value;
+    document.getElementById("previewJumlahLowongan").innerText = document.getElementById("jumlah_lowongan").value;
+    document.getElementById("previewTargetTanggalHiring").innerText = document.getElementById("target_tanggal").value;
+    document.getElementById("previewHiringManager").innerText = document.getElementById("hiring_manager").value;
+
+    // File NDE
+    let ndeInput = document.getElementById("ndeFile");
+    let ndeFile = ndeInput.files[0];
+    if (ndeFile) {
+        document.getElementById("previewNdeFile").style.display = "inline-block";
+        document.getElementById("previewNdeFile").innerText = ndeFile.name;
+        document.getElementById("previewNdeEmpty").style.display = "none";
+    } else {
+        document.getElementById("previewNdeFile").style.display = "none";
+        document.getElementById("previewNdeEmpty").style.display = "block";
+    }
+
+    // Detail Kualifikasi
+    document.getElementById("previewPendidikanTerakhir").innerText = document.getElementById("pendidikan_terakhir").value;
+    document.getElementById("previewJurusanRelevan").innerText = document.getElementById("jurusan_relevan").value;
+    document.getElementById("previewPengalamanMinimum").innerText = document.getElementById("pengalaman_minimum").value;
+    document.getElementById("previewDomisiliPreferensi").innerText = document.getElementById("domisili_preferensi").value;
+    document.getElementById("previewJenisKelamin").innerText = document.getElementById("jenis_kelamin").value;
+    document.getElementById("previewBatasanUsia").innerText = document.getElementById("batasan_usia").value;
 }
 </script>
-
-<style>
-.is-invalid {
-    border: 2px solid red !important;
-    background-color: #ffe6e6 !important;
-}
-.error-msg {
-    font-size: 0.85rem;
-}
-</style>
-
-
 <script>
-  function prevStep(currentStep) {
-      document.getElementById("step-content-" + currentStep).classList.add("d-none");
-      var prevStep = currentStep - 1;
-      document.getElementById("step-content-" + prevStep).classList.remove("d-none");
-  }
+function updateStepper(step) {
+    let steps = document.querySelectorAll(".progress-container .step");
+    let lines = document.querySelectorAll(".progress-container .line");
 
-  function showPreview() {
-      // ambil value input biasa
-      document.getElementById("previewNamaPosisi").innerText =
-          document.getElementById("namaPosisi").value;
+    steps.forEach((el, index) => {
+        let circle = el.querySelector(".circle2");
 
-      document.getElementById("previewRegionalDirektorat").innerText =
-          document.getElementById("regionalDirektorat").value;
+        if (index + 1 < step) {
+            // ✅ step sudah selesai → centang hijau
+            el.classList.remove("active", "pending");
+            el.classList.add("completed");
+            if (circle) circle.innerHTML = '<i class="fas fa-check"></i>';
+        } else if (index + 1 === step) {
+            // 🔵 step aktif sekarang
+            el.classList.remove("completed", "pending");
+            el.classList.add("active");
+            if (circle) circle.innerHTML = index + 1;
+        } else {
+            // ⏳ step belum jalan
+            el.classList.remove("completed", "active");
+            el.classList.add("pending");
+            if (circle) circle.innerHTML = index + 1;
+        }
+    });
 
-      document.getElementById("previewUnitSub").innerText =
-          document.getElementById("unitSub").value;
-
-      document.getElementById("previewBandPosisi").innerText =
-          document.getElementById("band_posisi").value;
-
-      document.getElementById("previewStatusKepegawaian").innerText =
-          document.getElementById("status_kepegawaian").value;
-
-      document.getElementById("previewLokasiPekerjaan").innerText =
-          document.getElementById("lokasi_pekerjaan").value;
-
-      document.getElementById("previewMedisNonMedis").innerText =
-          document.getElementById("medis_non_medis").value;
-
-      document.getElementById("previewJumlahLowongan").innerText =
-          document.getElementById("jumlah_lowongan").value;
-
-      document.getElementById("previewTargetTanggalHiring").innerText =
-          document.getElementById("target_tanggal").value;
-
-      document.getElementById("previewHiringManager").innerText =
-          document.getElementById("hiring_manager").value;
-
-      // khusus NDE file → nama file (bukan value kosong)
-      let ndeFile = document.getElementById("ndeFile");
-      if (ndeFile && ndeFile.files.length > 0) {
-          document.getElementById("previewNdeFile").innerText = ndeFile.files[0].name;
-      }
-
-      // ambil teks option yang dipilih (biar lebih user-friendly)
-      function getSelectedText(id) {
-          let el = document.getElementById(id);
-          return el.options[el.selectedIndex]?.text || "";
-      }
-
-      document.getElementById("previewPendidikanTerakhir").innerText =
-          getSelectedText("pendidikan_terakhir");
-
-      document.getElementById("previewJurusanRelevan").innerText =
-          getSelectedText("jurusan_relevan");
-
-      document.getElementById("previewPengalamanMinimum").innerText =
-          getSelectedText("pengalaman_minimum");
-
-      document.getElementById("previewDomisiliPreferensi").innerText =
-          getSelectedText("domisili_preferensi");
-
-      document.getElementById("previewJenisKelamin").innerText =
-          getSelectedText("jenis_kelamin");
-
-      document.getElementById("previewBatasanUsia").innerText =
-          document.getElementById("batasan_usia").value;
-  }
+    // Update garis antar step
+    lines.forEach((line, index) => {
+        if (index < step - 1) {
+            line.classList.add("completed");
+            line.classList.remove("active", "pending");
+        } else if (index === step - 1) {
+            line.classList.add("active");
+            line.classList.remove("completed", "pending");
+        } else {
+            line.classList.add("pending");
+            line.classList.remove("active", "completed");
+        }
+    });
+}
 </script>
+
 
 <script>
   document.addEventListener("change", function (e) {
