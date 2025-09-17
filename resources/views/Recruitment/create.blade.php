@@ -720,7 +720,7 @@ textarea.form-control {
 
 /* Jika step sebelumnya completed, garis berubah hijau */
 .step.completed + .line {
-  background-color: rgba(0, 0, 205, 0.8);
+  background-color: #7CFC00;
 }
 
 .alert-danger {
