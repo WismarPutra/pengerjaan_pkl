@@ -81,7 +81,8 @@ class RecruitmentController extends Controller
 
     public function create() {
 
-        $currentStep = session('currentStep', 1);
+        // Ambil step sekarang dari session (default = 1)
+    $currentStep = session('currentStep', 1);
     return view('recruitment.create', compact('currentStep'));
 
     }
@@ -193,7 +194,6 @@ class RecruitmentController extends Controller
 
 public function nextStep(Request $request) 
 {
-    // Step sekarang dari request
     $step = $request->input('step', 1);
 
     // Validasi sesuai step
@@ -210,46 +210,55 @@ public function nextStep(Request $request)
             'target_tanggal' => 'required|date',
             'hiring_manager' => 'required|string',
             'nde' => 'required|file|mimes:pdf,doc,docx|max:2048',
-            'pendidikan_terakhir' => 'nullable|string',
-            'jurusan_relevan' => 'nullable|string',
-            'pengalaman_minimum' => 'nullable|string',
-            'domisili_preferensi' => 'nullable|string',
-            'jenis_kelamin' => 'nullable|string',
-            'batasan_usia' => 'nullable|string',
         ]);
     }
 
-    // Simpan data step sekarang ke session
+    if ($step == 2) {
+        $request->validate([
+            'pendidikan_terakhir' => 'required|string',
+            'jurusan_relevan' => 'required|string',
+            'pengalaman_minimum' => 'required|string',
+        ]);
+    }
+
+    // Simpan input step ini ke session
     session()->put("recruitment.step{$step}", $request->except('_token','step'));
 
-    // Naik ke step berikutnya
+    // Pindah ke step berikutnya
     $nextStep = $step + 1;
     session(['currentStep' => $nextStep]);
 
     return redirect()->route('recruitment.create');
 }
 
+public function previousStep(Request $request)
+{
+    $step = $request->input('step', 1);
+
+    $prevStep = max(1, $step - 1);
+    session(['currentStep' => $prevStep]);
+
+    return redirect()->route('recruitment.create');
+}
 
     public function submit(Request $request)
     {
-        $step1 = session('recruitment.step1', []);
-        $step2 = session('recruitment.step2', []);
+    // Gabungkan semua step yang sudah disimpan di session
+    $step1 = session('recruitment.step1', []);
+    $step2 = session('recruitment.step2', []);
 
-        $finalData = array_merge($step1, $step2);
-        $finalData['created_by_role'] = Auth::user()->role;
+    $finalData = array_merge($step1, $step2);
 
+    // Tambahan data otomatis
+    $finalData['created_by'] = Auth::id();
 
-        Recruitment::create($finalData);
+    // Simpan ke database
+    Recruitment::create($finalData);
 
-        session()->forget('recruitment');
+    // Bersihkan session
+    session()->forget('recruitment');
+    session()->forget('currentStep');
 
-        session()->forget('currentStep');
-
-
-        return response()->json([
-            'success' => true,
-            'message' => 'Data berhasil disubmit!',
-            'data' => $finalData
-        ]);
-    }
+    return redirect()->route('recruitment.index')->with('success', 'Data berhasil disimpan');
+}
 }

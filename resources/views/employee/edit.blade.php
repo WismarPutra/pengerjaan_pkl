@@ -2731,9 +2731,9 @@
                       <label class="bintang">*</label>
                   </div>
                   <div class="file-input file-input-sm">
-                      <input type="file" name="{{ $name }}" id="{{ $name }}File" hidden required>
+                      <input type="file" name="{{ $name }}" id="{{ $name }}File" hidden>
                       <input type="text" class="file-text" id="{{ $name }}FileText" placeholder="Tambahkan file" readonly>
-                      <label for="{{ $name }}File" class="file-btn">Select</label>
+                      <label for="{{ $name }}File" class="file-btn">Upload</label>
                   </div>
               </div>
           @endforeach
@@ -2763,7 +2763,7 @@
                   <div class="form-group">
                       <label for="{{ $name }}File">{{ $label }}</label>
                       <div class="file-input file-input-sm">
-                          <input type="file" name="{{ $name }}" id="{{ $name }}File" hidden required>
+                          <input type="file" name="{{ $name }}" id="{{ $name }}File" hidden>
                           <input type="text" class="file-text" id="{{ $name }}FileText" placeholder="Belum ada file" readonly>
                           <label for="{{ $name }}File" class="file-btn">Upload</label>
                       </div>
@@ -3895,5 +3895,3 @@ document.querySelectorAll('.file-input').forEach(function(wrapper) {
     dropdown.style.display = "none"; // tutup setelah simpan
   });
 </script>
-
-
