@@ -4,27 +4,18 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
-    /**
-     * Run the migrations.
-     */
+return new class extends Migration {
     public function up(): void
     {
         Schema::table('d_j_m_s', function (Blueprint $table) {
-    $table->string('job')->nullable()->after('unitSub');
-});
-
+            $table->string('job')->nullable()->after('unitsub');
+        });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::table('d_j_m_s', function (Blueprint $table) {
-    $table->string('job')->nullable()->after('unitSub');
-});
-
+            $table->dropColumn('job');
+        });
     }
 };

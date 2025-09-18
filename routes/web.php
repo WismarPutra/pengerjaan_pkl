@@ -106,6 +106,12 @@ Route::get('/training/{id}/edit', [TrainingController::class, 'edit'])->name('tr
 Route::delete('/training/{id}/destroy', [TrainingController::class, 'destroy'])->name('training.destroy');
 Route::post('/training/upload',[TrainingController::class, 'upload'])->name('training.upload');
 
+/* PAYROLL */
+Route::prefix('employees/{employee}')->group(function () {
+    Route::post('payslips', [TMController::class, 'storePayslip'])->name('employees.payslip.store');
+});
+
+Route::delete('/payslips/{id}', [TMController::class, 'deletePayslip'])->name('employees.payslip.delete');
 
 /* DJM MANAGEMENT */
 

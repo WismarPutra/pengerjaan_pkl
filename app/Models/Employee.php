@@ -80,5 +80,13 @@ public function jobHistories()
     return $this->hasMany(JobHistory::class, 'employee_id');
 }
 
+public function payslips()
+{
+    return $this->hasMany(EmployeePayslip::class);
+}
+
+
+
+
 
 }
