@@ -11,16 +11,10 @@ class RecruitmentController extends Controller
     public function index(Request $request)
 {
     // Ambil parameter sort & direction dari URL
-    $sort = $request->get('sort', 'id');       // default sort by id
+    $sort = $request->get('sort', 'id');             // default sort by id
     $direction = $request->get('direction', 'desc'); // default desc
-    $perPage = $request->get('per_page', 10); // default 10
-    $recruitments = Recruitment::orderBy($sort, $direction)
-        ->paginate($perPage)
-        ->appends([
-            'sort' => $sort,
-            'direction' => $direction,
-            'per_page' => $perPage
-        ]);
+    $perPage = $request->get('per_page', 10);        // default 10
+
     // Daftar kolom yang boleh di-sort
     $allowedSorts = [
         'namaPosisi',
@@ -42,33 +36,44 @@ class RecruitmentController extends Controller
         'created_by',
     ];
 
-    // Kalau kolom yang dikirim user tidak ada di daftar, pakai default
     if (! in_array($sort, $allowedSorts)) {
         $sort = 'id';
     }
 
-    // Ambil data recruitment dengan sorting
-    $recruitments = Recruitment::orderBy($sort, $direction)
-        ->paginate(10)
-        ->appends([
-            'sort' => $sort,
-            'direction' => $direction
-        ]); // biar pagination bawa query sort
+    // === Filter data sesuai status ===
+    $kebutuhan = Recruitment::where('status', 'kebutuhan')
+        ->orderBy($sort, $direction)
+        ->paginate($perPage, ['*'], 'kebutuhan_page')
+        ->appends(compact('sort', 'direction', 'perPage'));
 
-     // --- Tambahan untuk box statistik ---
+    $berjalan = Recruitment::where('status', 'berjalan')
+        ->orderBy($sort, $direction)
+        ->paginate($perPage, ['*'], 'berjalan_page')
+        ->appends(compact('sort', 'direction', 'perPage'));
+
+    $selesai = Recruitment::where('status', 'selesai')
+        ->orderBy($sort, $direction)
+        ->paginate($perPage, ['*'], 'selesai_page')
+        ->appends(compact('sort', 'direction', 'perPage'));
+
+    $draft = Recruitment::where('status', 'draft')
+        ->orderBy($sort, $direction)
+        ->paginate($perPage, ['*'], 'draft_page')
+        ->appends(compact('sort', 'direction', 'perPage'));
+
+    // --- Box statistik ---
     $jumlahKebutuhan = Recruitment::sum('jumlah_lowongan');
-
-    $direktoratAktif = Recruitment::distinct('regionalDirektorat')
-                                  ->count('regionalDirektorat');
-
-    $targetBulanIni = Recruitment::whereMonth('target_tanggal', now()->month)
-                                 ->whereYear('target_tanggal', now()->year)
-                                 ->count();
-    // -----------------------------------
+    $direktoratAktif = Recruitment::distinct('regionalDirektorat')->count('regionalDirektorat');
+    $targetBulanIni  = Recruitment::whereMonth('target_tanggal', now()->month)
+                                  ->whereYear('target_tanggal', now()->year)
+                                  ->count();
 
     // Kirim ke view
     return view('recruitment.index', compact(
-        'recruitments',
+        'kebutuhan',
+        'berjalan',
+        'selesai',
+        'draft',
         'sort',
         'direction',
         'jumlahKebutuhan',
@@ -79,9 +84,11 @@ class RecruitmentController extends Controller
 }
 
 
+
     public function create() {
 
-        $currentStep = session('currentStep', 1);
+        // Ambil step sekarang dari session (default = 1)
+    $currentStep = session('currentStep', 1);
     return view('recruitment.create', compact('currentStep'));
 
     }
@@ -193,7 +200,6 @@ class RecruitmentController extends Controller
 
 public function nextStep(Request $request) 
 {
-    // Step sekarang dari request
     $step = $request->input('step', 1);
 
     // Validasi sesuai step
@@ -210,46 +216,55 @@ public function nextStep(Request $request)
             'target_tanggal' => 'required|date',
             'hiring_manager' => 'required|string',
             'nde' => 'required|file|mimes:pdf,doc,docx|max:2048',
-            'pendidikan_terakhir' => 'nullable|string',
-            'jurusan_relevan' => 'nullable|string',
-            'pengalaman_minimum' => 'nullable|string',
-            'domisili_preferensi' => 'nullable|string',
-            'jenis_kelamin' => 'nullable|string',
-            'batasan_usia' => 'nullable|string',
         ]);
     }
 
-    // Simpan data step sekarang ke session
+    if ($step == 2) {
+        $request->validate([
+            'pendidikan_terakhir' => 'required|string',
+            'jurusan_relevan' => 'required|string',
+            'pengalaman_minimum' => 'required|string',
+        ]);
+    }
+
+    // Simpan input step ini ke session
     session()->put("recruitment.step{$step}", $request->except('_token','step'));
 
-    // Naik ke step berikutnya
+    // Pindah ke step berikutnya
     $nextStep = $step + 1;
     session(['currentStep' => $nextStep]);
 
     return redirect()->route('recruitment.create');
 }
 
+public function previousStep(Request $request)
+{
+    $step = $request->input('step', 1);
+
+    $prevStep = max(1, $step - 1);
+    session(['currentStep' => $prevStep]);
+
+    return redirect()->route('recruitment.create');
+}
 
     public function submit(Request $request)
     {
-        $step1 = session('recruitment.step1', []);
-        $step2 = session('recruitment.step2', []);
+    // Gabungkan semua step yang sudah disimpan di session
+    $step1 = session('recruitment.step1', []);
+    $step2 = session('recruitment.step2', []);
 
-        $finalData = array_merge($step1, $step2);
-        $finalData['created_by_role'] = Auth::user()->role;
+    $finalData = array_merge($step1, $step2);
 
+    // Tambahan data otomatis
+    $finalData['created_by'] = Auth::id();
 
-        Recruitment::create($finalData);
+    // Simpan ke database
+    Recruitment::create($finalData);
 
-        session()->forget('recruitment');
+    // Bersihkan session
+    session()->forget('recruitment');
+    session()->forget('currentStep');
 
-        session()->forget('currentStep');
-
-
-        return response()->json([
-            'success' => true,
-            'message' => 'Data berhasil disubmit!',
-            'data' => $finalData
-        ]);
-    }
+    return redirect()->route('recruitment.index')->with('success', 'Data berhasil disimpan');
+}
 }

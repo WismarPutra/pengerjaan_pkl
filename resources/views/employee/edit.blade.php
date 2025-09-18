@@ -2722,8 +2722,10 @@
   </div>
 
 
-
   <!-- DOKUMEN DI HALAMAN EDIT -->
+
+
+  <!-- ======================= DOKUMEN DI HALAMAN EDIT ======================= -->
 
   <div class="tab-content" id="dokumen" style="display: none;">
     <div class="w-[140vh] p-4 bg-white rounded-lg shadow-sm">
@@ -2745,6 +2747,8 @@
 
         <div class="dokumen-grid-2">
           @foreach ($dokumens as $name => $label)
+
+
           <div class="form-group">
             <div class="label-group">
               <label for="{{ $name }}File">{{ $label }}</label>
@@ -2764,7 +2768,7 @@
         <div class="flex align-middle justify-between">
           <!-- Dokumen Lainnya -->
           <h5 class="font-semibold text-gray-800 mb-3">Dokumen Lainnya</h5>
-          <!-- Tombol Tambah -->
+          <!-- Tombol Tambah Dokumen -->
           <button type="button" class="mb-4 px-4 py-2 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700">
             + Tambah
           </button>
@@ -2779,6 +2783,7 @@
 
         <div class="dokumen-grid-2">
           @foreach ($dokumens_assessment as $row)
+
           @foreach ($row as $name => $label)
           <div class="form-group">
             <label for="{{ $name }}File">{{ $label }}</label>
@@ -2798,210 +2803,65 @@
           <button type="submit" class="btn btn-primary ml-2">Save</button>
         </div>
       </form>
+    </div>
+  </div> <!-- 🔹 Tutup dokumen -->
 
-      <!-- Semua modal (anak, cluster, edit cluster) tetap di sini -->
-      {{-- MODAL TAMBAH ANAK --}}
-      <div id="addModal" class="hidden fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50" style="padding-left:400px; padding-top:60px;">
-        <div class="bg-white rounded-2xl shadow-lg w-full max-w-3xl p-6">
-          <!-- Header -->
-          <div class="flex justify-between items-center mb-6">
-            <h3 class="text-xl font-semibold text-gray-800">Tambah Informasi Anak</h3>
-            <button onclick="closeAddModal()" class="text-gray-500 hover:text-gray-700">
-              <i class="fas fa-times text-xl"></i>
-            </button>
-          </div>
+  {{-- MODAL CLUSTER TAMBAH --}}
+  <div id="addClusterModal">
+    <div class="modal-content">
+      <div class="">
+        <div class="">
+          <h3>Tambah Penilaian Talent Cluster</h3>
+        </div>
 
-          <!-- Form -->
-          <form action="{{ route('families.store', $employee->id) }}" method="POST" class="space-y-6">
-            @csrf
-
-            <!-- Grid Form -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-7">
-              <!-- Nama Lengkap -->
-              <div>
-                <label class="block text-sm font-medium text-gray-700">Nama Lengkap <span class="text-red-600">*</span></label>
-                <input type="text" name="nama_lengkap" value="{{ old('nama_lengkap') }}"
-                  class="mt-1 block w-full px-2 py-3 rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" style="border: 1px solid black;"
-                  required>
-              </div>
-
-              <!-- Jenis Kelamin -->
-              <div>
-                <label class="block text-sm font-medium text-gray-700">Jenis Kelamin <span class="text-red-600">*</span></label>
-                <select name="jenis_kelamin"
-                  class="mt-1 block w-full px-2 py-3 rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" style="border: 1px solid black;"
-                  required>
-                  <option disabled selected value=""></option>
-                  <option value="Laki-Laki" {{ old('jenis_kelamin')==='Laki-Laki'?'selected':'' }}>Laki-Laki</option>
-                  <option value="Perempuan" {{ old('jenis_kelamin')==='Perempuan'?'selected':'' }}>Perempuan</option>
-                </select>
-              </div>
-
-              <!-- Tempat, Tanggal Lahir -->
-              <div>
-                <label class="block text-sm font-medium text-gray-700">Tempat, Tanggal Lahir <span class="text-red-600">*</span></label>
-                <input type="text" name="ttl" placeholder="Contoh: Jakarta, 18 Agustus 2009"
-                  value="{{ old('ttl', $family->ttl ?? '') }}"
-                  class="mt-1 block w-full px-2 py-3 rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" style="border: 1px solid black;">
-              </div>
-
-              <!-- Pendidikan -->
-              <div>
-                <label class="block text-sm font-medium text-gray-700">Pendidikan Saat Ini <span class="text-red-600">*</span></label>
-                <select name="pendidikan"
-                  class="mt-1 block w-full px-2 py-3 rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" style="border: 1px solid black;">
-                  <option disabled selected value=""></option>
-                  <option value="SD" {{ old('pendidikan')==='SD'?'selected':'' }}>SD</option>
-                  <option value="SMP" {{ old('pendidikan')==='SMP'?'selected':'' }}>SMP</option>
-                  <option value="SMA" {{ old('pendidikan')==='SMA'?'selected':'' }}>SMA</option>
-                  <option value="Kuliah" {{ old('pendidikan')==='Kuliah'?'selected':'' }}>Kuliah</option>
-                </select>
-              </div>
-
-              <!-- Status Anak -->
-              <div>
-                <label class="block text-sm font-medium text-gray-700">Status Anak <span class="text-red-600">*</span></label>
-                <select name="status_anak"
-                  class="mt-1 block w-full px-2 py-3 rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" style="border: 1px solid black;">
-                  <option disabled selected value=""></option>
-                  <option value="Kandung" {{ old('status_anak')==='Kandung'?'selected':'' }}>Kandung</option>
-                  <option value="Tidak Kandung" {{ old('status_anak')==='Tidak Kandung'?'selected':'' }}>Tidak Kandung</option>
-                </select>
-              </div>
-
-              <!-- Urutan Anak -->
-              <div>
-                <label class="block text-sm font-medium text-gray-700">Urutan Anak <span class="text-red-600">*</span></label>
-                <input type="text" name="urutan_anak" placeholder="Contoh: 1, 2, 3 atau Anak ke-1"
-                  value="{{ old('urutan_anak') }}"
-                  class="mt-1 block w-full px-2 py-3 rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" style="border: 1px solid black;">
-              </div>
-
-              <!-- Keterangan -->
-              <div class="md:col-span-2">
-                <label class="block text-sm font-medium text-gray-700">Keterangan <span class="text-red-600">*</span></label>
-                <select name="keterangan"
-                  class="mt-1 block w-full px-2 py-3 rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" style="border: 1px solid black;">
-                  <option disabled selected value=""></option>
-                  <option value="Ditanggung" {{ old('keterangan')==='Ditanggung'?'selected':'' }}>Ditanggung</option>
-                  <option value="Tidak Ditanggung" {{ old('keterangan')==='Tidak Ditanggung'?'selected':'' }}>Tidak Ditanggung</option>
-                </select>
-              </div>
-            </div>
-
-            <!-- Tombol -->
-            <div class="flex justify-center gap-3 pt-4">
-              <button type="button" onclick="closeAddModal()"
-                class="w-full py-2 rounded-lg bg-gray-200 text-gray-700 font-medium hover:bg-gray-300">
-                Cancel
-              </button>
-              <button type="submit"
-                class="w-full py-2 rounded-lg bg-indigo-600 text-white font-medium hover:bg-indigo-700">
-                Tambah
-              </button>
-            </div>
-          </form>
+        <div class="">
+          <button onclick="closeAddClusterModal()" class="close-button">
+            <i class="fas fa-circle-xmark"></i>
+          </button>
         </div>
       </div>
-
-      {{-- MODAL CLUSTER TAMBAH --}}
-      <div id="addClusterModal">
-        <div class="modal-content">
-          <div class="">
-            <div class="">
-              <h3>Tambah Penilaian Talent Cluster</h3>
-            </div>
-
-            <div class="">
-              <button onclick="closeAddClusterModal()" class="close-button">
-                <i class="fas fa-circle-xmark"></i>
-              </button>
-            </div>
-          </div>
-          <div class="full-width">
-            <div class="full-width">
-              <form action="{{ route('clusters.store', $employee->id) }}" method="POST">
-                @csrf
-                <div class="form-grid1">
-                  <div class="form-group2">
-                    <div class="label-group">
-                      <label>Periode</label>
-                      <label class="bintang">*</label>
-                    </div>
-                    <select name="periodeCluster" class="form-control1" required>
-                      <option disabled selected value=""></option>
-                      <option value="Q1">Q1</option>
-                      <option value="Q2">Q2</option>
-                      <option value="Q3">Q3</option>
-                      <option value="Q4">Q4</option>
-                    </select>
-                  </div>
-
-                  <div class="form-group3">
-                    <div class="label-group">
-                      <label>Tahun</label>
-                      <label class="bintang">*</label>
-                    </div>
-                    <input type="month" name="tahunCluster" class="form-control" />
-                  </div>
-
-                  <div class="form-group2 fully-width">
-                    <div class="label-group">
-                      <label class="mt-[50px]">Talent Cluster</label>
-                      <label class="bintang mt-[50px]">*</label>
-                    </div>
-                    <select name="talentCluster" class="form-control1" required>
-                      <option disabled selected value=""></option>
-                      <option value="Potential Employee">Potential Employee</option>
-                      <option value="Promotable Employee">Promotable Employee</option>
-                    </select>
-                  </div>
-                </div>
-                <div class="form-buttons w-[700px]">
-                  <button type="button" class="cancel" onclick="closeAddClusterModal()">Cancel</button>
-                  <button type="submit" class="submit">Tambah</button>
-                </div>
-              </form>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {{-- MODAL CLUSTER EDIT --}}
-      <div id="editClusterModal" class="hidden fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-        <div class="bg-white rounded-lg shadow-lg p-6 w-[600px]">
-          <h3 class="text-lg font-bold mb-4">Edit Talent Cluster</h3>
-
-          <form id="editClusterForm" method="POST">
+      <div class="full-width">
+        <div class="full-width">
+          <form action="{{ route('clusters.store', $employee->id) }}" method="POST">
             @csrf
-            @method('PUT')
+            <div class="form-grid1">
+              <div class="form-group2">
+                <div class="label-group">
+                  <label>Periode</label>
+                  <label class="bintang">*</label>
+                </div>
+                <select name="periodeCluster" class="form-control1" required>
+                  <option disabled selected value=""></option>
+                  <option value="Q1">Q1</option>
+                  <option value="Q2">Q2</option>
+                  <option value="Q3">Q3</option>
+                  <option value="Q4">Q4</option>
+                </select>
+              </div>
 
-            <div class="mb-3">
-              <label>Periode</label>
-              <select id="editPeriodeCluster" name="periodeCluster" class="w-full border p-2">
-                <option value="Q1">Q1</option>
-                <option value="Q2">Q2</option>
-                <option value="Q3">Q3</option>
-                <option value="Q4">Q4</option>
-              </select>
+              <div class="form-group3">
+                <div class="label-group">
+                  <label>Tahun</label>
+                  <label class="bintang">*</label>
+                </div>
+                <input type="month" name="tahunCluster" class="form-control" />
+              </div>
+
+              <div class="form-group2 fully-width">
+                <div class="label-group">
+                  <label class="mt-[50px]">Talent Cluster</label>
+                  <label class="bintang mt-[50px]">*</label>
+                </div>
+                <select name="talentCluster" class="form-control1" required>
+                  <option disabled selected value=""></option>
+                  <option value="Potential Employee">Potential Employee</option>
+                  <option value="Promotable Employee">Promotable Employee</option>
+                </select>
+              </div>
             </div>
-
-            <div class="mb-3">
-              <label>Tahun</label>
-              <input type="month" id="editTahunCluster" name="tahunCluster" class="w-full border p-2" />
-            </div>
-
-            <div class="mb-3">
-              <label>Talent Cluster</label>
-              <select id="editTalentCluster" name="talentCluster" class="w-full border p-2">
-                <option value="Potential Employee">Potential Employee</option>
-                <option value="Promotable Employee">Promotable Employee</option>
-              </select>
-            </div>
-
-            <div class="flex justify-end gap-2">
-              <button type="button" onclick="closeEditClusterPopup()" class="px-4 py-2 bg-gray-300 rounded">Cancel</button>
-              <button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded">Update</button>
+            <div class="form-buttons w-[700px]">
+              <button type="button" class="cancel" onclick="closeAddClusterModal()">Cancel</button>
+              <button type="submit" class="submit">Tambah</button>
             </div>
           </form>
         </div>
@@ -3009,6 +2869,45 @@
     </div>
   </div>
 
+  {{-- MODAL CLUSTER EDIT --}}
+  <div id="editClusterModal" class="hidden fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+    <div class="bg-white rounded-lg shadow-lg p-6 w-[600px]">
+      <h3 class="text-lg font-bold mb-4">Edit Talent Cluster</h3>
+
+      <form id="editClusterForm" method="POST">
+        @csrf
+        @method('PUT')
+
+        <div class="mb-3">
+          <label>Periode</label>
+          <select id="editPeriodeCluster" name="periodeCluster" class="w-full border p-2">
+            <option value="Q1">Q1</option>
+            <option value="Q2">Q2</option>
+            <option value="Q3">Q3</option>
+            <option value="Q4">Q4</option>
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label>Tahun</label>
+          <input type="month" id="editTahunCluster" name="tahunCluster" class="w-full border p-2" />
+        </div>
+
+        <div class="mb-3">
+          <label>Talent Cluster</label>
+          <select id="editTalentCluster" name="talentCluster" class="w-full border p-2">
+            <option value="Potential Employee">Potential Employee</option>
+            <option value="Promotable Employee">Promotable Employee</option>
+          </select>
+        </div>
+
+        <div class="flex justify-end gap-2">
+          <button type="button" onclick="closeEditClusterPopup()" class="px-4 py-2 bg-gray-300 rounded">Cancel</button>
+          <button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded">Update</button>
+        </div>
+      </form>
+    </div>
+  </div>
 
 
   <!-- AKTIVITAS CAREER -->
@@ -3031,7 +2930,8 @@
             <p class="sub-info">Maret 2023 - Sekarang (3 Tahun 1 Bulan) • Nama Direktorat • Band Level V</p>
             <p class="promo-date">Tanggal Promosi: 1 Maret 2023</p>
             <p class="description">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus error eveniet...
+
+              Lorem, ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus error eveniet culpa eos cupiditate doloribus impedit aliquid saepe aut nobis, consequuntur ex fuga consectetur quasi dolorum eum. Blanditiis, quibusdam incidunt?
             </p>
 
             <!-- tombol action -->
@@ -3151,7 +3051,7 @@
     <!-- Save / Cancel di bawah -->
     <div class="form-actions">
       <a href="{{ route('employees.show', $employee->id) }}" class="btn-cancel">Cancel</a>
-      <button type="submit" class="btn-save">Save</button>
+      <a href="{{ route('employees.show', $employee->id) }}" class="btn-save">Save</a>
     </div>
   </div>
 
@@ -3375,6 +3275,111 @@
       </div>
     </div>
   </div>
+
+  <!-- ======================= MODAL TAMBAH ANAK (DILUAR TAB-CONTENT) ======================= -->
+  <div id="addModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+    <div class="bg-white rounded-2xl shadow-lg w-full max-w-3xl p-6 relative">
+      <!-- Header -->
+      <div class="flex justify-between items-center mb-6">
+        <h3 class="text-xl font-semibold text-gray-800">Tambah Informasi Anak</h3>
+        <button type="button" onclick="closeAddModal()" class="text-gray-500 hover:text-gray-700">
+          <i class="fas fa-times text-xl"></i>
+        </button>
+      </div>
+
+      <!-- Form -->
+      <form action="{{ route('families.store', $employee->id) }}" method="POST" class="space-y-6">
+        @csrf
+
+        <!-- Grid Form -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-7">
+          <!-- Nama Lengkap -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700">Nama Lengkap <span class="text-red-600">*</span></label>
+            <input type="text" name="nama_lengkap" value="{{ old('nama_lengkap') }}"
+              class="mt-1 block w-full px-2 py-3 rounded-lg border border-black shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+              required>
+          </div>
+
+          <!-- Jenis Kelamin -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700">Jenis Kelamin <span class="text-red-600">*</span></label>
+            <select name="jenis_kelamin"
+              class="mt-1 block w-full px-2 py-3 rounded-lg border border-black shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+              required>
+              <option disabled selected value=""></option>
+              <option value="Laki-Laki" {{ old('jenis_kelamin') === 'Laki-Laki' ? 'selected' : '' }}>Laki-Laki</option>
+              <option value="Perempuan" {{ old('jenis_kelamin') === 'Perempuan' ? 'selected' : '' }}>Perempuan</option>
+            </select>
+          </div>
+
+          <!-- Tempat, Tanggal Lahir -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700">Tempat, Tanggal Lahir <span class="text-red-600">*</span></label>
+            <input type="text" name="ttl" placeholder="Contoh: Jakarta, 18 Agustus 2009"
+              value="{{ old('ttl') }}"
+              class="mt-1 block w-full px-2 py-3 rounded-lg border border-black shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+          </div>
+
+          <!-- Pendidikan -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700">Pendidikan Saat Ini <span class="text-red-600">*</span></label>
+            <select name="pendidikan"
+              class="mt-1 block w-full px-2 py-3 rounded-lg border border-black shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+              <option disabled selected value=""></option>
+              <option value="SD" {{ old('pendidikan') === 'SD' ? 'selected' : '' }}>SD</option>
+              <option value="SMP" {{ old('pendidikan') === 'SMP' ? 'selected' : '' }}>SMP</option>
+              <option value="SMA" {{ old('pendidikan') === 'SMA' ? 'selected' : '' }}>SMA</option>
+              <option value="Kuliah" {{ old('pendidikan') === 'Kuliah' ? 'selected' : '' }}>Kuliah</option>
+            </select>
+          </div>
+
+
+          <!-- Status Anak -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700">Status Anak <span class="text-red-600">*</span></label>
+            <select name="status_anak"
+              class="mt-1 block w-full px-2 py-3 rounded-lg border border-black shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+              <option disabled selected value=""></option>
+              <option value="Kandung" {{ old('status_anak') === 'Kandung' ? 'selected' : '' }}>Kandung</option>
+              <option value="Tidak Kandung" {{ old('status_anak') === 'Tidak Kandung' ? 'selected' : '' }}>Tidak Kandung</option>
+            </select>
+          </div>
+
+          <!-- Urutan Anak -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700">Urutan Anak <span class="text-red-600">*</span></label>
+            <input type="text" name="urutan_anak" placeholder="Contoh: 1, 2, 3 atau Anak ke-1"
+              value="{{ old('urutan_anak') }}"
+              class="mt-1 block w-full px-2 py-3 rounded-lg border border-black shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+          </div>
+
+          <!-- Keterangan -->
+          <div class="md:col-span-2">
+            <label class="block text-sm font-medium text-gray-700">Keterangan <span class="text-red-600">*</span></label>
+            <select name="keterangan"
+              class="mt-1 block w-full px-2 py-3 rounded-lg border border-black shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+              <option disabled selected value=""></option>
+              <option value="Ditanggung" {{ old('keterangan') === 'Ditanggung' ? 'selected' : '' }}>Ditanggung</option>
+              <option value="Tidak Ditanggung" {{ old('keterangan') === 'Tidak Ditanggung' ? 'selected' : '' }}>Tidak Ditanggung</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Tombol -->
+        <div class="flex justify-center gap-3 pt-4">
+          <button type="button" onclick="closeAddModal()"
+            class="w-full py-2 rounded-lg bg-gray-200 text-gray-700 font-medium hover:bg-gray-300">
+            Cancel
+          </button>
+          <button type="submit"
+            class="px-4 py-2 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700">
+            Tambah
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
   <script>
     document.querySelectorAll('.file-input').forEach(function(wrapper) {
       let fileInput = wrapper.querySelector('input[type="file"]');
@@ -3422,12 +3427,12 @@
       });
     });
 
+
     // Buka modal edit cluster
     function openEditClusterPopup(clusterId, periode, tahun, cluster) {
       document.getElementById('editPeriodeCluster').value = periode;
       document.getElementById('editTahunCluster').value = tahun;
       document.getElementById('editTalentCluster').value = cluster;
-
       let form = document.getElementById('editClusterForm');
       form.action = `/employees/{{ $employee->id }}/clusters/${clusterId}`;
 
@@ -3472,6 +3477,7 @@
       let hash = window.location.hash || '#profile';
       let activeTab = document.querySelector(hash);
 
+
       if (activeTab) {
         activeTab.style.display = 'block';
       }
@@ -3491,21 +3497,6 @@
       icon.classList.toggle('fa-chevron-up');
     }
   </script>
-
-  <script>
-    function openAddModal() {
-      document.getElementById("addModal").style.display = "block";
-    }
-
-    function closeAddModal() {
-      document.getElementById("addModal").style.display = "none";
-    }
-  </script>
-
-
-
-
-
   <script>
     document.addEventListener("DOMContentLoaded", function() {
       const saveBtn = document.getElementById("saveInfo");
@@ -3914,4 +3905,13 @@
 
       dropdown.style.display = "none"; // tutup setelah simpan
     });
+
   </script>
+  <script>
+  function openAddModal() {
+    document.getElementById("addModal").classList.remove("hidden");
+  }
+  function closeAddModal() {
+    document.getElementById("addModal").classList.add("hidden");
+  }
+</script>
