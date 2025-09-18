@@ -2744,6 +2744,7 @@
 
         <div class="dokumen-grid-2">
           @foreach ($dokumens as $name => $label)
+
           <div class="form-group">
             <div class="label-group">
               <label for="{{ $name }}File">{{ $label }}</label>
@@ -2778,6 +2779,7 @@
 
         <div class="dokumen-grid-2">
           @foreach ($dokumens_assessment as $row)
+
           @foreach ($row as $name => $label)
           <div class="form-group">
             <label for="{{ $name }}File">{{ $label }}</label>
@@ -3907,5 +3909,3 @@
     document.getElementById("addModal").classList.add("hidden");
   }
 </script>
-
-
