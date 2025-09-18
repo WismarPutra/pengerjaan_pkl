@@ -11,16 +11,10 @@ class RecruitmentController extends Controller
     public function index(Request $request)
 {
     // Ambil parameter sort & direction dari URL
-    $sort = $request->get('sort', 'id');       // default sort by id
+    $sort = $request->get('sort', 'id');             // default sort by id
     $direction = $request->get('direction', 'desc'); // default desc
-    $perPage = $request->get('per_page', 10); // default 10
-    $recruitments = Recruitment::orderBy($sort, $direction)
-        ->paginate($perPage)
-        ->appends([
-            'sort' => $sort,
-            'direction' => $direction,
-            'per_page' => $perPage
-        ]);
+    $perPage = $request->get('per_page', 10);        // default 10
+
     // Daftar kolom yang boleh di-sort
     $allowedSorts = [
         'namaPosisi',
@@ -42,33 +36,44 @@ class RecruitmentController extends Controller
         'created_by',
     ];
 
-    // Kalau kolom yang dikirim user tidak ada di daftar, pakai default
     if (! in_array($sort, $allowedSorts)) {
         $sort = 'id';
     }
 
-    // Ambil data recruitment dengan sorting
-    $recruitments = Recruitment::orderBy($sort, $direction)
-        ->paginate(10)
-        ->appends([
-            'sort' => $sort,
-            'direction' => $direction
-        ]); // biar pagination bawa query sort
+    // === Filter data sesuai status ===
+    $kebutuhan = Recruitment::where('status', 'kebutuhan')
+        ->orderBy($sort, $direction)
+        ->paginate($perPage, ['*'], 'kebutuhan_page')
+        ->appends(compact('sort', 'direction', 'perPage'));
 
-     // --- Tambahan untuk box statistik ---
+    $berjalan = Recruitment::where('status', 'berjalan')
+        ->orderBy($sort, $direction)
+        ->paginate($perPage, ['*'], 'berjalan_page')
+        ->appends(compact('sort', 'direction', 'perPage'));
+
+    $selesai = Recruitment::where('status', 'selesai')
+        ->orderBy($sort, $direction)
+        ->paginate($perPage, ['*'], 'selesai_page')
+        ->appends(compact('sort', 'direction', 'perPage'));
+
+    $draft = Recruitment::where('status', 'draft')
+        ->orderBy($sort, $direction)
+        ->paginate($perPage, ['*'], 'draft_page')
+        ->appends(compact('sort', 'direction', 'perPage'));
+
+    // --- Box statistik ---
     $jumlahKebutuhan = Recruitment::sum('jumlah_lowongan');
-
-    $direktoratAktif = Recruitment::distinct('regionalDirektorat')
-                                  ->count('regionalDirektorat');
-
-    $targetBulanIni = Recruitment::whereMonth('target_tanggal', now()->month)
-                                 ->whereYear('target_tanggal', now()->year)
-                                 ->count();
-    // -----------------------------------
+    $direktoratAktif = Recruitment::distinct('regionalDirektorat')->count('regionalDirektorat');
+    $targetBulanIni  = Recruitment::whereMonth('target_tanggal', now()->month)
+                                  ->whereYear('target_tanggal', now()->year)
+                                  ->count();
 
     // Kirim ke view
     return view('recruitment.index', compact(
-        'recruitments',
+        'kebutuhan',
+        'berjalan',
+        'selesai',
+        'draft',
         'sort',
         'direction',
         'jumlahKebutuhan',
@@ -77,6 +82,7 @@ class RecruitmentController extends Controller
         'perPage'
     ));
 }
+
 
 
     public function create() {
