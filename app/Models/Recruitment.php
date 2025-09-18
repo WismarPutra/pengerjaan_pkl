@@ -27,6 +27,7 @@ class Recruitment extends Model
         'jenis_kelamin',
         'batasan_usia',
         'created_by',
+        'status',
     ];
 
     public function user()
