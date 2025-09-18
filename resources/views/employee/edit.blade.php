@@ -2722,8 +2722,11 @@
   </div>
 
 
+  <!-- DOKUMEN DI HALAMAN EDIT -->
+
 
   <!-- ======================= DOKUMEN DI HALAMAN EDIT ======================= -->
+
   <div class="tab-content" id="dokumen" style="display: none;">
     <div class="w-[140vh] p-4 bg-white rounded-lg shadow-sm">
       <form action="{{ route('employees.documents.upload', $employee->id) }}"
@@ -2744,6 +2747,7 @@
 
         <div class="dokumen-grid-2">
           @foreach ($dokumens as $name => $label)
+
 
           <div class="form-group">
             <div class="label-group">
@@ -2906,8 +2910,6 @@
   </div>
 
 
-
-
   <!-- AKTIVITAS CAREER -->
 
   <div class="tab-content" id="karir">
@@ -2928,6 +2930,7 @@
             <p class="sub-info">Maret 2023 - Sekarang (3 Tahun 1 Bulan) • Nama Direktorat • Band Level V</p>
             <p class="promo-date">Tanggal Promosi: 1 Maret 2023</p>
             <p class="description">
+
               Lorem, ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus error eveniet culpa eos cupiditate doloribus impedit aliquid saepe aut nobis, consequuntur ex fuga consectetur quasi dolorum eum. Blanditiis, quibusdam incidunt?
             </p>
 
@@ -3331,6 +3334,7 @@
             </select>
           </div>
 
+
           <!-- Status Anak -->
           <div>
             <label class="block text-sm font-medium text-gray-700">Status Anak <span class="text-red-600">*</span></label>
@@ -3423,12 +3427,12 @@
       });
     });
 
+
     // Buka modal edit cluster
     function openEditClusterPopup(clusterId, periode, tahun, cluster) {
       document.getElementById('editPeriodeCluster').value = periode;
       document.getElementById('editTahunCluster').value = tahun;
       document.getElementById('editTalentCluster').value = cluster;
-
       let form = document.getElementById('editClusterForm');
       form.action = `/employees/{{ $employee->id }}/clusters/${clusterId}`;
 
@@ -3472,6 +3476,7 @@
       // Ambil hash dari URL
       let hash = window.location.hash || '#profile';
       let activeTab = document.querySelector(hash);
+
 
       if (activeTab) {
         activeTab.style.display = 'block';
@@ -3900,6 +3905,7 @@
 
       dropdown.style.display = "none"; // tutup setelah simpan
     });
+
   </script>
   <script>
   function openAddModal() {

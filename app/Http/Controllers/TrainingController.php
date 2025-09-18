@@ -35,14 +35,25 @@ class TrainingController extends Controller
         $pelatihanTerlaksana = Training::where('status', 'completed')->count();
 
         $tanggalMulai = Training::orderBy('tanggal_mulai', 'desc')->get();
-        $perPage = $request->get('per_page', 10);
+        $perPage = $request->input('per_page', 10);
         $totalBiaya = Training::sum('total_biaya');
         $biaya = Training::sum('biaya');
         $totalNamaTraining = Training::count('nama_training');
 
         // ambil data sesuai jumlah per_page
-        $trainings = Training::paginate($perPage);
+        $perPages = $request->input('per_page', 10);
+        $perPageSelesai = $request->input('per_page_selesai', 10);
+        $perPageAnalysis = $request->input('per_pageND', 10);
 
+        $trainingsAnalysis = Training::paginate($perPageAnalysis);
+        $totalTrainingAnalysis = Training::count();
+
+        $trainings = Training::where('status', '!=', 'Completed')->paginate($perPages);
+        $trainingSelesai = Training::where('status', 'Completed')->paginate($perPageSelesai);
+
+        // Mengambil jumlah yang sudah di per_page dan yang nilainya bukan Completed
+        $jumlahTrainingsNC = Training::where('status', '!=', 'Completed')->count();
+        $jumlahTrainingsC = Training::where('status', 'Completed')->count();
 
         $sortByTraining    = $request->query('sort_by_training', 'nama_training');
         $sortOrderTraining = $request->query('sort_order_training', 'desc');
@@ -93,7 +104,13 @@ class TrainingController extends Controller
             'training.index',
             compact(
                 'training',
+                'trainings',
                 'trainingss',
+                'trainingSelesai',
+                'trainingsAnalysis',
+                'totalTrainingAnalysis',
+                'jumlahTrainingsNC',
+                'jumlahTrainingsC',
                 'totalPartisipan',
                 'tna',
                 'persenTna',
@@ -104,6 +121,8 @@ class TrainingController extends Controller
                 'tanggalMulai',
                 'totalTraining',
                 'perPage',
+                'perPages',
+                'perPageSelesai',
                 'trainings',
                 'totalBiaya',
                 'biaya',
@@ -120,7 +139,7 @@ class TrainingController extends Controller
 
     public function create()
     {
-        
+
         return view('training.create');
     }
 

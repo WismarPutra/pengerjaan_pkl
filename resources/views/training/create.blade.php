@@ -652,17 +652,19 @@
     <div class="form-grid">
 
       <div class="form-group">
-        <label>Nama Training  (Learning Solutsion)*</label>
-        <select name="nama_training" class="form-control1" required>
-          <option disabled selected value=""></option>
+        <label>Nama Training (Learning Solution)*</label>
+        <select name="nama_training" id="nama_training" class="form-control1" required>
+          <option disabled selected value="">-- Pilih Training --</option>
           <option value="microsoft_excel_for_data_analyst">Microsoft Excel for Data Analyst</option>
-          <option value=""></option>
+          <option value="data_science_python">Data Science with Python</option>
+          <option value="project_management">Project Management Fundamentals</option>
         </select>
       </div>
 
+
       <div class="form-group">
         <label>Deskripsi Training *</label>
-        <input type="text" name="deskripsi_training" class="form-control" required>
+        <input type="text" name="deskripsi_training" id="deskripsi_training" class="form-control" required readonly>
       </div>
 
       <div class="form-group">
@@ -742,6 +744,7 @@
         <label>Lokasi *</label>
         <input type="text" name="lokasi" class="form-control" required>
       </div>
+    </div>
 
     <hr class="divider">
 
@@ -762,7 +765,7 @@
     <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; flex-wrap: wrap;">
       <h2 class="left-section">List Of Participants</h2>
       <div class="right-section1">
-        <button class="add-btn"><i class="fas fa-plus"></i> Tambah</button>
+        <button class="add-btn" onclick="toggleTambah()"><i class="fas fa-plus"></i>Tambah</button>
       </div>
     </div>
     <table id="customers" style="margin-top: 10px;">
@@ -783,7 +786,87 @@
         <button type="submit" class="btn create-btn">Create</button>
       </div>
     </div>
-  </form>
+
+</div>
+</form>
+
+<!-- Modal Tambah Diluar TNA Pop up -->
+<div id="popupModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+  <div class="bg-white p-6 rounded shadow-lg w-[40%]">
+    <div class="flex align-middle justify-between">
+      <h1 class="font-bold">Tambah Peserta</h1>
+      <button onclick="closeTambah('popupModal')" class="text-xl" style="color: #696969;">
+        <i class="fas fa-circle-xmark"></i>
+      </button>
+    </div>
+
+    <form style="margin-top: 30px;">
+      <!-- Option Nama  -->
+      <div class="form-group">
+        <label>Nama</label>
+        <select name="nama" class="form-control1 w-full" required>
+          <option disabled selected value="">Nama Lengkap (nik)</option>
+          <option value=""> </option>
+          <option value=""> </option>
+        </select>
+      </div>
+
+      <!-- Option Gap Kompetensi -->
+      <div class="form-group" style="margin-top: 30px;">
+        <label>Gap Kompetensi</label>
+        <select name="gap_kompetensi" class="form-control1 w-full rounded-4xl" required>
+          <option disabled selected value="">TNA/Non TNA</option>
+          <option value="tna">TNA</option>
+          <option value="non_tna">Non TNA</option>
+        </select>
+      </div>
+
+      <div class="flex justify-end gap-2" style="margin-top: 20px;">
+        <button type="button"
+          onclick="closeTambah()"
+          class="px-5 py-2 w-full rounded-lg bg-gray-200 text-gray-700 font-medium hover:bg-gray-300">
+          Cancel
+        </button>
+        <button type="submit"
+          class="px-5 py-2 w-full rounded-lg bg-indigo-600 text-white font-medium hover:bg-indigo-700">
+          Tambah
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
 
 </div>
 @endsection
+
+<script>
+  // Mapping Nama Training → Deskripsi Training
+  const trainingDescriptions = {
+    "microsoft_excel_for_data_analyst": "Pelatihan Excel tingkat lanjut untuk analisis data",
+    "data_science_python": "Belajar Data Science menggunakan Python",
+    "project_management": "Dasar-dasar Manajemen Proyek untuk profesional"
+  };
+
+  // Event Listener
+  document.getElementById("nama_training").addEventListener("change", function() {
+    const selectedValue = this.value;
+    const deskripsiInput = document.getElementById("deskripsi_training");
+
+    if (trainingDescriptions[selectedValue]) {
+      deskripsiInput.value = trainingDescriptions[selectedValue];
+      deskripsiInput.innerText = trainingDescriptions[selectedValue];
+    } else {
+      deskripsiInput.value = "";
+    }
+  });
+
+
+  function toggleTambah() {
+    document.getElementById('popupModal').classList.remove('hidden');
+    document.getElementById('popupModal').classList.remove('block');
+  }
+
+  function closeTambah(tabId) {
+    document.getElementById(tabId).classList.add('hidden');
+  }
+</script>

@@ -1096,11 +1096,18 @@
           </th>
           <th class="sticky right-0 z-30 bg-gray-100 px-3 py-1 border-b">Actions</th>
         </tr>
-        @foreach($trainingss as $training)
+        @foreach($trainings as $training)
+
         <tr>
-          <td class="sticky left-0 z-20 bg-gray-100 px-3 py-1 border-b">{{ $loop->iteration }}</td>
+          <td class="sticky left-0 z-20 bg-gray-100 px-3 py-1 border-b"> {{ ($trainings->currentPage() - 1) * $trainings->perPage() + $loop->iteration }}</td>
           <td>{{ $training->nama_training }}</td>
-          <td>{{ $training->status }}</td>
+
+          @if($training->status === 'On Going')
+          <td style="color:blue;">{{ $training->status }}</td>
+          @elseif($training->status === 'Scheduled')
+          <td style="color:red;">{{ $training->status }}</td>
+          @endif
+
           <td>{{ $training->stream }}</td>
           <td>{{ $training->keterangan }}</td>
           <td>{{ $training->partisipan }}</td>
@@ -1115,30 +1122,44 @@
           <td class="sticky right-0 z-20 bg-white px-3 py-1 border-b">
             <div class="dropdown-action" style="position: relative;">
               <button class="horizontal-dots">&#x22EF;</button>
-              <!-- DropDown Action -->
+
               <div class="absolute right-0 w-40 bg-white border border-gray-200 rounded-lg shadow-lg hidden z-60">
-                <a href="{{ route('training.show', $training->id) }}"
-                  class="block px-4 py-2 text-xs text-gray-700 hover:bg-gray-100">
+                @if($training->status === 'On Going')
+                <a href="{{ route('training.show', $training->id) }}" class="block px-4 py-2 text-xs text-gray-700 hover:bg-gray-100">
                   Detail
                 </a>
-                <form action="{{ route('training.destroy', $training->id) }}" method="POST"
-                  onsubmit="return confirm('Yakin ingin menghapus data ini?')">
+                <form action="{{ route('training.destroy', $training->id) }}" method="POST" onsubmit="return confirm('Yakin ingin membatalkan data ini?')">
                   @csrf
                   @method('DELETE')
-                  <button type="submit"
-                    class="w-full text-left px-4 py-2 text-xs text-red-600 hover:bg-red-100">
+                  <button type="submit" class="w-full text-left px-4 py-2 text-xs text-red-600 hover:bg-red-100">
                     Cancelled
                   </button>
                 </form>
+                @elseif($training->status === 'Scheduled')
+                <a href="{{ route('training.show', $training->id) }}" class="block px-4 py-2 text-xs text-gray-700 hover:bg-gray-100">
+                  Detail
+                </a>
+                <a href="{{ route('training.edit', $training->id) }}" class="block px-4 py-2 text-xs text-gray-700 hover:bg-gray-100">
+                  Edit
+                </a>
+                <form action="{{ route('training.destroy', $training->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus data ini?')">
+                  @csrf
+                  @method('DELETE')
+                  <button type="submit" class="w-full text-left px-4 py-2 text-xs text-red-600 hover:bg-red-100">
+                    Delete
+                  </button>
+                </form>
+                @endif
               </div>
             </div>
           </td>
         </tr>
         @endforeach
+
       </table>
-
-
     </div>
+
+
     <!-- MENGHITUNG TOTAL DATA YANG AKAN DITAMPILKAN -->
     <div class="flex items-center gap-2 mt-5">
       <span>Menampilkan</span>
@@ -1150,15 +1171,21 @@
           class="w-24 border-2 border-black rounded-md px-2 py-1"
           onchange="this.form.submit()">
           @for ($i = 1; $i <= 10; $i++)
-            <option value="{{ $i }}" {{ $perPage = $i ? 'selected' : '' }}>
+            <option value="{{ $i }}" {{ $totalTraining == $i ? 'selected' : '' }}>
             {{ $i }}
             </option>
             @endfor
         </select>
       </form>
 
-      <span>entri dari {{ $totalTraining }} entri</span>
+      <span>entri dari {{ $jumlahTrainingsNC }} entri</span>
     </div>
+
+    <div class="flex justify-end mt-4">
+      {{ $trainings->links() }}
+    </div>
+
+
   </div>
 </div>
 
@@ -1411,9 +1438,9 @@
       </tr>
 
 
-      @foreach($trainings as $row)
+      @foreach($trainingsAnalysis as $row)
       <tr>
-        <td class="sticky left-0 z-20 bg-gray-100 px-3 py-1 border-b">{{ $loop->iteration }}</td>
+        <td class="sticky left-0 z-20 bg-gray-100 px-3 py-1 border-b"> {{ ($trainingsAnalysis->currentPage() - 1) * $trainingsAnalysis->perPage() + $loop->iteration }}</td>
         <td>{{ \Carbon\Carbon::parse($row->tanggal_mulai)->format('Y') }}</td>
         <td>{{ $row->nama_training }}</td>
         <td>{{ $row->gap_kompetensi }}</td>
@@ -1441,19 +1468,23 @@
 
     <form method="GET" action="{{ route('training.index') }}">
       <select
-        name="per_page"
-        id="#"
+        name="per_pageND"
+        id="per_pageND"
         class="w-24 border-2 border-black rounded-md px-2 py-1"
         onchange="this.form.submit()">
-        @for ($a = 1; $a <= 10; $a++)
-          <option value="{{ $a }}" {{ $perPage = $a ? 'selected' : '' }}>
-          {{ $a }}
+        @for ($i = 1; $i <= 10; $i++)
+          <option value="{{ $i }}" {{ $totalTrainingAnalysis == $i ? 'selected' : '' }}>
+          {{ $i }}
           </option>
           @endfor
       </select>
     </form>
 
-    <span>entri dari {{ $totalTraining }} entri</span>
+    <span>entri dari {{ $totalTrainingAnalysis }} entri</span>
+  </div>
+
+  <div class="flex justify-end mt-4">
+    {{ $trainingsAnalysis->links() }}
   </div>
 </div>
 
@@ -1672,13 +1703,28 @@
         </th>
         <th class="sticky right-0 z-30 bg-gray-100 px-3 py-1 border-b">Actions</th>
       </tr>
-      @foreach($trainingss as $training)
+
+      @foreach($trainingSelesai as $training)
       <tr>
-        <td class="sticky left-0 z-20 bg-gray-100 px-3 py-1 border-b">{{ $loop->iteration }}</td>
-        <td>{{ $training->nama_training }}</td>
-        <td>{{ $training->status }}</td>
-        <td>{{ $training->sertifikat }}</td>
-        <td>{{ $training->kelulusan }}</td>
+        <td class="sticky left-0 z-20 bg-gray-100 px-3 py-1 border-b">{{ ($trainingSelesai->currentPage() - 1) * $trainingSelesai->perPage() + $loop->iteration }}</td>
+        <td><a href="{{route('training.show', $training->id)}}">{{ $training->nama_training }}</a></td>
+       
+        @if($training->status === "Completed")
+        <td style="color: green;">{{ $training->status }}</td>
+        @endif
+        
+        @if($training->sertifikat === "Not Uploaded")
+        <td class="whitespace-nowrap min-w-[110px]" style="color: red;">{{ $training->sertifikat }}</td>
+        @elseif($training->sertifikat === "Uploaded")
+        <td class="whitespace-nowrap min-w-[110px]" style="color:green;">{{ $training->sertifikat }}</td>
+        @endif
+
+        @if($training->kelulusan === "Not Uploaded")
+        <td class="whitespace-nowrap min-w-[110px]" style="color: red;">{{ $training->kelulusan }}</td>
+        @elseif($training->kelulusan === "Uploaded")
+        <td class="whitespace-nowrap min-w-[110px]" style="color: green;">{{ $training->kelulusan }}</td>
+        @endif
+
         <td>{{ $training->stream }}</td>
         <td>{{ $training->keterangan }}</td>
         <td>{{ $training->partisipan }}</td>
@@ -1714,19 +1760,23 @@
 
     <form method="GET" action="{{ route('training.index') }}">
       <select
-        name="per_page"
-        id="#"
+        name="per_page_selesai"
+        id="per_page"
         class="w-24 border-2 border-black rounded-md px-2 py-1"
         onchange="this.form.submit()">
-        @for ($a = 1; $a <= 10; $a++)
-          <option value="{{ $a }}" {{ $perPage = $a ? 'selected' : '' }}>
-          {{ $a }}
+        @for ($i = 1; $i <= 10; $i++)
+          <option value="{{ $i }}" {{ $totalTraining == $i ? 'selected' : '' }}>
+          {{ $i }}
           </option>
           @endfor
       </select>
     </form>
 
-    <span>entri dari {{ $totalTraining }} entri</span>
+    <span>entri dari {{ $jumlahTrainingsC }} entri</span>
+  </div>
+
+  <div class="flex justify-end mt-4">
+    {{ $trainingSelesai->links() }}
   </div>
 </div>
 
