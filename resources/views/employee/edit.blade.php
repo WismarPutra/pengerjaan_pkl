@@ -2009,7 +2009,7 @@
       <li><a href="{{ route('dashboard.index') }}"><i class="fas fa-file-lines"></i>Dashboard Outsource</a></li>
       <li><a class="active" href="#tlm"><i class="fas fa-user-group"></i>Talent Management</a></li>
       <li><a href="{{ route('recruitment.index') }}"><i class="fas fa-user"></i>Recruitment Management</a></li>
-      <li><a href="#trm"><i class="fas fa-chart-line"></i>Training Management</a></li>
+      <li><a href="{{route('training.index')}}"><i class="fas fa-chart-line"></i>Training Management</a></li>
       <li><a href="#djm"><i class="fas fa-folder"></i>DJM Management</a></li>
       <h2 class="config">Configuration</h2>
       <li><a href="#user"><i class="fas fa-user"></i>User</a></li>
@@ -3380,6 +3380,7 @@
       </form>
     </div>
   </div>
+
   <script>
     document.querySelectorAll('.file-input').forEach(function(wrapper) {
       let fileInput = wrapper.querySelector('input[type="file"]');
