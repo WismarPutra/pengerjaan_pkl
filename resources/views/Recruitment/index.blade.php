@@ -1000,17 +1000,31 @@
             <!-- Table -->
             <table class="table table-bordered table-hover align-middle text-center" id="tableKebutuhan">
               <thead class="table-light">
-                <tr>
-                  <th onclick="sortTable(0)">No</th>
-                  <th onclick="sortTable(1)" style="cursor:pointer">Nama Posisi ↑↓</th>
-                  <th onclick="sortTable(2)" style="cursor:pointer">Regional/Direktorat ↑↓</th>
-                  <th onclick="sortTable(3)" style="cursor:pointer">Band Posisi ↑↓</th>
-                  <th onclick="sortTable(4)" style="cursor:pointer">Jumlah Lowongan ↑↓</th>
-                  <th onclick="sortTable(5)" style="cursor:pointer">Target Tanggal Perekrutan ↑↓</th>
-                  <th onclick="sortTable(6)" style="cursor:pointer">Created by ↑↓</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
+  <tr>
+    <th onclick="sortTable(0)" style="cursor:pointer">
+      No <span class="sort-icon">⇅</span>
+    </th>
+    <th onclick="sortTable(1)" style="cursor:pointer">
+      Nama Posisi <span class="sort-icon">⇅</span>
+    </th>
+    <th onclick="sortTable(2)" style="cursor:pointer">
+      Regional/Direktorat <span class="sort-icon">⇅</span>
+    </th>
+    <th onclick="sortTable(3)" style="cursor:pointer">
+      Band Posisi <span class="sort-icon">⇅</span>
+    </th>
+    <th onclick="sortTable(4)" style="cursor:pointer">
+      Jumlah Lowongan <span class="sort-icon">⇅</span>
+    </th>
+    <th onclick="sortTable(5)" style="cursor:pointer">
+      Target Tanggal Perekrutan <span class="sort-icon">⇅</span>
+    </th>
+    <th onclick="sortTable(6)" style="cursor:pointer">
+      Created By <span class="sort-icon">⇅</span>
+    </th>
+    <th>Actions</th>
+  </tr>
+</thead>
               <tbody>
                 @foreach($kebutuhan as $i => $k)
                 <tr>
@@ -1038,43 +1052,8 @@
       </div>
     </div>
 
-    <!-- Script filter & sorting -->
-    <script>
-      // Search filter
-      document.getElementById('searchKebutuhan').addEventListener('keyup', function() {
-        let filter = this.value.toLowerCase();
-        let rows = document.querySelectorAll('#tableKebutuhan tbody tr');
-        rows.forEach(row => {
-          let namaPosisi = row.cells[1].textContent.toLowerCase();
-          row.style.display = namaPosisi.includes(filter) ? '' : 'none';
-        });
-      });
+    
 
-      // Sorting table
-      let sortDirection = {}; // simpan status per kolom
-
-      function sortTable(colIndex) {
-        let table = document.getElementById("tableKebutuhan");
-        let rows = Array.from(table.rows).slice(1); // skip header
-        let isAsc = sortDirection[colIndex] = !sortDirection[colIndex];
-
-        rows.sort((a, b) => {
-          let A = a.cells[colIndex].innerText.trim();
-          let B = b.cells[colIndex].innerText.trim();
-
-          // coba parse angka / tanggal kalau bisa
-          if (!isNaN(Date.parse(A)) && !isNaN(Date.parse(B))) {
-            return isAsc ? new Date(A) - new Date(B) : new Date(B) - new Date(A);
-          } else if (!isNaN(A) && !isNaN(B)) {
-            return isAsc ? A - B : B - A;
-          } else {
-            return isAsc ? A.localeCompare(B) : B.localeCompare(A);
-          }
-        });
-
-        rows.forEach(r => table.tBodies[0].appendChild(r));
-      }
-    </script>
 
 
 
@@ -1105,6 +1084,67 @@
 
 </div>
 @endsection
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const table = document.getElementById("tableKebutuhan");
+  const headers = table.querySelectorAll("th");
+  let sortDirection = {};
+
+  headers.forEach((header, index) => {
+    // skip kolom "No" (0) dan "Actions" (terakhir)
+    if (index === 0 || index === headers.length - 1) return;
+
+    // kasih cursor pointer
+    header.style.cursor = "pointer";
+
+    // bikin span untuk icon sort
+    const icon = document.createElement("span");
+    icon.textContent = " ⇅";
+    icon.classList.add("sort-icon");
+    header.appendChild(icon);
+
+    header.addEventListener("click", () => {
+      const tbody = table.querySelector("tbody");
+      const rows = Array.from(tbody.querySelectorAll("tr"));
+      const dir = sortDirection[index] === "asc" ? "desc" : "asc";
+
+      rows.sort((a, b) => {
+        const cellA = a.children[index].innerText.trim();
+        const cellB = b.children[index].innerText.trim();
+
+        // cek angka dulu
+        const numA = parseFloat(cellA.replace(/[^0-9.-]+/g,""));
+        const numB = parseFloat(cellB.replace(/[^0-9.-]+/g,""));
+        if (!isNaN(numA) && !isNaN(numB)) {
+          return dir === "asc" ? numA - numB : numB - numA;
+        }
+
+        // cek tanggal
+        const dateA = Date.parse(cellA);
+        const dateB = Date.parse(cellB);
+        if (!isNaN(dateA) && !isNaN(dateB)) {
+          return dir === "asc" ? dateA - dateB : dateB - dateA;
+        }
+
+        // default string compare
+        return dir === "asc"
+          ? cellA.localeCompare(cellB)
+          : cellB.localeCompare(cellA);
+      });
+
+      // reset ikon
+      table.querySelectorAll(".sort-icon").forEach(el => el.textContent = " ⇅");
+      header.querySelector(".sort-icon").textContent = dir === "asc" ? " ↑" : " ↓";
+
+      // update rows
+      rows.forEach(row => tbody.appendChild(row));
+
+      sortDirection[index] = dir;
+    });
+  });
+});
+</script>
+
 <script>
   document.addEventListener("DOMContentLoaded", function() {
     let activeTab = 'kebutuhan'; // default tab
