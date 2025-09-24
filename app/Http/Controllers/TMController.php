@@ -9,6 +9,8 @@ use App\Models\TalentCluster;
 use App\Models\EmployeeDocument;
 use App\Models\Training;
 use App\Models\EmployeePayslip;
+use App\Models\FeedbackPeserta;
+use App\Models\FeedbackAtasan;
 use Illuminate\Support\Facades\Storage;
 
 
@@ -103,6 +105,14 @@ class TMController extends Controller
             ->orderByRaw('MONTH(tanggalKDMP) DESC')
             ->get();
 
+        $feedbackPeserta = \App\Models\FeedbackPeserta::where('employee_id', $employee->id)
+            ->latest()
+            ->get();
+        $feedbackAtasan = \App\Models\FeedbackAtasan::where('employee_id', $employee->id)
+            ->latest()
+            ->first();
+
+
         return view('employee.show', compact(
             'employee',
             'payslips',
@@ -115,7 +125,9 @@ class TMController extends Controller
             'sortByFamily',
             'sortOrderFamily',
             'sortByTraining',
-            'sortOrderTraining'
+            'sortOrderTraining',
+            'feedbackPeserta',
+            'feedbackAtasan'
         ));
     }
 
@@ -572,5 +584,58 @@ class TMController extends Controller
         $payslip->delete();
 
         return back()->with('success', 'Slip gaji berhasil dihapus.');
+    }
+
+    public function storeEvaluasiPeserta(Request $request, Employee $employee)
+    {
+        $request->validate([
+            'emoji_rating' => 'required|in:sangat_baik,baik,kurang_baik',
+            'q1' => 'required|integer|min:1|max:10',
+            'q2' => 'required|integer|min:1|max:10',
+            'q3' => 'required|integer|min:1|max:10',
+            'q4' => 'required|integer|min:1|max:10',
+            'q5' => 'required|integer|min:1|max:10',
+            'komentar' => 'required|string',
+        ]);
+
+        FeedbackPeserta::create([
+            'employee_id'  => $employee->id,
+            'emoji_rating' => $request->emoji_rating,
+            'q1'           => $request->q1,
+            'q2'           => $request->q2,
+            'q3'           => $request->q3,
+            'q4'           => $request->q4,
+            'q5'           => $request->q5,
+            'komentar'     => $request->komentar,
+        ]);
+
+        $redirectTo = $request->input('redirect_to', route('employees.show', $employee->id));
+
+        return redirect($redirectTo)->with('success', 'Evaluasi Peserta berhasil disimpan.');
+    }
+
+
+    public function storeEvaluasiAtasan(Request $request, Employee $employee)
+    {
+        $request->validate([
+            'atasan_q1' => 'required|integer|min:1|max:10',
+            'atasan_q2' => 'required|integer|min:1|max:10',
+            'atasan_q3' => 'required|integer|min:1|max:10',
+            'atasan_q4' => 'required|integer|min:1|max:10',
+            'atasan_q5' => 'required|integer|min:1|max:10',
+            'atasan_komentar' => 'required|string',
+        ]);
+
+        \App\Models\FeedbackAtasan::create([
+            'employee_id' => $employee->id,
+            'q1' => $request->atasan_q1,
+            'q2' => $request->atasan_q2,
+            'q3' => $request->atasan_q3,
+            'q4' => $request->atasan_q4,
+            'q5' => $request->atasan_q5,
+            'komentar' => $request->atasan_komentar,
+        ]);
+
+        return redirect()->back()->with('success', 'Evaluasi Atasan berhasil disimpan.');
     }
 }

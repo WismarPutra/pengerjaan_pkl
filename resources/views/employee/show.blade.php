@@ -1709,6 +1709,11 @@
     margin: 15px 0;
   }
 
+  /* sembunyikan bulatan radio */
+  .emoji-rating input[type="radio"] {
+    display: none;
+  }
+
   .emoji-btn {
     flex: 1;
     border: 1px solid #ddd;
@@ -1728,6 +1733,15 @@
     border-color: #3B57FF;
     background: #f4f6ff;
   }
+
+  /* efek kalau dipilih */
+  .emoji-rating input[type="radio"]:checked+.emoji-btn {
+    border-color: #3B57FF;
+    background: #e6ebff;
+    font-weight: bold;
+    color: #3B57FF;
+  }
+
 
   /* saat dipilih */
   input[type="radio"]:checked+.emoji-btn {
@@ -1830,12 +1844,12 @@
   .modal-content {
     background: #fff;
     border-radius: 12px;
-    width: 500px;
+    width: 1000px;
     max-width: 95%;
     padding: 30px;
     position: relative;
     text-align: center;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 4px 20px rgba(133, 120, 120, 0.2);
     animation: fadeIn 0.3s ease-in-out;
   }
 
@@ -2553,13 +2567,40 @@
           </button>
         </div>
 
-        <p id="evEmoji">Keseluruhan Pengalaman Training</p><br>
-        <p id="evQ1">Hasil Pelatihan menambah pengetahuan saya</p><br>
-        <p id="evQ2">Saya mudah mengimplementasikan hasil pelatihan</p><br>
-        <p id="evQ3">Hasil pelatihan mempermudah pekerjaan saya</p><br>
-        <p id="evQ4">Saya konsisten menerapkan hasil pelatihan</p><br>
-        <p id="evQ5">Hasil pelatihan meningkatkan kinerja unit</p><br>
-        <p id="evKomentar">Komentar:</p><br>
+        {{-- Ringkasan (feedback terbaru kalau ada) --}}
+        @if($feedbackPeserta->isNotEmpty())
+        @php $latest = $feedbackPeserta->first(); @endphp
+        <p id="evEmoji">
+          Keseluruhan Pengalaman Training <br>
+          <strong>{{ ucfirst($latest->emoji_rating) }}</strong>
+        </p><br>
+        <p id="evQ1">
+          Hasil Pelatihan menambah pengetahuan saya <br>
+          <strong>{{ $latest->q1 }}</strong>
+        </p><br>
+        <p id="evQ2">
+          Saya mudah mengimplementasikan hasil pelatihan <br>
+          <strong>{{ $latest->q2 }}</strong>
+        </p><br>
+        <p id="evQ3">
+          Hasil pelatihan mempermudah pekerjaan saya <br>
+          <strong>{{ $latest->q3 }}</strong>
+        </p><br>
+        <p id="evQ4">
+          Saya konsisten menerapkan hasil pelatihan <br>
+          <strong>{{ $latest->q4 }}</strong>
+        </p><br>
+        <p id="evQ5">
+          Hasil pelatihan meningkatkan kinerja unit <br>
+          <strong>{{ $latest->q5 }}</strong>
+        </p><br>
+        <p id="evKomentar">
+          Komentar: <br>
+          <strong>{{ $latest->komentar }}</strong>
+        </p><br>
+        @else
+        <p><em>Belum ada evaluasi peserta.</em></p>
+        @endif
       </div>
 
       <!-- 🔹 TAB CONTENT: EVALUASI ATASAN -->
@@ -2570,35 +2611,59 @@
             <i class="fas fa-pen"></i> Isi Evaluasi
           </button>
         </div>
-        <div id="hasilEvaluasi"></div>
-        <p>Hasil pelatihan yang diikuti, menambah pengetahuan & keterampilan staff Saudara</p><br>
-        <p>Staff Saudara mengimplementasikan hasil pelatihan dalam tugas/pekerjaannya</p><br>
-        <p>Dengan hasil pelatihan tersebut, banyak tugas dan kasus dipekerjakan unit staff Saudara yang bisa disolusikan</p><br>
-        <p>Staff Saudara menerapkan hasil dalam tugas/pekerjaan secara konsisten</p><br>
-        <p>Hasil pelatihan yang diperoleh staff Saudara meningkatkan performansi/kinerja unit</p><br>
-        <p>Komentar:</p><br>
+
+        {{-- Ringkasan evaluasi atasan terbaru --}}
+        @if($feedbackAtasan)
+        <p>Hasil pelatihan menambah pengetahuan & keterampilan staff Saudara <br>
+          <strong>{{ $feedbackAtasan->q1 }}</strong>
+        </p><br>
+        <p>Staff Saudara mengimplementasikan hasil pelatihan dalam tugas/pekerjaannya <br>
+          <strong>{{ $feedbackAtasan->q2 }}</strong>
+        </p><br>
+        <p>Dengan hasil pelatihan tersebut, banyak tugas/kasus unit Saudara yang bisa disolusikan <br>
+          <strong>{{ $feedbackAtasan->q3 }}</strong>
+        </p><br>
+        <p>Staff Saudara menerapkan hasil pelatihan secara konsisten <br>
+          <strong>{{ $feedbackAtasan->q4 }}</strong>
+        </p><br>
+        <p>Hasil pelatihan meningkatkan performansi/kinerja unit Saudara <br>
+          <strong>{{ $feedbackAtasan->q5 }}</strong>
+        </p><br>
+        <p>Komentar: <br>
+          <strong>{{ $feedbackAtasan->komentar }}</strong>
+        </p><br>
+        @else
+        <p><em>Belum ada evaluasi atasan.</em></p>
+        @endif
       </div>
     </div>
+
+
     <!-- 🔹 MODAL ISI EVALUASI PESERTA -->
     <div class="modal fade" id="modalEvaluasiPeserta" tabindex="-1" aria-hidden="true">
       <div class="modal-dialog modal-lg">
         <div class="modal-content">
-          <form id="evaluationForm">
+          <form id="evaluationform" method="POST" action="{{ route('evaluasi.peserta.store', $employee->id) }}">
+            @csrf
+            <input type="hidden" name="redirect_to" value="{{ url()->current() }}">
+
             <div class="modal-header">
               <h5 class="modal-title"><strong>Nilai Pelatihan yang Anda Ikuti</strong></h5>
               <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
+
             <div class="modal-body">
               <p>Terima kasih telah mengikuti dan menyelesaikan pelatihan ini!</p>
 
-              <div class="emoji-rating">
+              <!-- Emoji Rating -->
+              <div class="emoji-rating mb-3">
                 <label>
-                  <input type="radio" name="emoji_rating" value="sangat_suka" hidden>
-                  <span class="emoji-btn">🥰 <br> Sangat Suka</span>
+                  <input type="radio" name="emoji_rating" value="sangat_baik" required hidden>
+                  <span class="emoji-btn">🥰 <br> Sangat Baik</span>
                 </label>
 
                 <label>
-                  <input type="radio" name="emoji_rating" value="cukup_baik" hidden>
+                  <input type="radio" name="emoji_rating" value="baik" hidden>
                   <span class="emoji-btn">🙂 <br> Cukup Baik</span>
                 </label>
 
@@ -2606,293 +2671,185 @@
                   <input type="radio" name="emoji_rating" value="kurang_baik" hidden>
                   <span class="emoji-btn">😐 <br> Kurang Baik</span>
                 </label>
+
               </div>
 
-
-              <!-- Pertanyaan Skala -->
-              <!-- Pertanyaan 1 -->
-              <div class="pertanyaan">
-                <label>Hasil pelatihan yang saya ikuti, menambah pengetahuan dan keterampilan saya *</label>
-                <div class="skala">
+              <!-- Pertanyaan Skala 1–10 -->
+              @for ($q = 1; $q <= 5; $q++)
+                <div class="pertanyaan mb-3">
+                <label>
+                  @switch($q)
+                  @case(1) Hasil pelatihan yang saya ikuti, menambah pengetahuan dan keterampilan saya * @break
+                  @case(2) Saya mudah mengimplementasikan hasil pelatihan dalam tugas/pekerjaan saya * @break
+                  @case(3) Hasil pelatihan yang didapat mempercepat/mempermudah penyelesaian tugas/pekerjaan saya * @break
+                  @case(4) Saya menerapkan secara konsisten hasil pelatihan pada tugas/pekerjaan saya * @break
+                  @case(5) Hasil pelatihan yang saya ikuti meningkatkan kinerja/performansi di unit saya saat ini * @break
+                  @endswitch
+                </label>
+                <div class="skala d-flex justify-content-between align-items-center">
                   <span class="label-kiri">Tidak Setuju</span>
-                  <div class="skala-options">
+                  <div class="d-flex gap-2 skala-options">
                     @for ($i = 1; $i <= 10; $i++)
-                      <label>
-                      <input type="radio" name="q1" value="{{ $i }}">
+                      <label class="text-center">
+                      <input type="radio" name="q{{ $q }}" value="{{ $i }}" required>
                       <span>{{ $i }}</span>
                       </label>
                       @endfor
                   </div>
                   <span class="label-kanan">Sangat Setuju</span>
                 </div>
-              </div>
-
-              <!-- Pertanyaan 2 -->
-              <div class="pertanyaan">
-                <label>Saya mudah mengimplementasikan hasil pelatihan dalam tugas/pekerjaan saya *</label>
-                <div class="skala">
-                  <span class="label-kiri">Tidak Setuju</span>
-                  <div class="skala-options">
-                    @for ($i = 1; $i <= 10; $i++)
-                      <label>
-                      <input type="radio" name="q2" value="{{ $i }}">
-                      <span>{{ $i }}</span>
-                      </label>
-                      @endfor
-                  </div>
-                  <span class="label-kanan">Sangat Setuju</span>
-                </div>
-              </div>
-
-              <!-- Pertanyaan 3 -->
-              <div class="pertanyaan">
-                <label>Hasil pelatihan yang didapat mempercepat/mempermudah penyelesaian tugas/pekerjaan saya *</label>
-                <div class="skala">
-                  <span class="label-kiri">Tidak Setuju</span>
-                  <div class="skala-options">
-                    @for ($i = 1; $i <= 10; $i++)
-                      <label>
-                      <input type="radio" name="q3" value="{{ $i }}">
-                      <span>{{ $i }}</span>
-                      </label>
-                      @endfor
-                  </div>
-                  <span class="label-kanan">Sangat Setuju</span>
-                </div>
-              </div>
-
-              <!-- Pertanyaan 4 -->
-              <div class="pertanyaan">
-                <label>Saya menerapkan secara konsisten hasil pelatihan pada tugas/pekerjaan saya *</label>
-                <div class="skala">
-                  <span class="label-kiri">Tidak Setuju</span>
-                  <div class="skala-options">
-                    @for ($i = 1; $i <= 10; $i++)
-                      <label>
-                      <input type="radio" name="q4" value="{{ $i }}">
-                      <span>{{ $i }}</span>
-                      </label>
-                      @endfor
-                  </div>
-                  <span class="label-kanan">Sangat Setuju</span>
-                </div>
-              </div>
-
-              <!-- Pertanyaan 5 -->
-              <div class="pertanyaan">
-                <label>Hasil pelatihan yang saya ikuti meningkatkan kinerja/performansi di unit saya saat ini *</label>
-                <div class="skala">
-                  <span class="label-kiri">Tidak Setuju</span>
-                  <div class="skala-options">
-                    @for ($i = 1; $i <= 10; $i++)
-                      <label>
-                      <input type="radio" name="q5" value="{{ $i }}">
-                      <span>{{ $i }}</span>
-                      </label>
-                      @endfor
-                  </div>
-                  <span class="label-kanan">Sangat Setuju</span>
-                </div>
-              </div>
-              <!-- Komentar -->
-              <div class="pertanyaan">
-                <label>Berikan komentar Anda *</label>
-                <textarea class="form-control" name="komentar" rows="3" required></textarea>
-              </div>
             </div>
-
-            <div class="modal-footer">
-              <!-- Cancel otomatis nutup modal -->
-              <button type="button" class="btn-cancel" data-bs-dismiss="modal">Cancel</button>
-
-              <!-- Submit simpan data -->
-              <button type="submit" class="btn-submit">Submit</button>
-            </div>
-          </form>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- 🔹 MODAL EVALUASI ATASAN -->
-  <div class="modal fade" id="modalEvaluasiAtasan" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-      <div class="modal-content">
-        <form id="formEvaluasiAtasan"> <!-- ✅ Tambahkan form -->
-          <div class="modal-header">
-            <h5 class="modal-title"><strong>Nilai Evaluasi Dampak Pelatihan (Atasan)</strong></h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-          </div>
-          <div class="modal-body">
-            <p>Mohon berikan evaluasi atas dampak dan penerapan pelatihan oleh staf di unit Anda.</p>
-
-            <!-- Pertanyaan Skala 1–10 -->
-            <div class="pertanyaan">
-              <label>Hasil pelatihan menambah pengetahuan & keterampilan staff Saudara *</label>
-              <div class="skala d-flex justify-content-between align-items-center">
-                <span class="label-kiri">Tidak Setuju</span>
-                <div class="d-flex gap-2">
-                  @for ($i = 1; $i <= 10; $i++)
-                    <label class="text-center">
-                    <input type="radio" name="atasan_q1" value="{{ $i }}">
-                    <span>{{ $i }}</span>
-                    </label>
-                    @endfor
-                </div>
-                <span class="label-kanan">Sangat Setuju</span>
-              </div>
-            </div>
-
-            <div class="pertanyaan">
-              <label>Staff Saudara mengimplementasikan hasil pelatihan dalam tugas/pekerjaannya *</label>
-              <div class="skala d-flex justify-content-between align-items-center">
-                <span>Tidak Setuju</span>
-                <div class="d-flex gap-2">
-                  @for ($i = 1; $i <= 10; $i++)
-                    <label class="text-center">
-                    <input type="radio" name="atasan_q2" value="{{ $i }}">
-                    <span>{{ $i }}</span>
-                    </label>
-                    @endfor
-                </div>
-                <span>Sangat Setuju</span>
-              </div>
-            </div>
-
-            <div class="pertanyaan">
-              <label>Dengan hasil pelatihan tersebut, banyak tugas/kasus unit Saudara yang bisa disolusikan *</label>
-              <div class="skala d-flex justify-content-between align-items-center">
-                <span>Tidak Setuju</span>
-                <div class="d-flex gap-2">
-                  @for ($i = 1; $i <= 10; $i++)
-                    <label class="text-center">
-                    <input type="radio" name="atasan_q3" value="{{ $i }}">
-                    <span>{{ $i }}</span>
-                    </label>
-                    @endfor
-                </div>
-                <span>Sangat Setuju</span>
-              </div>
-            </div>
-
-            <div class="pertanyaan">
-              <label>Staff Saudara menerapkan hasil pelatihan secara konsisten *</label>
-              <div class="skala d-flex justify-content-between align-items-center">
-                <span>Tidak Setuju</span>
-                <div class="d-flex gap-2">
-                  @for ($i = 1; $i <= 10; $i++)
-                    <label class="text-center">
-                    <input type="radio" name="atasan_q4" value="{{ $i }}">
-                    <span>{{ $i }}</span>
-                    </label>
-                    @endfor
-                </div>
-                <span>Sangat Setuju</span>
-              </div>
-            </div>
-
-            <div class="pertanyaan">
-              <label>Hasil pelatihan meningkatkan performansi/kinerja unit Saudara *</label>
-              <div class="skala d-flex justify-content-between align-items-center">
-                <span>Tidak Setuju</span>
-                <div class="d-flex gap-2">
-                  @for ($i = 1; $i <= 10; $i++)
-                    <label class="text-center">
-                    <input type="radio" name="atasan_q5" value="{{ $i }}">
-                    <span>{{ $i }}</span>
-                    </label>
-                    @endfor
-                </div>
-                <span>Sangat Setuju</span>
-              </div>
-            </div>
+            @endfor
 
             <!-- Komentar -->
             <div class="pertanyaan">
               <label>Berikan komentar Anda *</label>
-              <textarea class="form-control" rows="3" name="atasan_komentar"></textarea>
+              <textarea class="form-control" name="komentar" rows="3" required></textarea>
             </div>
-          </div>
+        </div>
 
-          <div class="modal-footer">
-            <button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-            <button type="submit" class="btn btn-primary">Submit</button>
-          </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
         </form>
       </div>
     </div>
   </div>
 
 
-  <!-- DATA PAYROLL -->
-  <div class="tab-content" id="payroll" style="display: none;">
-    <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; flex-wrap: wrap;">
-      <h2 class="left-section">List Data Payroll</h2>
-      <div class="right-section2" style="display:flex; gap:10px; align-items:center;">
-        <div class="search-container">
-          <i class="fas fa-search search-icon"></i>
-          <input type="text" placeholder="Search by Name" class="search-bar" />
-        </div>
-        <button class="filter-btn" onclick="toggleFilter()"><i class="fas fa-sliders"></i> Filters</button>
-        <!-- Tombol Tambah -->
-        <button onclick="openUploadModal()"
-          style="background:#3B82F6; color:#fff; font-weight:600; font-size:14px; 
-         padding:8px 16px; border:none; border-radius:8px; cursor:pointer;">
-          + Tambah
-        </button>
-      </div>
-    </div>
 
-    <div class="payslip-grid">
-      <!-- Payslip dari Database -->
-      @if(isset($payslips) && $payslips->count() > 0)
-      @foreach($payslips as $payslip)
-      <div class="payslip-card">
-        <img src="{{ asset('assets/pdf-icon.png') }}" alt="PDF" class="pdf-icon">
-        <div class="payslip-text">
-          <strong>{{ $payslip->filename }}</strong><br>
-          <span>{{ \Carbon\Carbon::parse($payslip->date)->translatedFormat('d F Y') }}</span><br>
-          <a href="javascript:void(0)"
-            onclick="openPayslipModal('{{ Storage::url($payslip->path) }}', '{{ $payslip->filename }}')"
-            class="download-link">
-            Klik untuk Download
-          </a>
-        </div>
+
+  <meta name="csrf-token" content="{{ csrf_token() }}">
+  <!-- 🔹 MODAL EVALUASI ATASAN -->
+  <div class="modal fade" id="modalEvaluasiAtasan" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <form id="formEvaluasiAtasan" action="{{ route('evaluasi.atasan.store', $employee->id) }}" method="POST">
+          @csrf
+          <div class="modal-header">
+            <h5 class="modal-title"><strong>Nilai Evaluasi Dampak Pelatihan (Atasan)</strong></h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+
+          <div class="modal-body">
+            <p>Mohon berikan evaluasi atas dampak dan penerapan pelatihan oleh staf di unit Anda.</p>
+
+            @for ($q = 1; $q <= 5; $q++)
+              <div class="pertanyaan mb-3">
+              <label>
+                @switch($q)
+                @case(1) Hasil pelatihan menambah pengetahuan & keterampilan staff Saudara * @break
+                @case(2) Staff Saudara mengimplementasikan hasil pelatihan dalam tugas/pekerjaannya * @break
+                @case(3) Dengan hasil pelatihan tersebut, banyak tugas/kasus unit Saudara yang bisa disolusikan * @break
+                @case(4) Staff Saudara menerapkan hasil pelatihan secara konsisten * @break
+                @case(5) Hasil pelatihan meningkatkan performansi/kinerja unit Saudara * @break
+                @endswitch
+              </label>
+
+              <div class="skala d-flex justify-content-between align-items-center">
+                <span class="label-kiri">Tidak Setuju</span>
+                <div class="d-flex gap-2">
+                  @for ($i = 1; $i <= 10; $i++)
+                    <label class="text-center">
+                    <input type="radio" name="atasan_q{{ $q }}" value="{{ $i }}" required>
+                    <span>{{ $i }}</span>
+                    </label>
+                    @endfor
+                </div>
+                <span class="label-kanan">Sangat Setuju</span>
+              </div>
+          </div>
+          @endfor
+
+          <div class="pertanyaan">
+            <label>Berikan komentar Anda *</label>
+            <textarea class="form-control" rows="3" name="atasan_komentar" required></textarea>
+          </div>
       </div>
-      @endforeach
-      @else
-      <p style="margin-top:15px;">Tidak ada data payslip.</p>
-      @endif
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+<!-- DATA PAYROLL -->
+<div class="tab-content" id="payroll" style="display: none;">
+  <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; flex-wrap: wrap;">
+    <h2 class="left-section">List Data Payroll</h2>
+    <div class="right-section2" style="display:flex; gap:10px; align-items:center;">
+      <div class="search-container">
+        <i class="fas fa-search search-icon"></i>
+        <input type="text" placeholder="Search by Name" class="search-bar" />
+      </div>
+      <button class="filter-btn" onclick="toggleFilter()"><i class="fas fa-sliders"></i> Filters</button>
+      <!-- Tombol Tambah -->
+      <button onclick="openUploadModal()"
+        style="background:#3B82F6; color:#fff; font-weight:600; font-size:14px; 
+         padding:8px 16px; border:none; border-radius:8px; cursor:pointer;">
+        + Tambah
+      </button>
     </div>
   </div>
 
-  <!-- Modal View Payslip -->
-  <div id="payslipModal" class="modal"
-    style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; 
+  <div class="payslip-grid">
+    <!-- Payslip dari Database -->
+    @if(isset($payslips) && $payslips->count() > 0)
+    @foreach($payslips as $payslip)
+    <div class="payslip-card">
+      <img src="{{ asset('assets/pdf-icon.png') }}" alt="PDF" class="pdf-icon">
+      <div class="payslip-text">
+        <strong>{{ $payslip->filename }}</strong><br>
+        <span>{{ \Carbon\Carbon::parse($payslip->date)->translatedFormat('d F Y') }}</span><br>
+        <a href="javascript:void(0)"
+          onclick="openPayslipModal('{{ Storage::url($payslip->path) }}', '{{ $payslip->filename }}')"
+          class="download-link">
+          Klik untuk Download
+        </a>
+      </div>
+    </div>
+    @endforeach
+    @else
+    <p style="margin-top:15px;">Tidak ada data payslip.</p>
+    @endif
+  </div>
+</div>
+
+<!-- Modal View Payslip -->
+<div id="payslipModal" class="modal"
+  style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; 
     background: rgba(0,0,0,0.5); justify-content:center; align-items:center; z-index:9999;">
-    <div class="modal-content"
-      style="background:#fff; border-radius:12px; width:70%; max-width:800px; height:90%; 
+  <div class="modal-content"
+    style="background:#fff; border-radius:12px; width:70%; max-width:800px; height:90%; 
       position:relative; display:flex; flex-direction:column; overflow:hidden;">
-      <button type="button" onclick="closePayslipModal()"
-        style="position:absolute; top:15px; right:15px; background:none; border:none; 
+    <button type="button" onclick="closePayslipModal()"
+      style="position:absolute; top:15px; right:15px; background:none; border:none; 
        font-size:24px; font-weight:bold; cursor:pointer; color:#333;">&times;</button>
-      <div id="payslipTitle" style="padding:20px 20px 0 20px; text-align:left; font-size:18px; font-weight:600;">
-        Slip Gaji
-      </div>
-      <div style="flex:1; padding:20px;">
-        <iframe id="payslipFrame" src=""
-          style="width:100%; height:100%; border:none; border-radius:8px; box-shadow:0 2px 6px rgba(0,0,0,0.1);"></iframe>
-      </div>
-      <div style="padding:15px; text-align:center; border-top:1px solid #eee;">
-        <a id="downloadPayslipBtn" href="#" download
-          style="background:#3B82F6; color:#fff; font-weight:600; font-size:16px; 
+    <div id="payslipTitle" style="padding:20px 20px 0 20px; text-align:left; font-size:18px; font-weight:600;">
+      Slip Gaji
+    </div>
+    <div style="flex:1; padding:20px;">
+      <iframe id="payslipFrame" src=""
+        style="width:100%; height:100%; border:none; border-radius:8px; box-shadow:0 2px 6px rgba(0,0,0,0.1);"></iframe>
+    </div>
+    <div style="padding:15px; text-align:center; border-top:1px solid #eee;">
+      <a id="downloadPayslipBtn" href="#" download
+        style="background:#3B82F6; color:#fff; font-weight:600; font-size:16px; 
         padding:12px 30px; border-radius:8px; text-decoration:none; 
         display:inline-block; transition:background 0.3s;">Download</a>
-      </div>
     </div>
   </div>
+</div>
 
-  <!-- Modal Upload Payroll -->
+<!-- Modal Upload Payroll -->
 <div id="uploadModal" class="modal"
   style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.5); 
   justify-content:center; align-items:center; z-index:9999;">
@@ -2908,7 +2865,7 @@
     <h3 style="font-size:18px; font-weight:600;">Tambah Data Payroll</h3>
 
     <!-- 🔹 Buka form di sini -->
-    <form id="uploadForm" action="{{ route('employees.payslip.store', ['employee' => $employee->id]) }}" 
+    <form id="uploadForm" action="{{ route('employees.payslip.store', ['employee' => $employee->id]) }}"
       method="POST" enctype="multipart/form-data" style="width:100%;">
       @csrf
 
@@ -2948,721 +2905,861 @@
           Tambah
         </button>
       </div>
-    </form> 
+    </form>
   </div>
 </div>
 
 
 
-  <div class="tab-content" id="karir" style="display: none;">
-    <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; flex-wrap: wrap;">
-      <h2 class="left-section9">Aktivitas Karir</h2>
-    </div>
-    <div class="timeline-container">
-      <div class="timeline-group">
-        <div class="timeline-item new">
-          <div class="timeline-year">2023</div>
-          <div class="timeline-content">
-            <h4 class="role-title text-blue-600 cursor-pointer" onclick="openModal('ModalRole2')">
-              Nama Role Sekarang
-            </h4>
-            <p class="sub-info">Maret 2023 - Sekarang (3 Tahun 1 Bulan) • Nama Direktorat • Band Level V</p>
-            <p class="promo-date">Tanggal Promosi: 1 Maret 2023</p>
-            <p class="description">
-              Lorem, ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus error eveniet culpa eos cupiditate doloribus impedit aliquid saepe aut nobis, consequuntur ex fuga consectetur quasi dolorum eum. Blanditiis, quibusdam incidunt?
-            </p>
-          </div>
-        </div>
-        <div class="timeline-item old">
-          <div class="timeline-year1">2020</div>
-          <div class="timeline-content">
-            <h4 class="role-title1">PJ Role ABC</h4>
-            <p class="sub-info">Januari 2020 - Februari 2023 (3 Tahun 2 Bulan) • Nama Direktorat • Band Level V</p>
-            <p class="promo-date">Tanggal Menjadi PJ: 3 Feb 2021</p>
-            <p class="description">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Praesentium illo alias ut impedit nihil eum molestias cupiditate eligendi numquam! Quae ex non quis autem esse! Eveniet nemo culpa porro nisi!</p>
-          </div>
-        </div>
-        <div class="timeline-item old">
-          <div class="timeline-year1">2011</div>
-          <div class="timeline-content">
-            <h4 class="role-title1">Staff Posisi ABC</h4>
-            <p class="sub-info">Januari 2011 - Desember 2020 (8 Tahun 11 Bulan) • Nama Direktorat • Band Level V</p>
-            <p class="promo-date">Tanggal Karyawan Tetap: 1 Januari 2011</p>
-            <p class="description">Lorem ipsum dolor sit amet consectetur adipisicing elit. Maiores ad reprehenderit nesciunt cumque iste accusantium, eligendi quidem dolorum. Impedit facilis molestias quibusdam. Earum laborum ea, eligendi molestias in eos error.</p>
-          </div>
+<div class="tab-content" id="karir" style="display: none;">
+  <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; flex-wrap: wrap;">
+    <h2 class="left-section9">Aktivitas Karir</h2>
+  </div>
+  <div class="timeline-container">
+    <div class="timeline-group">
+      <div class="timeline-item new">
+        <div class="timeline-year">2023</div>
+        <div class="timeline-content">
+          <h4 class="role-title text-blue-600 cursor-pointer" onclick="openModal('ModalRole2')">
+            Nama Role Sekarang
+          </h4>
+          <p class="sub-info">Maret 2023 - Sekarang (3 Tahun 1 Bulan) • Nama Direktorat • Band Level V</p>
+          <p class="promo-date">Tanggal Promosi: 1 Maret 2023</p>
+          <p class="description">
+            Lorem, ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus error eveniet culpa eos cupiditate doloribus impedit aliquid saepe aut nobis, consequuntur ex fuga consectetur quasi dolorum eum. Blanditiis, quibusdam incidunt?
+          </p>
         </div>
       </div>
-    </div>
-
-    <hr class="divider">
-
-    <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; flex-wrap: wrap;">
-      <h2 class="left-section10">Histori Pekerjaan Sebelumnya</h2>
-    </div>
-    <div class="timeline-container1">
-      <div class="timeline-group">
-        <div class="timeline-item old">
-          <div class="timeline-year1">2010</div>
-          <div class="timeline-content">
-            <h4 class="role-title1">Role Pekerjaan Sebelumnya</h4>
-            <p class="sub-info">PT Nama Perusahaan</p>
-            <p class="promo-date">April 2010 - Desember 2010 (9 Bulan)</p>
-            <p class="description">Lorem ipsum dolor sit amet consectetur adipisicing elit. Id adipisci eligendi animi ad ipsa alias officiis veritatis! Perferendis veniam voluptates, omnis porro, architecto mollitia laudantium laborum rerum rem vel assumenda.</p>
-          </div>
+      <div class="timeline-item old">
+        <div class="timeline-year1">2020</div>
+        <div class="timeline-content">
+          <h4 class="role-title1">PJ Role ABC</h4>
+          <p class="sub-info">Januari 2020 - Februari 2023 (3 Tahun 2 Bulan) • Nama Direktorat • Band Level V</p>
+          <p class="promo-date">Tanggal Menjadi PJ: 3 Feb 2021</p>
+          <p class="description">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Praesentium illo alias ut impedit nihil eum molestias cupiditate eligendi numquam! Quae ex non quis autem esse! Eveniet nemo culpa porro nisi!</p>
         </div>
-        <div class="timeline-item old">
-          <div class="timeline-year1">2010</div>
-          <div class="timeline-content">
-            <h4 class="role-title1">Role Pekerjaan Sebelumnya</h4>
-            <p class="sub-info">PT Nama Perusahaan</p>
-            <p class="promo-date">Januari 2010 - Maret 2010 (3 Bulan)</p>
-            <p class="description">Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolorum soluta quaerat at accusamus repudiandae consequatur eum ut perferendis blanditiis dicta laboriosam rem incidunt hic iste itaque quidem vitae, deleniti possimus.</p>
-          </div>
+      </div>
+      <div class="timeline-item old">
+        <div class="timeline-year1">2011</div>
+        <div class="timeline-content">
+          <h4 class="role-title1">Staff Posisi ABC</h4>
+          <p class="sub-info">Januari 2011 - Desember 2020 (8 Tahun 11 Bulan) • Nama Direktorat • Band Level V</p>
+          <p class="promo-date">Tanggal Karyawan Tetap: 1 Januari 2011</p>
+          <p class="description">Lorem ipsum dolor sit amet consectetur adipisicing elit. Maiores ad reprehenderit nesciunt cumque iste accusantium, eligendi quidem dolorum. Impedit facilis molestias quibusdam. Earum laborum ea, eligendi molestias in eos error.</p>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Modal Detail Aktivitas Karir -->
-  <div id="ModalRole2" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
-    <div class="bg-white p-6 rounded-2xl w-3/4 max-w-3xl shadow-lg relative max-h-[90vh] overflow-y-auto">
-      <button class="absolute top-4 right-4 text-gray-500 hover:text-gray-700 text-2xl"
-        onclick="closeModal('ModalRole2')">&times;</button>
-      <h3 class="text-xl font-semibold text-gray-800 mb-6">Detail Aktivitas Karir</h3>
+  <hr class="divider">
 
-      <div class="grid grid-cols-2 gap-y-4 gap-x-8 text-gray-700">
-        <p><span class="font-normal">Nama Role</span><br><span class="font-semibold">Nama Role Sekarang</span></p>
-        <p><span class="font-normal">Regional/Direktorat</span><br><span class="font-semibold">Nama Direktorat</span></p>
-        <p><span class="font-normal">Unit/Sub Unit</span><br><span class="font-semibold">Band</span></p>
-        <p><span class="font-normal">Nama Sub Unit</span><br><span class="font-semibold">Band Level V</span></p>
-        <p><span class="font-normal">Deskripsi</span><br><span class="font-semibold">Tanggal Promosi</span></p>
-        <p><span class="font-normal">Deskripsi singkat aktivitas karir</span><br><span class="font-semibold">1 Maret 2023</span></p>
-        <p><span class="font-normal">Dokumen SK</span><br><a href="#" class="text-blue-600 hover:underline">Klik untuk Melihat</a></p>
-        <p><span class="font-normal">Dokumen Nota Dinas</span><br><a href="#" class="text-blue-600 hover:underline">Klik untuk Melihat</a></p>
+  <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; flex-wrap: wrap;">
+    <h2 class="left-section10">Histori Pekerjaan Sebelumnya</h2>
+  </div>
+  <div class="timeline-container1">
+    <div class="timeline-group">
+      <div class="timeline-item old">
+        <div class="timeline-year1">2010</div>
+        <div class="timeline-content">
+          <h4 class="role-title1">Role Pekerjaan Sebelumnya</h4>
+          <p class="sub-info">PT Nama Perusahaan</p>
+          <p class="promo-date">April 2010 - Desember 2010 (9 Bulan)</p>
+          <p class="description">Lorem ipsum dolor sit amet consectetur adipisicing elit. Id adipisci eligendi animi ad ipsa alias officiis veritatis! Perferendis veniam voluptates, omnis porro, architecto mollitia laudantium laborum rerum rem vel assumenda.</p>
+        </div>
+      </div>
+      <div class="timeline-item old">
+        <div class="timeline-year1">2010</div>
+        <div class="timeline-content">
+          <h4 class="role-title1">Role Pekerjaan Sebelumnya</h4>
+          <p class="sub-info">PT Nama Perusahaan</p>
+          <p class="promo-date">Januari 2010 - Maret 2010 (3 Bulan)</p>
+          <p class="description">Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolorum soluta quaerat at accusamus repudiandae consequatur eum ut perferendis blanditiis dicta laboriosam rem incidunt hic iste itaque quidem vitae, deleniti possimus.</p>
+        </div>
       </div>
     </div>
   </div>
+</div>
+
+<!-- Modal Detail Aktivitas Karir -->
+<div id="ModalRole2" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
+  <div class="bg-white p-6 rounded-2xl w-3/4 max-w-3xl shadow-lg relative max-h-[90vh] overflow-y-auto">
+    <button class="absolute top-4 right-4 text-gray-500 hover:text-gray-700 text-2xl"
+      onclick="closeModal('ModalRole2')">&times;</button>
+    <h3 class="text-xl font-semibold text-gray-800 mb-6">Detail Aktivitas Karir</h3>
+
+    <div class="grid grid-cols-2 gap-y-4 gap-x-8 text-gray-700">
+      <p><span class="font-normal">Nama Role</span><br><span class="font-semibold">Nama Role Sekarang</span></p>
+      <p><span class="font-normal">Regional/Direktorat</span><br><span class="font-semibold">Nama Direktorat</span></p>
+      <p><span class="font-normal">Unit/Sub Unit</span><br><span class="font-semibold">Band</span></p>
+      <p><span class="font-normal">Nama Sub Unit</span><br><span class="font-semibold">Band Level V</span></p>
+      <p><span class="font-normal">Deskripsi</span><br><span class="font-semibold">Tanggal Promosi</span></p>
+      <p><span class="font-normal">Deskripsi singkat aktivitas karir</span><br><span class="font-semibold">1 Maret 2023</span></p>
+      <p><span class="font-normal">Dokumen SK</span><br><a href="#" class="text-blue-600 hover:underline">Klik untuk Melihat</a></p>
+      <p><span class="font-normal">Dokumen Nota Dinas</span><br><a href="#" class="text-blue-600 hover:underline">Klik untuk Melihat</a></p>
+    </div>
+  </div>
+</div>
 
 
-  <div class="tab-content" id="dokumen" style="display: none;">
-    <div class="content6">
-      <div class="left-content6">
-        <h4 class="content-info6">Dokumen Personal</h4>
+<div class="tab-content" id="dokumen" style="display: none;">
+  <div class="content6">
+    <div class="left-content6">
+      <h4 class="content-info6">Dokumen Personal</h4>
 
-        <p class="info1">KTP</p>
-        @if($employee->ktp)
-        <a href="{{ asset('storage/'.$employee->ktp) }}" target="_blank" class="ktp-link">Klik untuk Melihat</a>
-        @else
-        <span class="text-muted">Belum ada file</span>
-        @endif
+      <p class="info1">KTP</p>
+      @if($employee->ktp)
+      <a href="{{ asset('storage/'.$employee->ktp) }}" target="_blank" class="ktp-link">Klik untuk Melihat</a>
+      @else
+      <span class="text-muted">Belum ada file</span>
+      @endif
 
-        <p class="info1">BPJS Kesehatan</p>
-        @if($employee->bpjs_kesehatan)
-        <a href="{{ asset('storage/'.$employee->bpjs_kesehatan) }}" target="_blank" class="ktp-link">Klik untuk Melihat</a>
-        @else
-        <span class="text-muted">Belum ada file</span>
-        @endif
+      <p class="info1">BPJS Kesehatan</p>
+      @if($employee->bpjs_kesehatan)
+      <a href="{{ asset('storage/'.$employee->bpjs_kesehatan) }}" target="_blank" class="ktp-link">Klik untuk Melihat</a>
+      @else
+      <span class="text-muted">Belum ada file</span>
+      @endif
 
-        <p class="info1">NPWP</p>
-        @if($employee->npwp)
-        <a href="{{ asset('storage/'.$employee->npwp) }}" target="_blank" class="ktp-link">Klik untuk Melihat</a>
-        @else
-        <span class="text-muted">Belum ada file</span>
-        @endif
-      </div>
-
-      <div class="right-content6">
-        <p class="info1">Kartu Keluarga</p>
-        @if($employee->kartu_keluarga)
-        <a href="{{ asset('storage/'.$employee->kartu_keluarga) }}" target="_blank" class="ktp-link">Klik untuk Melihat</a>
-        @else
-        <span class="text-muted">Belum ada file</span>
-        @endif
-
-        <p class="info1">BPJS Ketenagakerjaan</p>
-        @if($employee->bpjs_ketenagakerjaan)
-        <a href="{{ asset('storage/'.$employee->bpjs_ketenagakerjaan) }}" target="_blank" class="ktp-link">Klik untuk Melihat</a>
-        @else
-        <span class="text-muted">Belum ada file</span>
-        @endif
-
-        <p class="info1">Nota Dinas</p>
-        @if($employee->nota_dinas)
-        <a href="{{ asset('storage/'.$employee->nota_dinas) }}" target="_blank" class="ktp-link">Klik untuk Melihat</a>
-        @else
-        <span class="text-muted">Belum ada file</span>
-        @endif
-      </div>
+      <p class="info1">NPWP</p>
+      @if($employee->npwp)
+      <a href="{{ asset('storage/'.$employee->npwp) }}" target="_blank" class="ktp-link">Klik untuk Melihat</a>
+      @else
+      <span class="text-muted">Belum ada file</span>
+      @endif
     </div>
 
-    <hr class="divider">
+    <div class="right-content6">
+      <p class="info1">Kartu Keluarga</p>
+      @if($employee->kartu_keluarga)
+      <a href="{{ asset('storage/'.$employee->kartu_keluarga) }}" target="_blank" class="ktp-link">Klik untuk Melihat</a>
+      @else
+      <span class="text-muted">Belum ada file</span>
+      @endif
 
-    <div class="content7">
-      <div class="left-content7">
-        <h4 class="content-info7">Dokumen Lainnya</h4>
+      <p class="info1">BPJS Ketenagakerjaan</p>
+      @if($employee->bpjs_ketenagakerjaan)
+      <a href="{{ asset('storage/'.$employee->bpjs_ketenagakerjaan) }}" target="_blank" class="ktp-link">Klik untuk Melihat</a>
+      @else
+      <span class="text-muted">Belum ada file</span>
+      @endif
 
-        <p class="info1">Hasil Psikotest</p>
-        @if($employee->psikotest)
-        <a href="{{ asset('storage/'.$employee->psikotest) }}" target="_blank" class="ktp-link">Klik untuk Melihat</a>
-        @else
-        <span class="text-muted">Belum ada file</span>
-        @endif
-
-        <p class="info1">Hasil Assessment 02</p>
-        @if($employee->assessment_02)
-        <a href="{{ asset('storage/'.$employee->assessment_02) }}" target="_blank" class="ktp-link">Klik untuk Melihat</a>
-        @else
-        <span class="text-muted">Belum ada file</span>
-        @endif
-      </div>
-
-      <div class="right-content7">
-        <p class="info1">Hasil Assessment 01</p>
-        @if($employee->assessment_01)
-        <a href="{{ asset('storage/'.$employee->assessment_01) }}" target="_blank" class="ktp-link">Klik untuk Melihat</a>
-        @else
-        <span class="text-muted">Belum ada file</span>
-        @endif
-
-        <p class="info1">Hasil Assessment 03</p>
-        @if($employee->assessment_03)
-        <a href="{{ asset('storage/'.$employee->assessment_03) }}" target="_blank" class="ktp-link">Klik untuk Melihat</a>
-        @else
-        <span class="text-muted">Belum ada file</span>
-        @endif
-      </div>
+      <p class="info1">Nota Dinas</p>
+      @if($employee->nota_dinas)
+      <a href="{{ asset('storage/'.$employee->nota_dinas) }}" target="_blank" class="ktp-link">Klik untuk Melihat</a>
+      @else
+      <span class="text-muted">Belum ada file</span>
+      @endif
     </div>
   </div>
 
+  <hr class="divider">
+
+  <div class="content7">
+    <div class="left-content7">
+      <h4 class="content-info7">Dokumen Lainnya</h4>
+
+      <p class="info1">Hasil Psikotest</p>
+      @if($employee->psikotest)
+      <a href="{{ asset('storage/'.$employee->psikotest) }}" target="_blank" class="ktp-link">Klik untuk Melihat</a>
+      @else
+      <span class="text-muted">Belum ada file</span>
+      @endif
+
+      <p class="info1">Hasil Assessment 02</p>
+      @if($employee->assessment_02)
+      <a href="{{ asset('storage/'.$employee->assessment_02) }}" target="_blank" class="ktp-link">Klik untuk Melihat</a>
+      @else
+      <span class="text-muted">Belum ada file</span>
+      @endif
+    </div>
+
+    <div class="right-content7">
+      <p class="info1">Hasil Assessment 01</p>
+      @if($employee->assessment_01)
+      <a href="{{ asset('storage/'.$employee->assessment_01) }}" target="_blank" class="ktp-link">Klik untuk Melihat</a>
+      @else
+      <span class="text-muted">Belum ada file</span>
+      @endif
+
+      <p class="info1">Hasil Assessment 03</p>
+      @if($employee->assessment_03)
+      <a href="{{ asset('storage/'.$employee->assessment_03) }}" target="_blank" class="ktp-link">Klik untuk Melihat</a>
+      @else
+      <span class="text-muted">Belum ada file</span>
+      @endif
+    </div>
+  </div>
+</div>
 
 
-  <!-- CLUSTER MODAL -->
-  <div id="addClusterModal">
-    <div class="modal-content">
-      <div class="content11">
-        <div class="left-content11">
-          <h3>Tambah Penilaian Talent Cluster</h3>
-        </div>
 
-        <div class="right-content11">
-          <button onclick="closeAddClusterModal()" class="close-button">
-            <i class="fas fa-circle-xmark"></i>
-          </button>
-        </div>
+<!-- CLUSTER MODAL -->
+<div id="addClusterModal">
+  <div class="modal-content">
+    <div class="content11">
+      <div class="left-content11">
+        <h3>Tambah Penilaian Talent Cluster</h3>
       </div>
+
+      <div class="right-content11">
+        <button onclick="closeAddClusterModal()" class="close-button">
+          <i class="fas fa-circle-xmark"></i>
+        </button>
+      </div>
+    </div>
+    <div class="full-width">
       <div class="full-width">
-        <div class="full-width">
-          <form action="{{ route('clusters.store', $employee->id) }}" method="POST">
-            @csrf
-            <div class="form-grid1">
-              <div class="form-group2">
-                <div class="label-group">
-                  <label>Periode</label>
-                  <label class="bintang">*</label>
-                </div>
-                <select name="periodeCluster" class="form-control1" required>
-                  <option disabled selected value=""></option>
-                  <option value="Q1">Q1</option>
-                  <option value="Q2">Q2</option>
-                  <option value="Q3">Q3</option>
-                  <option value="Q4">Q4</option>
-                </select>
+        <form action="{{ route('clusters.store', $employee->id) }}" method="POST">
+          @csrf
+          <div class="form-grid1">
+            <div class="form-group2">
+              <div class="label-group">
+                <label>Periode</label>
+                <label class="bintang">*</label>
+              </div>
+              <select name="periodeCluster" class="form-control1" required>
+                <option disabled selected value=""></option>
+                <option value="Q1">Q1</option>
+                <option value="Q2">Q2</option>
+                <option value="Q3">Q3</option>
+                <option value="Q4">Q4</option>
+              </select>
+            </div>
+
+            <div class="form-group3">
+              <div class="label-group">
+                <label>Tahun</label>
+                <label class="bintang">*</label>
+              </div>
+              <input type="month" name="tahunCluster" class="form-control" />
+            </div>
+
+            <div class="form-group2 fully-width">
+              <div class="label-group">
+                <label class="mt-[50px]">Talent Cluster</label>
+                <label class="bintang mt-[50px]">*</label>
+              </div>
+              <select name="talentCluster" class="form-control1" required>
+                <option disabled selected value=""></option>
+                <option value="Potential Employee">Potential Employee</option>
+                <option value="Promotable Employee">Promotable Employee</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-buttons w-[700px]">
+            <button type="button" class="cancel" onclick="closeAddClusterModal()">Cancel</button>
+            <button type="submit" class="submit">Tambah</button>
+          </div>
+        </form>
+      </div>
+
+
+      <div class="modal fade" id="feedbackModal" tabindex="-1" aria-labelledby="feedbackModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content">
+            <form action="{{ route('feedback.store') }}" methode="POST">
+              @csrf
+              <div class="modal-header">
+                <h5 class="modal-title" id="feedbackModalLabel">Bantu Kami Lebih Baik!</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
 
-              <div class="form-group3">
-                <div class="label-group">
-                  <label>Tahun</label>
-                  <label class="bintang">*</label>
-                </div>
-                <input type="month" name="tahunCluster" class="form-control" />
-              </div>
+              <div class="modal-body">
+                <p>Terima Kasih telah mengikuti pelatihan ini. Silahkan berikan umpan balik agar kami dapat terus melakukan perbaikan.</p>
+                <div class="d-flex justify-content-between mb-4">
+                  <div class="emoji-select-group text-center">
+                    <input type="radio" name="emoji_feedback" id="emoji1" value="Sangat Suka" hidden>
+                    <label for="emoji1" class="emoji-option">
+                      🥰
+                      <div class="emoji-label">Sangat Suka</div>
+                    </label>
 
-              <div class="form-group2 fully-width">
-                <div class="label-group">
-                  <label class="mt-[50px]">Talent Cluster</label>
-                  <label class="bintang mt-[50px]">*</label>
+                    <input type="radio" name="emoji_feedback" id="emoji2" value="Cukup Baik" hidden>
+                    <label for="emoji2" class="emoji-option">
+                      😀
+                      <div class="emoji-label">Cukup Baik</div>
+                    </label>
+
+                    <input type="radio" name="emoji_feedback" id="emoji3" value="Kurang Baik" hidden>
+                    <label for="emoji3" class="emoji-option">
+                      😔
+                      <div class="emoji-label">Kurang Baik</div>
+                    </label>
+                  </div>
                 </div>
-                <select name="talentCluster" class="form-control1" required>
-                  <option disabled selected value=""></option>
-                  <option value="Potential Employee">Potential Employee</option>
-                  <option value="Promotable Employee">Promotable Employee</option>
-                </select>
+
+                @php
+                $questions = [
+                "Hasil pelatihan yang saya ikuti, menambah pengetahuan dan keterampilan saya",
+                "Saya mudah mengimplementasikan hasil pelatihan dalam tugas/pekerjaan saya",
+                "Hasil pelatihan yang didapat mempercpat/mempermudah penyelesaian tugas/pekerjaan saya",
+                "Saya menerapkan secara konsisten hasil pelatihan pada tugas/pekerjaan saya",
+                "Hasil pelatihan yang saya ikuti meningkatkan kinerja/performance di unit saya saat ini"
+                ];
+                @endphp
+
+                @foreach($questions as $index => $question)
+                <div class="mb-3">
+                  <label class="form-label">{{ $question }} <span class="text-danger">*</span></label>
+                  <div class="d-flex gap-2 flex-wrap">
+                    @for($i =1; $i <= 10; $i++)
+                      <div>
+                      <input type="radio" class="btn-check" name="q{{ $index+1 }}" id="q{{ $index+1 }}_{{ $i }}" value="{{ $i }}" required>
+                      <label class="btn btn-outline-primary btn-sm" for="q{{ $index+1 }}_{{ $i }}">{{ $i }}</label>
+                  </div>
+                  @endfor
+                </div>
               </div>
-            </div>
-            <div class="form-buttons w-[700px]">
-              <button type="button" class="cancel" onclick="closeAddClusterModal()">Cancel</button>
-              <button type="submit" class="submit">Tambah</button>
-            </div>
+              @endforeach
+
+              <div class="mb-3">
+                <label class="form-label">Beritahu kami bagaimana kami bisa memperbaiki pelatihan ini <span class="text-danger">*</span></label>
+                <textarea class="form-control" name="saran" rows="3" required></textarea>
+              </div>
+          </div>
+
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+            <button type="submit" class="btn btn-primary">Submit</button>
+          </div>
           </form>
         </div>
-
-
-        <div class="modal fade" id="feedbackModal" tabindex="-1" aria-labelledby="feedbackModalLabel" aria-hidden="true">
-          <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-              <form action="{{ route('feedback.store') }}" methode="POST">
-                @csrf
-                <div class="modal-header">
-                  <h5 class="modal-title" id="feedbackModalLabel">Bantu Kami Lebih Baik!</h5>
-                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-
-                <div class="modal-body">
-                  <p>Terima Kasih telah mengikuti pelatihan ini. Silahkan berikan umpan balik agar kami dapat terus melakukan perbaikan.</p>
-                  <div class="d-flex justify-content-between mb-4">
-                    <div class="emoji-select-group text-center">
-                      <input type="radio" name="emoji_feedback" id="emoji1" value="Sangat Suka" hidden>
-                      <label for="emoji1" class="emoji-option">
-                        🥰
-                        <div class="emoji-label">Sangat Suka</div>
-                      </label>
-
-                      <input type="radio" name="emoji_feedback" id="emoji2" value="Cukup Baik" hidden>
-                      <label for="emoji2" class="emoji-option">
-                        😀
-                        <div class="emoji-label">Cukup Baik</div>
-                      </label>
-
-                      <input type="radio" name="emoji_feedback" id="emoji3" value="Kurang Baik" hidden>
-                      <label for="emoji3" class="emoji-option">
-                        😔
-                        <div class="emoji-label">Kurang Baik</div>
-                      </label>
-                    </div>
-                  </div>
-
-                  @php
-                  $questions = [
-                  "Hasil pelatihan yang saya ikuti, menambah pengetahuan dan keterampilan saya",
-                  "Saya mudah mengimplementasikan hasil pelatihan dalam tugas/pekerjaan saya",
-                  "Hasil pelatihan yang didapat mempercpat/mempermudah penyelesaian tugas/pekerjaan saya",
-                  "Saya menerapkan secara konsisten hasil pelatihan pada tugas/pekerjaan saya",
-                  "Hasil pelatihan yang saya ikuti meningkatkan kinerja/performance di unit saya saat ini"
-                  ];
-                  @endphp
-
-                  @foreach($questions as $index => $question)
-                  <div class="mb-3">
-                    <label class="form-label">{{ $question }} <span class="text-danger">*</span></label>
-                    <div class="d-flex gap-2 flex-wrap">
-                      @for($i =1; $i <= 10; $i++)
-                        <div>
-                        <input type="radio" class="btn-check" name="q{{ $index+1 }}" id="q{{ $index+1 }}_{{ $i }}" value="{{ $i }}" required>
-                        <label class="btn btn-outline-primary btn-sm" for="q{{ $index+1 }}_{{ $i }}">{{ $i }}</label>
-                    </div>
-                    @endfor
-                  </div>
-                </div>
-                @endforeach
-
-                <div class="mb-3">
-                  <label class="form-label">Beritahu kami bagaimana kami bisa memperbaiki pelatihan ini <span class="text-danger">*</span></label>
-                  <textarea class="form-control" name="saran" rows="3" required></textarea>
-                </div>
-            </div>
-
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-              <button type="submit" class="btn btn-primary">Submit</button>
-            </div>
-            </form>
-          </div>
-        </div>
       </div>
     </div>
-    @endsection
+  </div>
+  @endsection
 
-    <script>
-      function showTab(tabId) {
-        // Sembunyikan semua konten
-        const tabs = document.querySelectorAll('.tab-content');
-        tabs.forEach(tab => tab.style.display = 'none');
+  <script>
+    function showTab(tabId) {
+      // Sembunyikan semua konten
+      const tabs = document.querySelectorAll('.tab-content');
+      tabs.forEach(tab => tab.style.display = 'none');
 
-        // Hapus kelas aktif dari semua tombol
-        const buttons = document.querySelectorAll('.tab-button');
-        buttons.forEach(btn => btn.classList.remove('active'));
+      // Hapus kelas aktif dari semua tombol
+      const buttons = document.querySelectorAll('.tab-button');
+      buttons.forEach(btn => btn.classList.remove('active'));
 
-        // Tampilkan tab yang diklik
-        document.getElementById(tabId).style.display = 'block';
+      // Tampilkan tab yang diklik
+      document.getElementById(tabId).style.display = 'block';
 
-        // Tambahkan kelas aktif ke tombol yang diklik
-        event.currentTarget.classList.add('active');
+      // Tambahkan kelas aktif ke tombol yang diklik
+      event.currentTarget.classList.add('active');
 
-        const badge = document.getElementById('badgeStatus');
-        if (badge) {
-          // Reset class dulu
-          badge.className = 'badge-status';
+      const badge = document.getElementById('badgeStatus');
+      if (badge) {
+        // Reset class dulu
+        badge.className = 'badge-status';
 
-          switch (tabId) {
-            case 'profile':
-              badge.textContent = 'Karyawan Tetap';
-              badge.classList.add('badge-profile');
-              break;
-            case 'keluarga':
-              badge.textContent = 'Karyawan Tetap';
-              badge.classList.add('badge-keluarga');
-              break;
-            case 'cluster':
-              badge.textContent = 'Karyawan Tetap';
-              badge.classList.add('badge-keluarga');
-              break;
-            case 'pelatihan':
-              badge.textContent = 'Karyawan Tetap';
-              badge.classList.add('badge-pelatihan');
-              break;
-            case 'payroll':
-              badge.textContent = 'Karyawan Tetap';
-              badge.classList.add('badge-payroll');
-              break;
-            case 'karir':
-              badge.textContent = 'Karyawan Tetap';
-              badge.classList.add('badge-karir');
-              break;
-            case 'dokumen':
-              badge.textContent = 'Karyawan Tetap';
-              badge.classList.add('badge-dokumen');
-              break;
-            default:
-              badge.textContent = 'Karyawan Tetap';
-              badge.classList.add('badge-profile');
-          }
+        switch (tabId) {
+          case 'profile':
+            badge.textContent = 'Karyawan Tetap';
+            badge.classList.add('badge-profile');
+            break;
+          case 'keluarga':
+            badge.textContent = 'Karyawan Tetap';
+            badge.classList.add('badge-keluarga');
+            break;
+          case 'cluster':
+            badge.textContent = 'Karyawan Tetap';
+            badge.classList.add('badge-keluarga');
+            break;
+          case 'pelatihan':
+            badge.textContent = 'Karyawan Tetap';
+            badge.classList.add('badge-pelatihan');
+            break;
+          case 'payroll':
+            badge.textContent = 'Karyawan Tetap';
+            badge.classList.add('badge-payroll');
+            break;
+          case 'karir':
+            badge.textContent = 'Karyawan Tetap';
+            badge.classList.add('badge-karir');
+            break;
+          case 'dokumen':
+            badge.textContent = 'Karyawan Tetap';
+            badge.classList.add('badge-dokumen');
+            break;
+          default:
+            badge.textContent = 'Karyawan Tetap';
+            badge.classList.add('badge-profile');
         }
       }
-    </script>
+    }
+  </script>
 
-    <script>
-      document.addEventListener('DOMContentLoaded', function() {
-        const tabs = document.querySelectorAll('.tab-content');
-        const tabButtons = document.querySelectorAll('.tab-button');
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const tabs = document.querySelectorAll('.tab-content');
+      const tabButtons = document.querySelectorAll('.tab-button');
 
-        // Sembunyikan semua tab dulu
-        tabs.forEach(tab => tab.style.display = 'none');
+      // Sembunyikan semua tab dulu
+      tabs.forEach(tab => tab.style.display = 'none');
 
-        // Ambil hash dari URL
-        let hash = window.location.hash || '#profile';
-        let activeTab = document.querySelector(hash);
+      // Ambil hash dari URL
+      let hash = window.location.hash || '#profile';
+      let activeTab = document.querySelector(hash);
 
-        if (activeTab) {
-          activeTab.style.display = 'block';
+      if (activeTab) {
+        activeTab.style.display = 'block';
+      }
+
+      // Optional: jika pakai tombol tab (tab-button class), tandai yang aktif
+      tabButtons.forEach(btn => {
+        const target = btn.getAttribute('href');
+        if (target === hash) {
+          btn.classList.add('active');
+        } else {
+          btn.classList.remove('active');
         }
+      });
+    });
+  </script>
 
-        // Optional: jika pakai tombol tab (tab-button class), tandai yang aktif
-        tabButtons.forEach(btn => {
-          const target = btn.getAttribute('href');
-          if (target === hash) {
-            btn.classList.add('active');
+  <script>
+    function showPelatihanDetail() {
+      document.getElementById('pelatihan').style.display = 'none';
+      document.getElementById('pelatihan-detail').style.display = 'block';
+    }
+
+    function backToPelatihan() {
+      event.preventDefault(); // agar tidak reload halaman
+      document.getElementById('pelatihan-detail').style.display = 'none';
+      document.getElementById('pelatihan').style.display = 'block';
+    }
+  </script>
+
+  <script>
+    function openFeedbackModal() {
+      document.getElementById('feedbackModal').style.display = 'block';
+    }
+
+    function closeFeedbackModal() {
+      document.getElementById('feedbackModal').style.display = 'none';
+    }
+
+    // Tutup jika klik di luar konten
+    window.onclick = function(event) {
+      const modal = document.getElementById('feedbackModal');
+      if (event.target == modal) {
+        modal.style.display = "none";
+      }
+    }
+
+    function openFeedbackModal() {
+      document.getElementById("feedbackModal").style.display = "block";
+    }
+  </script>
+
+  <script>
+    function openAddClusterModal() {
+      document.getElementById("addClusterModal").style.display = "block";
+    }
+
+    function closeAddClusterModal() {
+      document.getElementById("addClusterModal").style.display = "none";
+    }
+  </script>
+  <script>
+    function toggleFilter() {
+      const modal = document.getElementById("filterModal");
+      modal.style.display = modal.style.display === "block" ? "none" : "block";
+    }
+  </script>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      const container = document.getElementById("pelatihan-container");
+      if (!container) return;
+
+      const tabButtons = container.querySelectorAll(".tab-btn");
+      const tabPanes = container.querySelectorAll(".tab-pane");
+
+      tabButtons.forEach(button => {
+        button.addEventListener("click", function() {
+          tabButtons.forEach(btn => btn.classList.remove("active"));
+          this.classList.add("active");
+
+          tabPanes.forEach(pane => pane.classList.remove("active"));
+          const target = this.getAttribute("data-target");
+          container.querySelector("#" + target).classList.add("active");
+        });
+      });
+    });
+  </script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const modal = document.getElementById('payslipModal');
+      const frame = document.getElementById('payslipFrame');
+      const downloadBtn = document.getElementById('downloadPayslipBtn');
+
+      document.querySelectorAll('.view-payslip-link').forEach(link => {
+        link.addEventListener('click', function(e) {
+          e.preventDefault(); // penting supaya tidak pindah tab
+          const fileUrl = this.href;
+          frame.src = fileUrl;
+          downloadBtn.href = fileUrl;
+          modal.style.display = 'flex';
+        });
+      });
+
+      window.closePayslipModal = function() {
+        modal.style.display = 'none';
+        frame.src = '';
+      }
+    });
+  </script>
+  <script>
+    //EVALUASI PESERTA
+    document.addEventListener("DOMContentLoaded", function() {
+      const form = document.getElementById("evaluationForm");
+
+      // mapping emoji
+      function labelEmoji(val) {
+        switch (val) {
+          case "sangat_suka":
+            return "Sangat Suka";
+          case "cukup_baik":
+            return "Cukup Baik";
+          case "kurang_baik":
+            return "Kurang Baik";
+          default:
+            return "-";
+        }
+      }
+
+      // mapping skala angka → keterangan
+      function labelSkala(val) {
+        if (!val) return "-";
+        const num = parseInt(val);
+        if (num >= 9) return `${num} (Sangat Setuju)`;
+        if (num >= 5) return `${num} (Setuju)`;
+        if (num <= 4) return `${num} (Tidak Setuju)`;
+        return `${num} (Kurang Baik)`;
+      }
+
+      form.addEventListener("submit", function(e) {
+        e.preventDefault();
+        const data = new FormData(form);
+
+        // update hasil evaluasi
+        document.getElementById("evEmoji").innerHTML =
+          `Keseluruhan Pengalaman Training <br><strong>${labelEmoji(data.get("emoji_rating"))}</strong>`;
+
+        document.getElementById("evQ1").innerHTML =
+          `Hasil Pelatihan menambah pengetahuan saya <br><strong>${labelSkala(data.get("q1"))}</strong>`;
+
+        document.getElementById("evQ2").innerHTML =
+          `Saya mudah mengimplementasikan hasil pelatihan <br><strong>${labelSkala(data.get("q2"))}</strong>`;
+
+        document.getElementById("evQ3").innerHTML =
+          `Hasil pelatihan mempermudah pekerjaan saya <br><strong>${labelSkala(data.get("q3"))}</strong>`;
+
+        document.getElementById("evQ4").innerHTML =
+          `Saya konsisten menerapkan hasil pelatihan <br><strong>${labelSkala(data.get("q4"))}</strong>`;
+
+        document.getElementById("evQ5").innerHTML =
+          `Hasil pelatihan meningkatkan kinerja unit <br><strong>${labelSkala(data.get("q5"))}</strong>`;
+
+        document.getElementById("evKomentar").innerHTML =
+          `Komentar: <br><strong>${data.get("komentar") || "-"}</strong>`;
+
+        // tutup modal
+        const modalEl = document.getElementById("modalEvaluasiPeserta");
+        const modal = bootstrap.Modal.getInstance(modalEl);
+        modal.hide();
+      });
+    });
+  </script>
+  <script>
+    //EVALUASI ATASAN
+    document.addEventListener("DOMContentLoaded", function() {
+      // mapping angka → label
+      function labelSkala(val) {
+        if (!val) return "-";
+        const num = parseInt(val);
+        if (num >= 9) return `${num} (Sangat Setuju)`;
+        if (num >= 5) return `${num} (Setuju)`;
+        if (num <= 4) return `${num} (Tidak Setuju)`;
+        return `${num} (Kurang Baik)`;
+      }
+
+      // Tangani submit Evaluasi Atasan
+      const atasanForm = document.querySelector("#modalEvaluasiAtasan form");
+      atasanForm.addEventListener("submit", function(e) {
+        //e.preventDefault();
+        const data = new FormData(atasanForm);
+
+        // update isi paragraf sesuai ID (biar rapi kasih ID di HTML)
+        document.querySelector("#pelatihan-atasan p:nth-of-type(1)").innerHTML =
+          `Hasil pelatihan menambah pengetahuan & keterampilan staff Saudara <br><strong>${labelSkala(data.get("atasan_q1"))}</strong>`;
+
+        document.querySelector("#pelatihan-atasan p:nth-of-type(2)").innerHTML =
+          `Staff Saudara mengimplementasikan hasil pelatihan dalam tugas/pekerjaannya <br><strong>${labelSkala(data.get("atasan_q2"))}</strong>`;
+
+        document.querySelector("#pelatihan-atasan p:nth-of-type(3)").innerHTML =
+          `Dengan hasil pelatihan tersebut, banyak tugas dan kasus dipekerjakan unit staff Saudara yang bisa disolusikan <br><strong>${labelSkala(data.get("atasan_q3"))}</strong>`;
+
+        document.querySelector("#pelatihan-atasan p:nth-of-type(4)").innerHTML =
+          `Staff Saudara menerapkan hasil dalam tugas/pekerjaan secara konsisten <br><strong>${labelSkala(data.get("atasan_q4"))}</strong>`;
+
+        document.querySelector("#pelatihan-atasan p:nth-of-type(5)").innerHTML =
+          `Hasil pelatihan yang diperoleh staff Saudara meningkatkan performansi/kinerja unit <br><strong>${labelSkala(data.get("atasan_q5"))}</strong>`;
+
+        document.querySelector("#pelatihan-atasan p:nth-of-type(6)").innerHTML =
+          `Komentar: <br><strong>${data.get("atasan_komentar") || "-"}</strong>`;
+
+        // tutup modal
+        const modalEl = document.getElementById("modalEvaluasiAtasan");
+        const modal = bootstrap.Modal.getInstance(modalEl);
+        modal.hide();
+      });
+    });
+  </script>
+  <script>
+    // Fungsi buka modal
+    function openModal(modalId) {
+      const modal = document.getElementById(modalId);
+      if (modal) {
+        modal.classList.remove('hidden');
+      }
+    }
+
+    // Fungsi tutup modal
+    function closeModal(modalId) {
+      const modal = document.getElementById(modalId);
+      if (modal) {
+        modal.classList.add('hidden');
+      }
+    }
+
+    // Tombol + Tambah untuk membuka modal tambah aktivitas
+    document.querySelectorAll('.btn-add').forEach(button => {
+      button.addEventListener('click', function() {
+        const tambahModal = document.getElementById('tambahAktivitasModal');
+        if (tambahModal) {
+          tambahModal.classList.remove('hidden');
+        }
+      });
+    });
+
+    // Tombol close di modal Tambah Aktivitas
+    document.querySelectorAll('#tambahAktivitasModal .close-button, #tambahAktivitasModal .cancel').forEach(btn => {
+      btn.addEventListener('click', function() {
+        const tambahModal = document.getElementById('tambahAktivitasModal');
+        if (tambahModal) {
+          tambahModal.classList.add('hidden');
+        }
+      });
+    });
+
+    // Tombol close di modal Detail Aktivitas
+    document.querySelectorAll('#detailAktivitasModal .close-button').forEach(btn => {
+      btn.addEventListener('click', function() {
+        const detailModal = document.getElementById('detailAktivitasModal');
+        if (detailModal) {
+          detailModal.classList.add('hidden');
+        }
+      });
+    });
+  </script>
+
+  <script>
+    function openUploadModal() {
+      document.getElementById("uploadModal").style.display = "flex";
+    }
+
+    function closeUploadModal() {
+      document.getElementById("uploadModal").style.display = "none";
+    }
+
+    function closePayslipModal() {
+      document.getElementById("payslipModal").style.display = "none";
+    }
+  </script>
+  <script>
+    // SCRIPT MODAL BUAT DATA PAYROLL
+    function openPayslipModal(fileUrl, filename) {
+      document.getElementById('payslipFrame').src = fileUrl;
+      document.getElementById('downloadPayslipBtn').href = fileUrl;
+      document.getElementById('payslipTitle').innerText = "Slip Gaji - " + filename;
+      document.getElementById('payslipModal').style.display = 'flex';
+    }
+
+    function closePayslipModal() {
+      document.getElementById('payslipModal').style.display = 'none';
+      document.getElementById('payslipFrame').src = '';
+    }
+
+    function openUploadModal() {
+      document.getElementById('uploadModal').style.display = 'flex';
+    }
+
+    function closeUploadModal() {
+      document.getElementById('uploadModal').style.display = 'none';
+    }
+  </script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      const fileInput = document.getElementById('payslip_file');
+      const uploadText = document.getElementById('uploadText');
+      const uploadSubText = document.getElementById('uploadSubText');
+
+      fileInput.addEventListener('change', function() {
+        if (this.files && this.files[0]) {
+          const file = this.files[0];
+
+          if (file.type !== "application/pdf") {
+            alert("Hanya file PDF yang bisa diupload!");
+            this.value = "";
+            uploadText.innerHTML = "<strong>Upload Slip Gaji</strong>";
+            uploadSubText.innerText = "Klik atau seret file ke area ini untuk mengunggah";
+            return;
+          }
+
+          // Ganti isi box jadi nama file
+          uploadText.innerHTML = `<strong>${file.name}</strong>`;
+          uploadSubText.innerText = "File siap diupload";
+        }
+      });
+    });
+  </script>
+  <script>
+    function openEvaluasiAtasan(id) {
+      let form = document.getElementById('formEvaluasiAtasan');
+      form.action = "/employees/" + id + "/evaluasi-atasan";
+      new bootstrap.Modal(document.getElementById('modalEvaluasiAtasan')).show();
+    }
+  </script>
+
+
+
+  <script>
+    document.getElementById('evaluationForm').addEventListener('submit', function(e) {
+      e.preventDefault(); // cegah reload halaman
+
+      let form = this;
+      let formData = new FormData(form);
+
+      fetch(form.action, {
+          method: 'POST',
+          headers: {
+            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+          },
+          body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            // Tutup modal
+            let modal = bootstrap.Modal.getInstance(document.getElementById('modalEvaluasiPeserta'));
+            modal.hide();
+
+            // Update isi tab Evaluasi Peserta
+            document.querySelector('#evaluasi-peserta').innerHTML = `
+                <div class="alert alert-success">Evaluasi peserta berhasil disimpan!</div>
+                <p><strong>Keseluruhan Pengalaman Training:</strong> ${data.evaluasi.emoji_rating}</p>
+                <p><strong>Komentar:</strong> ${data.evaluasi.komentar}</p>
+            `;
           } else {
-            btn.classList.remove('active');
+            alert('Gagal menyimpan evaluasi');
           }
-        });
+        })
+        .catch(error => console.error(error));
+    });
+  </script>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      const form = document.getElementById("evaluationform");
+
+      form.addEventListener("submit", function(e) {
+        e.preventDefault(); // cegah submit normal
+
+        fetch(form.action, {
+            method: "POST",
+            headers: {
+              "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').content,
+              "Content-Type": "application/x-www-form-urlencoded",
+            },
+            body: new URLSearchParams(new FormData(form)),
+          })
+          .then(response => {
+            if (!response.ok) throw new Error("Gagal menyimpan evaluasi");
+            return response.json(); // pastikan controller return JSON
+          })
+        //.then(data => {
+        //alert("Evaluasi berhasil disimpan!");
+        // Tutup modal
+        const modal = bootstrap.Modal.getInstance(document.getElementById("modalEvaluasiPeserta"));
+        modal.hide();
+
+        // Refresh container evaluasi peserta tanpa reload full page
+        document.querySelector("#evaluasi-peserta-container").innerHTML = data.html;
+        //})
       });
-    </script>
+    });
+  </script>
 
-    <script>
-      function showPelatihanDetail() {
-        document.getElementById('pelatihan').style.display = 'none';
-        document.getElementById('pelatihan-detail').style.display = 'block';
-      }
-
-      function backToPelatihan() {
-        event.preventDefault(); // agar tidak reload halaman
-        document.getElementById('pelatihan-detail').style.display = 'none';
-        document.getElementById('pelatihan').style.display = 'block';
-      }
-    </script>
-
-    <script>
-      function openFeedbackModal() {
-        document.getElementById('feedbackModal').style.display = 'block';
-      }
-
-      function closeFeedbackModal() {
-        document.getElementById('feedbackModal').style.display = 'none';
-      }
-
-      // Tutup jika klik di luar konten
-      window.onclick = function(event) {
-        const modal = document.getElementById('feedbackModal');
-        if (event.target == modal) {
-          modal.style.display = "none";
-        }
-      }
-
-      function openFeedbackModal() {
-        document.getElementById("feedbackModal").style.display = "block";
-      }
-    </script>
-
-    <script>
-      function openAddClusterModal() {
-        document.getElementById("addClusterModal").style.display = "block";
-      }
-
-      function closeAddClusterModal() {
-        document.getElementById("addClusterModal").style.display = "none";
-      }
-    </script>
-    <script>
-      function toggleFilter() {
-        const modal = document.getElementById("filterModal");
-        modal.style.display = modal.style.display === "block" ? "none" : "block";
-      }
-    </script>
-
-    <script>
-      document.addEventListener("DOMContentLoaded", function() {
-        const container = document.getElementById("pelatihan-container");
-        if (!container) return;
-
-        const tabButtons = container.querySelectorAll(".tab-btn");
-        const tabPanes = container.querySelectorAll(".tab-pane");
-
-        tabButtons.forEach(button => {
-          button.addEventListener("click", function() {
-            tabButtons.forEach(btn => btn.classList.remove("active"));
-            this.classList.add("active");
-
-            tabPanes.forEach(pane => pane.classList.remove("active"));
-            const target = this.getAttribute("data-target");
-            container.querySelector("#" + target).classList.add("active");
-          });
-        });
-      });
-    </script>
-    <script>
-      document.addEventListener('DOMContentLoaded', function() {
-        const modal = document.getElementById('payslipModal');
-        const frame = document.getElementById('payslipFrame');
-        const downloadBtn = document.getElementById('downloadPayslipBtn');
-
-        document.querySelectorAll('.view-payslip-link').forEach(link => {
-          link.addEventListener('click', function(e) {
-            e.preventDefault(); // penting supaya tidak pindah tab
-            const fileUrl = this.href;
-            frame.src = fileUrl;
-            downloadBtn.href = fileUrl;
-            modal.style.display = 'flex';
-          });
-        });
-
-        window.closePayslipModal = function() {
-          modal.style.display = 'none';
-          frame.src = '';
+  <script>
+    $(document).ready(function() {
+      $.ajaxSetup({
+        headers: {
+          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
       });
-    </script>
-    <script>
-      //EVALUASI PESERTA
-      document.addEventListener("DOMContentLoaded", function() {
-        const form = document.getElementById("evaluationForm");
 
-        // mapping emoji
-        function labelEmoji(val) {
-          switch (val) {
-            case "sangat_suka":
-              return "Sangat Suka";
-            case "cukup_baik":
-              return "Cukup Baik";
-            case "kurang_baik":
-              return "Kurang Baik";
-            default:
-              return "-";
-          }
-        }
+      $('#formEvaluasiAtasan').on('submit', function(e) {
+        e.preventDefault();
+        let form = $(this);
 
-        // mapping skala angka → keterangan
-        function labelSkala(val) {
-          if (!val) return "-";
-          const num = parseInt(val);
-          if (num >= 9) return `${num} (Sangat Setuju)`;
-          if (num >= 5) return `${num} (Setuju)`;
-          if (num <= 4) return `${num} (Tidak Setuju)`;
-          return `${num} (Kurang Baik)`;
-        }
-
-        form.addEventListener("submit", function(e) {
-          e.preventDefault();
-          const data = new FormData(form);
-
-          // update hasil evaluasi
-          document.getElementById("evEmoji").innerHTML =
-            `Keseluruhan Pengalaman Training <br><strong>${labelEmoji(data.get("emoji_rating"))}</strong>`;
-
-          document.getElementById("evQ1").innerHTML =
-            `Hasil Pelatihan menambah pengetahuan saya <br><strong>${labelSkala(data.get("q1"))}</strong>`;
-
-          document.getElementById("evQ2").innerHTML =
-            `Saya mudah mengimplementasikan hasil pelatihan <br><strong>${labelSkala(data.get("q2"))}</strong>`;
-
-          document.getElementById("evQ3").innerHTML =
-            `Hasil pelatihan mempermudah pekerjaan saya <br><strong>${labelSkala(data.get("q3"))}</strong>`;
-
-          document.getElementById("evQ4").innerHTML =
-            `Saya konsisten menerapkan hasil pelatihan <br><strong>${labelSkala(data.get("q4"))}</strong>`;
-
-          document.getElementById("evQ5").innerHTML =
-            `Hasil pelatihan meningkatkan kinerja unit <br><strong>${labelSkala(data.get("q5"))}</strong>`;
-
-          document.getElementById("evKomentar").innerHTML =
-            `Komentar: <br><strong>${data.get("komentar") || "-"}</strong>`;
-
-          // tutup modal
-          const modalEl = document.getElementById("modalEvaluasiPeserta");
-          const modal = bootstrap.Modal.getInstance(modalEl);
-          modal.hide();
-        });
-      });
-    </script>
-    <script>
-      //EVALUASI ATASAN
-      document.addEventListener("DOMContentLoaded", function() {
-        // mapping angka → label
-        function labelSkala(val) {
-          if (!val) return "-";
-          const num = parseInt(val);
-          if (num >= 9) return `${num} (Sangat Setuju)`;
-          if (num >= 5) return `${num} (Setuju)`;
-          if (num <= 4) return `${num} (Tidak Setuju)`;
-          return `${num} (Kurang Baik)`;
-        }
-
-        // Tangani submit Evaluasi Atasan
-        const atasanForm = document.querySelector("#modalEvaluasiAtasan form");
-        atasanForm.addEventListener("submit", function(e) {
-          e.preventDefault();
-          const data = new FormData(atasanForm);
-
-          // update isi paragraf sesuai ID (biar rapi kasih ID di HTML)
-          document.querySelector("#pelatihan-atasan p:nth-of-type(1)").innerHTML =
-            `Hasil pelatihan menambah pengetahuan & keterampilan staff Saudara <br><strong>${labelSkala(data.get("atasan_q1"))}</strong>`;
-
-          document.querySelector("#pelatihan-atasan p:nth-of-type(2)").innerHTML =
-            `Staff Saudara mengimplementasikan hasil pelatihan dalam tugas/pekerjaannya <br><strong>${labelSkala(data.get("atasan_q2"))}</strong>`;
-
-          document.querySelector("#pelatihan-atasan p:nth-of-type(3)").innerHTML =
-            `Dengan hasil pelatihan tersebut, banyak tugas dan kasus dipekerjakan unit staff Saudara yang bisa disolusikan <br><strong>${labelSkala(data.get("atasan_q3"))}</strong>`;
-
-          document.querySelector("#pelatihan-atasan p:nth-of-type(4)").innerHTML =
-            `Staff Saudara menerapkan hasil dalam tugas/pekerjaan secara konsisten <br><strong>${labelSkala(data.get("atasan_q4"))}</strong>`;
-
-          document.querySelector("#pelatihan-atasan p:nth-of-type(5)").innerHTML =
-            `Hasil pelatihan yang diperoleh staff Saudara meningkatkan performansi/kinerja unit <br><strong>${labelSkala(data.get("atasan_q5"))}</strong>`;
-
-          document.querySelector("#pelatihan-atasan p:nth-of-type(6)").innerHTML =
-            `Komentar: <br><strong>${data.get("atasan_komentar") || "-"}</strong>`;
-
-          // tutup modal
-          const modalEl = document.getElementById("modalEvaluasiAtasan");
-          const modal = bootstrap.Modal.getInstance(modalEl);
-          modal.hide();
-        });
-      });
-    </script>
-    <script>
-      // Fungsi buka modal
-      function openModal(modalId) {
-        const modal = document.getElementById(modalId);
-        if (modal) {
-          modal.classList.remove('hidden');
-        }
-      }
-
-      // Fungsi tutup modal
-      function closeModal(modalId) {
-        const modal = document.getElementById(modalId);
-        if (modal) {
-          modal.classList.add('hidden');
-        }
-      }
-
-      // Tombol + Tambah untuk membuka modal tambah aktivitas
-      document.querySelectorAll('.btn-add').forEach(button => {
-        button.addEventListener('click', function() {
-          const tambahModal = document.getElementById('tambahAktivitasModal');
-          if (tambahModal) {
-            tambahModal.classList.remove('hidden');
-          }
-        });
-      });
-
-      // Tombol close di modal Tambah Aktivitas
-      document.querySelectorAll('#tambahAktivitasModal .close-button, #tambahAktivitasModal .cancel').forEach(btn => {
-        btn.addEventListener('click', function() {
-          const tambahModal = document.getElementById('tambahAktivitasModal');
-          if (tambahModal) {
-            tambahModal.classList.add('hidden');
-          }
-        });
-      });
-
-      // Tombol close di modal Detail Aktivitas
-      document.querySelectorAll('#detailAktivitasModal .close-button').forEach(btn => {
-        btn.addEventListener('click', function() {
-          const detailModal = document.getElementById('detailAktivitasModal');
-          if (detailModal) {
-            detailModal.classList.add('hidden');
-          }
-        });
-      });
-    </script>
-
-    <script>
-      function openUploadModal() {
-        document.getElementById("uploadModal").style.display = "flex";
-      }
-
-      function closeUploadModal() {
-        document.getElementById("uploadModal").style.display = "none";
-      }
-
-      function closePayslipModal() {
-        document.getElementById("payslipModal").style.display = "none";
-      }
-    </script>
-    <script>
-      // SCRIPT MODAL BUAT DATA PAYROLL
-      function openPayslipModal(fileUrl, filename) {
-        document.getElementById('payslipFrame').src = fileUrl;
-        document.getElementById('downloadPayslipBtn').href = fileUrl;
-        document.getElementById('payslipTitle').innerText = "Slip Gaji - " + filename;
-        document.getElementById('payslipModal').style.display = 'flex';
-      }
-
-      function closePayslipModal() {
-        document.getElementById('payslipModal').style.display = 'none';
-        document.getElementById('payslipFrame').src = '';
-      }
-
-      function openUploadModal() {
-        document.getElementById('uploadModal').style.display = 'flex';
-      }
-
-      function closeUploadModal() {
-        document.getElementById('uploadModal').style.display = 'none';
-      }
-    </script>
-    <script>
-      document.addEventListener("DOMContentLoaded", function() {
-        const fileInput = document.getElementById('payslip_file');
-        const uploadText = document.getElementById('uploadText');
-        const uploadSubText = document.getElementById('uploadSubText');
-
-        fileInput.addEventListener('change', function() {
-          if (this.files && this.files[0]) {
-            const file = this.files[0];
-
-            if (file.type !== "application/pdf") {
-              alert("Hanya file PDF yang bisa diupload!");
-              this.value = "";
-              uploadText.innerHTML = "<strong>Upload Slip Gaji</strong>";
-              uploadSubText.innerText = "Klik atau seret file ke area ini untuk mengunggah";
-              return;
+        $.ajax({
+          url: form.attr('action'),
+          type: 'POST',
+          data: form.serialize(),
+          dataType: 'json',
+          success: function(res) {
+            if (res.status === 'success') {
+              $('#modalEvaluasiAtasan').modal('hide');
+              form.trigger('reset');
+              alert('Evaluasi atasan berhasil ✅');
             }
-
-            // Ganti isi box jadi nama file
-            uploadText.innerHTML = `<strong>${file.name}</strong>`;
-            uploadSubText.innerText = "File siap diupload";
+          },
+          error: function(err) {
+            console.error(err); // agar bisa cek kalau gagal
           }
         });
       });
-    </script>
+    });
+  </script>
+
+
+
+  <meta name="csrf-token" content="{{ csrf_token() }}">
+  <script>
+    $(document).ready(function() {
+
+      // Setup CSRF
+      $.ajaxSetup({
+        headers: {
+          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+      });
+
+      $('#evaluationform').on('submit', function(e) {
+        e.preventDefault(); // cegah reload default
+
+        $.ajax({
+          url: $(this).attr('action'),
+          type: "POST",
+          data: $(this).serialize(),
+          success: function() {
+            // Tutup modal
+            $('#modalEvaluasiPeserta').modal('hide');
+
+            // Reload halaman supaya data tampil
+            location.reload();
+          },
+        });
+      });
+    });
+  </script>

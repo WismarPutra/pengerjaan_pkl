@@ -90,7 +90,7 @@ Route::get('/employees/{employee}/clusters/{cluster}/edit', [TalentClusterContro
 Route::put('/employees/{employee}/clusters/{cluster}', [TalentClusterController::class, 'update'])->name('clusters.update');
 Route::delete('/employees/{employee}/clusters/{cluster}', [TalentClusterController::class, 'delete'])->name('clusters.delete');
 Route::put('/employees/{employee}/clusters/{cluster}', [TalentClusterController::class, 'update'])
-     ->name('clusters.update');
+    ->name('clusters.update');
 // web.php
 Route::resource('employees.clusters', TalentClusterController::class);
 
@@ -104,7 +104,7 @@ Route::post('/training', [TrainingController::class, 'store'])->name('training.s
 Route::get('training/{id}', [TrainingController::class, 'show'])->name('training.show');
 Route::get('/training/{id}/edit', [TrainingController::class, 'edit'])->name('training.edit');
 Route::delete('/training/{id}/destroy', [TrainingController::class, 'destroy'])->name('training.destroy');
-Route::post('/training/upload',[TrainingController::class, 'upload'])->name('training.upload');
+Route::post('/training/upload', [TrainingController::class, 'upload'])->name('training.upload');
 
 /* PAYROLL */
 Route::prefix('employees/{employee}')->group(function () {
@@ -179,4 +179,11 @@ Route::prefix('employees/{employee}')->group(function () {
     Route::delete('careers/{career}', [CareerActivityController::class, 'destroy'])->name('career_activities.destroy');
 });
 
+/* EVALUASI PESERTA */
+Route::post('employees/{employee}', [TMController::class, 'storeEvaluasiPeserta'])
+    ->name('evaluasi.peserta.store');
 
+Route::prefix('employees/{employee}')->group(function () {
+    Route::post('evaluasi-atasan', [TMController::class, 'storeEvaluasiAtasan'])
+        ->name('evaluasi.atasan.store');
+});
