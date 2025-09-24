@@ -649,12 +649,26 @@
     .upload-box {
         width: 584px;
         height: 180px;
-        border: 1px dashed #999;
         border-radius: 8px;
         padding: 40px;
+        border: 1px dashed #999999;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
         text-align: center;
-        margin: 0 auto;
-        box-sizing: border-box;
+    }
+
+    .upload-icon {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        background-color: #3C41E8;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #fff;
+        font-size: 24px;
     }
 
     .modal-footer {
@@ -706,6 +720,37 @@
         border: none;
         font-size: 20px;
         cursor: pointer;
+    }
+
+    /* Header tabel */
+    #excelPreview th {
+        position: relative;
+        cursor: pointer;
+        padding-right: 20px;
+        /* ruang buat ikon */
+    }
+
+    /* Default icon (↕) */
+    #excelPreview th::after {
+        content: "⇅";
+        position: absolute;
+        right: 6px;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 12px;
+        color: #aaa;
+    }
+
+    /* Ascending (↑) */
+    #excelPreview th.asc::after {
+        content: "";
+        color: #3C41E8;
+    }
+
+    /* Descending (↓) */
+    #excelPreview th.desc::after {
+        content: "";
+        color: #3C41E8;
     }
 </style>
 
@@ -866,6 +911,11 @@
             </div>
         </div>
 
+        <div id="excelDivider" class="divider" style="display:none;"></div>
+        <div id="excelPreview" style="margin-top:20px; overflow-x:auto;"></div>
+
+
+
 
         <div class="action-buttons">
             <a href="{{ route('recruitment.index') }}" class="btn btn-secondary">Cancel</a>
@@ -875,22 +925,28 @@
     </div>
 
     <!--modal kandidat-->
-    <div id="kandidatModal" class="modal" aria-hidden="true">
+    <div id="candidateModal" class="modal" aria-hidden="true">
         <div class="modal-content">
+            <!-- Header -->
             <div class="modal-header">
-                <h2>Tambah Data Kandidat</h2>
-                <button class="close" onclick="closeModal()">×</button>
+                <h3>Tambah Data Kandidat</h3>
+                <button class="close" type="button" onclick="closeModal()">&times;</button>
             </div>
 
-            <div class="upload-box">
+            <!-- Upload area (klik buka file picker) -->
+            <label class="upload-box" for="fileInput" id="uploadBox" style="cursor:pointer;">
                 <div class="upload-icon"><i class="fas fa-upload"></i></div>
-                <p class="upload-title">Upload Data Kandidat</p>
-                <p class="upload-sub">Klik atau seret file ke area ini untuk mengunggah</p>
-            </div>
+                <div class="upload-text" id="fileName">
+                    <strong>Upload Data Kandidat</strong>
+                    <p>Klik atau seret file ke area ini untuk mengunggah</p>
+                </div>
+                <input id="fileInput" type="file" accept=".xls,.xlsx" hidden>
+            </label>
 
+            <!-- Footer: Cancel + Tambah -->
             <div class="modal-footer">
-                <button class="btn-cancel" onclick="closeModal()">Cancel</button>
-                <button class="btn-submit">Tambah</button>
+                <button type="button" class="btn-cancel" onclick="closeModal()">Cancel</button>
+                <button type="button" class="btn-submit" id="modalAddBtn">Tambah</button>
             </div>
         </div>
     </div>
@@ -898,30 +954,158 @@
 
 
     @endsection
+    <!-- SheetJS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
     <script>
-        function openModal() {
-            const modal = document.getElementById('kandidatModal');
-            modal.classList.add('show');
-            modal.setAttribute('aria-hidden', 'false');
-        }
+        let selectedFile = null;
 
-        function closeModal() {
-            const modal = document.getElementById('kandidatModal');
-            modal.classList.remove('show');
-            modal.setAttribute('aria-hidden', 'true');
-        }
+        document.addEventListener("DOMContentLoaded", function() {
+            const fileInput = document.getElementById("fileInput");
+            const uploadText = document.getElementById("uploadText");
+            const fileName = document.getElementById("fileName");
+            const excelDivider = document.getElementById("excelDivider");
+            const excelPreview = document.getElementById("excelPreview");
 
-        // klik di luar modal --> close
-        window.addEventListener('click', function(e) {
-            const modal = document.getElementById('kandidatModal');
-            if (e.target === modal) closeModal();
+            // default text upload box
+            const defaultText = `
+            <strong>Upload Data Kandidat</strong>
+            <p>Klik atau seret file ke area ini untuk mengunggah</p>
+        `;
+
+            // ========== Modal Open & Close ==========
+            window.openModal = function() {
+                document.getElementById("candidateModal").classList.add("show");
+            }
+
+            window.closeModal = function() {
+                document.getElementById("candidateModal").classList.remove("show");
+
+                // reset input file dan tampilan
+                fileInput.value = "";
+                uploadText.innerHTML = defaultText;
+                fileName.innerText = "Klik atau seret file ke area ini untuk mengunggah";
+                selectedFile = null;
+            }
+
+            // klik area luar untuk tutup modal
+            window.addEventListener("click", function(e) {
+                const modal = document.getElementById("candidateModal");
+                if (e.target === modal) {
+                    closeModal();
+                }
+            });
+
+            // ========== Input File ==========
+            fileInput.addEventListener("change", function() {
+                const file = this.files[0];
+                if (!file) return;
+
+                const allowedExtensions = ["xls", "xlsx"];
+                const fileExt = file.name.split(".").pop().toLowerCase();
+
+                if (!allowedExtensions.includes(fileExt)) {
+                    alert("Hanya boleh upload file Excel (.xls, .xlsx)");
+                    this.value = "";
+                    uploadText.innerHTML = defaultText;
+                    return;
+                }
+
+                selectedFile = file;
+                fileName.innerText = file.name;
+            });
+
+            // ========== Tombol Tambah ==========
+            document.querySelector(".btn-submit").addEventListener("click", function() {
+                if (!selectedFile) {
+                    alert("Silakan pilih file Excel terlebih dahulu!");
+                    return;
+                }
+
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    const data = new Uint8Array(event.target.result);
+                    const workbook = XLSX.read(data, {
+                        type: "array"
+                    });
+
+                    const sheetName = workbook.SheetNames[0];
+                    const sheet = workbook.Sheets[sheetName];
+                    const json = XLSX.utils.sheet_to_json(sheet, {
+                        header: 1
+                    });
+
+                    // Buat tabel polos
+                    let table = "<table border='1' style='border-collapse:collapse; width:100%; text-align:center; font-family:Poppins;'>";
+                    json.forEach((row, i) => {
+                        table += "<tr>";
+                        row.forEach(cell => {
+                            if (i === 0) {
+                                table += `<th style="padding:8px; background:#f2f2f2; font-weight:bold; cursor:pointer; position:relative;">${cell ?? ""} <span class="sort-icon"></span></th>`;
+                            } else {
+                                table += `<td style="padding:8px;">${cell ?? ""}</td>`;
+                            }
+                        });
+                        table += "</tr>";
+                    });
+                    table += "</table>";
+
+                    // tampilkan divider + tabel
+                    excelDivider.style.display = "block";
+                    excelPreview.innerHTML = table;
+
+                    // ambil tabel yang baru dibuat
+                    const newTable = excelPreview.querySelector("table");
+                    if (newTable) {
+                        makeTableSortable(newTable);
+                    }
+
+                    // tutup modal setelah upload
+                    closeModal();
+                };
+                reader.readAsArrayBuffer(selectedFile);
+            });
         });
 
-        // escape key to close
-        window.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') closeModal();
-        });
+        // ========== Fungsi Sorting + Icon ==========
+        function makeTableSortable(table) {
+            const headers = table.querySelectorAll("th");
+            headers.forEach((header, index) => {
+                header.addEventListener("click", () => {
+                    const rows = Array.from(table.querySelectorAll("tr")).slice(1);
+                    const isAsc = header.classList.contains("asc");
 
-        // Jika kamu pakai fungsi toggleCreate() di banyak tempat, map saja:
-        // function toggleCreate() { document.getElementById('kandidatModal').classList.toggle('show'); }
+                    rows.sort((a, b) => {
+                        const cellA = a.cells[index].innerText.trim();
+                        const cellB = b.cells[index].innerText.trim();
+
+                        if (!isNaN(cellA) && !isNaN(cellB)) {
+                            return isAsc ? cellB - cellA : cellA - cellB;
+                        }
+                        return isAsc ?
+                            cellB.localeCompare(cellA) :
+                            cellA.localeCompare(cellB);
+                    });
+
+                    // reset semua header
+                    headers.forEach(h => {
+                        h.classList.remove("asc", "desc");
+                        const icon = h.querySelector(".sort-icon");
+                        if (icon) icon.innerText = "";
+                    });
+
+                    // kasih class + icon
+                    header.classList.toggle("asc", !isAsc);
+                    header.classList.toggle("desc", isAsc);
+
+                    const icon = header.querySelector(".sort-icon");
+                    if (icon) {
+                        icon.innerText = isAsc ? " ↓" : " ↑";
+                    }
+
+                    // append ulang row sesuai hasil sort
+                    rows.forEach(row => table.appendChild(row));
+                });
+            });
+        }
     </script>
