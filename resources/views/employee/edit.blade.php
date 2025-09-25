@@ -2355,7 +2355,7 @@
           <h4 class="content-info">Informasi Anak</h4>
         </div>
         <div class="right-content2">
-          <a href="#" class="add-btn" onclick="openAddModal()">Tambah</a>
+          <a href="#" class="add-btn" onclick="openAddModal('')">Tambah</a>
           <button class="arrowDown-btn1"><i class="fas fa-chevron-down"></i></button>
         </div>
       </div>
@@ -3906,13 +3906,13 @@
 
       dropdown.style.display = "none"; // tutup setelah simpan
     });
-
   </script>
   <script>
-  function openAddModal() {
-    document.getElementById("addModal").classList.remove("hidden");
-  }
-  function closeAddModal() {
-    document.getElementById("addModal").classList.add("hidden");
-  }
-</script>
+    function openAddModal() {
+      document.getElementById('popup-edit').style.display = 'flex';
+    }
+
+    function closeAddModal() {
+      document.getElementById("addModal").classList.add("hidden");
+    }
+  </script>
