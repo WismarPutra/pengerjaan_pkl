@@ -4,12 +4,14 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Training;
+use App\Models\Employee;
 use Illuminate\Support\Facades\DB;
 
 class TrainingController extends Controller
 {
     public function index(Request $request)
     {
+
         // Hitung total partisipan dari kolom 'partisipan'
         $totalPartisipan = Training::sum('partisipan');
 
@@ -48,12 +50,18 @@ class TrainingController extends Controller
         $trainingsAnalysis = Training::paginate($perPageAnalysis);
         $totalTrainingAnalysis = Training::count();
 
+
         $trainings = Training::where('status', '!=', 'Completed')->paginate($perPages);
         $trainingSelesai = Training::where('status', 'Completed')->paginate($perPageSelesai);
 
         // Mengambil jumlah yang sudah di per_page dan yang nilainya bukan Completed
         $jumlahTrainingsNC = Training::where('status', '!=', 'Completed')->count();
         $jumlahTrainingsC = Training::where('status', 'Completed')->count();
+
+        // Ambil data sesuai jumlah per_page Selesai
+        $trainingsSelesai = Training::paginate($perPageSelesai);
+        $totalTrainingsSelesai = Training::count();
+
 
         $sortByTraining    = $request->query('sort_by_training', 'nama_training');
         $sortOrderTraining = $request->query('sort_order_training', 'desc');
@@ -87,6 +95,8 @@ class TrainingController extends Controller
             'biaya',
             'gap_kompetensi',
             'total_biaya',
+            'sertifikat',
+            'kelulusan',
         ];
 
         if (!in_array($sortByTraining, $allowedTraining)) {
@@ -100,6 +110,21 @@ class TrainingController extends Controller
         $sortOrder = $request->input('sort_order_training', 'asc');
 
         $trainingss = Training::orderBy($sortBy, $sortOrder)->paginate($perPage);
+
+        //    PENCARIAN DI SEDANG BERJALAN
+        $query = Training::where('status', '!=', 'Completed'); // filter tetap ada
+
+        if ($request->filled('search')) {
+            $query->where('nama_training', 'like', '%' . $request->search . '%');
+        }
+
+        // urutkan: On Going di atas, sisanya urut default
+        $query->orderByRaw("CASE WHEN status = 'On Going' THEN 0 ELSE 1 END")
+            ->orderBy('nama_training', 'asc'); // urutan tambahan (opsional)
+
+        $trainings = $query->paginate($request->per_page ?? 10)
+            ->appends($request->only('search', 'per_page'));
+
         return view(
             'training.index',
             compact(
@@ -109,6 +134,8 @@ class TrainingController extends Controller
                 'trainingSelesai',
                 'trainingsAnalysis',
                 'totalTrainingAnalysis',
+                'trainingsSelesai',
+                'totalTrainingsSelesai',
                 'jumlahTrainingsNC',
                 'jumlahTrainingsC',
                 'totalPartisipan',
@@ -139,74 +166,129 @@ class TrainingController extends Controller
 
     public function create()
     {
-
-        return view('training.create');
+        $employees = Employee::select('id', 'nik', 'name', 'direktorat', 'posisi')->get();
+        return view('training.create', compact('employees'));
     }
+
 
     public function store(Request $request)
     {
-        $request->validate([
-            'id_training' => 'required|string|max:255',
-            'nama_training' => 'required',
-            'deskripsi_training' => 'required',
-            'tipe_training' => 'required|string',
-            'sertifikat_partisipasi' => 'string',
-            'sertifikat_pelatihan' => 'string',
-            'penyelenggara' => 'required',
-            'durasi' => 'required|string',
-            'tanggal_mulai' => 'required|date',
-            'tanggal_selesai' => 'required|date|after_or_equal:start_date',
-            'lokasi' => 'required',
-            'metode_pelatihan' => 'required|string',
-            'partisipan' => 'required|integer',
-            'status' => 'required',
-            'biaya' => 'required|string',
-            'total_biaya' => 'required|string',
-        ]);
+        // tentukan nilai TNA otomatis
+        $tnaValue = $request->has('gaps') ? 'TNA' : 'Non-TNA';
 
+        // simpan training (hanya 1 row)
         $training = Training::create([
-            'id_training' => $request->id_training,
-            'nama_training' => $request->nama_training,
-            'deskripsi_training' => $request->deskripsi_training,
-            'tipe_training' => $request->tipe_training,
-            'sertifikat_partisipasi' => $request->sertifikat_partisipasi,
-            'sertifikat_pelatihan' => $request->sertifikat_pelatihan,
-            'penyelenggara' => $request->penyelenggara,
-            'durasi' => $request->durasi,
-            'tanggal_mulai' => $request->tanggal_mulai,
-            'tanggal_selesai' => $request->tanggal_selesai,
-            'lokasi' => $request->lokasi,
-            'metode_pelatihan' => $request->metode_pelatihan,
-            'partisipan' => $request->partisipan,
-            'status' => $request->status,
-            'biaya' => $request->biaya,
-            'total_biaya' => $request->total_biaya,
+            'nama_training'          => $request->nama_training,
+            'deskripsi_training'     => $request->deskripsi_training,
+            'tipe_training'          => $request->tipe_training,
+            'penyelenggara'          => $request->penyelenggara,
+            'tanggal_mulai'          => $request->tanggal_mulai,
+            'tanggal_selesai'        => $request->tanggal_selesai,
+            'lokasi'                 => $request->lokasi,
+            'metode_pelatihan'       => $request->metode_pelatihan,
+            'biaya'                  => $request->biaya,
+            'total_biaya'            => $request->total_biaya,
+            'stream'                 => $request->stream,
+            'keterangan'             => $request->keterangan,
+            'sertifikat'             => $request->sertifikat_partisipasi,
+            'kelulusan'              => $request->sertifikat_kelulusan,
+            'partisipan'             => 0,
+            'tna'                    => $tnaValue,
         ]);
 
 
-        return redirect()->route('training.index')->with('success', 'Training berhasil ditambahkan.');
+        // simpan peserta ke tabel training_participants
+        if ($request->has('niks')) {
+            foreach ($request->niks as $i => $nik) {
+                $training->participants()->create([
+                    'nik'            => $nik,
+                    'nama'           => $request->names[$i],
+                    'direktorat'     => $request->direktorats[$i],
+                    'nama_posisi'    => $request->posisis[$i],
+                    'gap_kompetensi' => $request->gaps[$i],
+                    'keterangan'     => $request->kets[$i] ?? $tnaValue,
+                    // kalau ada input keterangan → pakai itu,
+                    // kalau kosong → ikut default TNA dari training
+                ]);
+            }
+        }
+
+        // update jumlah peserta di tabel trainings
+        $training->update([
+            'partisipan' => $training->participants()->count()
+        ]);
+
+        return redirect()->route('training.index')->with('success', 'Training berhasil dibuat!');
     }
+
+
+
+
+
 
     public function show($id)
     {
-        $training = Training::findOrFail($id);
+        $training = Training::with('participants')->findOrFail($id);
         return view('training.show', compact('training'));
     }
+
 
     public function edit($id)
     {
         $training = Training::findOrFail($id);
-        return view('training.edit', compact('training'));
+        $employee = Employee::select('id', 'nik', 'name', 'direktorat', 'posisi')->get();
+
+        return view('training.edit', compact(
+            'training',
+            'employee',
+        ));
     }
 
     public function update(Request $request, $id)
     {
         $training = Training::findOrFail($id);
 
-        $training->update($request->all());
+        $training->update($request->only([
+            'nama_training',
+            'deskripsi_training',
+            'tipe_training',
+            'penyelenggara',
+            'tanggal_mulai',
+            'tanggal_selesai',
+            'lokasi',
+            'metode_pelatihan',
+            'biaya',
+            'total_biaya',
+            'stream',
+            'keterangan',
+            'sertifikat',
+            'kelulusan',
+            'gap_kompetensi',
+        ]));
 
-        return redirect()->route('training.index')->with('success', 'Training berhasil diperbarui.');
+        // simpan peserta baru
+        if ($request->has('niks')) {
+            foreach ($request->niks as $i => $nik) {
+                $training->participants()->create([
+                    'nik'            => $nik,
+                    'nama'           => $request->names[$i],
+                    'direktorat'     => $request->direktorats[$i],
+                    'nama_posisi'    => $request->posisis[$i],
+                    'keterangan'     => $request->kets[$i],
+                    'gap_kompetensi' => $request->gaps[$i],
+                ]);
+            }
+        }
+
+        // update jumlah peserta
+        $training->update([
+            'partisipan' => $training->participants()->count()
+        ]);
+
+        return redirect()->route('training.index')->with('success', 'Training berhasil diupdate!');
     }
+
+
 
     public function destroy($id)
     {

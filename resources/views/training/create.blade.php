@@ -669,7 +669,7 @@
 
       <div class="form-group">
         <label>Stream *</label>
-        <select name="status" class="form-control1" required>
+        <select name="stream" class="form-control1" required>
           <option disabled selected value=""></option>
           <option value="Health">Health</option>
           <option value="Investment">Investment</option>
@@ -678,7 +678,7 @@
 
       <div class="form-group">
         <label>Keterangan *</label>
-        <select name="status" class="form-control1" required>
+        <select name="keterangan" class="form-control1" required>
           <option disabled selected value=""></option>
           <option value="Technical">Technical</option>
           <option value="digital_platform">Digital Platform & IT</option>
@@ -705,7 +705,7 @@
 
       <div class="form-group">
         <label>Penyelenggara</label>
-        <select name="sertifikat_kelulusan" class="form-control1" required>
+        <select name="penyelenggara" class="form-control1" required>
           <option disabled selected value=""></option>
           <option value="Ada">Learning Center</option>
           <option value="Tidak">Tidak Ada</option>
@@ -765,21 +765,26 @@
     <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; flex-wrap: wrap;">
       <h2 class="left-section">List Of Participants</h2>
       <div class="right-section1">
-        <button class="add-btn" onclick="toggleTambah()"><i class="fas fa-plus"></i>Tambah</button>
+        <button type="button" class="add-btn" onclick="toggleTambah()"><i class="fas fa-plus"></i>Tambah</button>
       </div>
     </div>
-    <table id="customers" style="margin-top: 10px;">
-      <tr>
-        <th>No</th>
-        <th>NIK</th>
-        <th>Nama</th>
-        <th>Regional/Direktorat</th>
-        <th>Nama Posisi</th>
-        <th>Email</th>
-        <th>No Telepon</th>
-        <th>Actions</th>
-      </tr>
+    <table id="customers" class="w-full border mt-4">
+      <thead class="bg-gray-100">
+        <tr>
+          <th>No</th>
+          <th>NIK</th>
+          <th>Nama</th>
+          <th>Regional/Direktorat</th>
+          <th>Nama Posisi</th>
+          <th>Gap Kompetensi</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody id="customerBody"></tbody>
     </table>
+    
+    <input type="hidden" name="tna" value="TNA">
+
     <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; flex-wrap: wrap;">
       <div class="right-section2">
         <a href="{{ route('training.index') }}" class="cancel-btn">Cancel</a>
@@ -787,78 +792,84 @@
       </div>
     </div>
 
+
 </div>
 </form>
 
 <!-- Modal Tambah Diluar TNA Pop up -->
-<div id="popupModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
-  <div class="bg-white p-6 rounded shadow-lg w-[40%]">
-    <div class="flex align-middle justify-between">
-      <h1 class="font-bold">Tambah Peserta</h1>
-      <button onclick="closeTambah('popupModal')" class="text-xl" style="color: #696969;">
-        <i class="fas fa-circle-xmark"></i>
-      </button>
+<!-- Modal Tambah Peserta -->
+<div id="popupModal" class="fixed inset-0 hidden bg-gray-900 bg-opacity-50 flex items-center justify-center">
+  <div class="bg-white rounded-lg shadow-lg w-96 p-6">
+    <div class="flex justify-between items-center mb-4">
+      <h2 class="text-lg font-semibold">Tambah Peserta</h2>
+      <button onclick="closeTambah()" class="text-gray-500 hover:text-gray-700">&times;</button>
     </div>
 
-    <form style="margin-top: 30px;">
-      <!-- Option Nama  -->
-      <div class="form-group">
-        <label>Nama</label>
-        <select name="nama" class="form-control1 w-full" required>
-          <option disabled selected value="">Nama Lengkap (nik)</option>
-          <option value=""> </option>
-          <option value=""> </option>
-        </select>
-      </div>
+    <!-- Select Nama -->
+    <div class="mb-4">
+      <label class="block text-sm font-medium">Nama</label>
+      <select id="employeeSelect" class="w-full border rounded p-2">
+        <option disabled selected value="">Nama Lengkap (NIK)</option>
+        @foreach($employees as $employee)
+        <option value="{{ $employee->id }}"
+          data-nik="{{ $employee->nik }}"
+          data-name="{{ $employee->name }}"
+          data-direktorat="{{ $employee->direktorat }}"
+          data-posisi="{{ $employee->posisi }}">
+          {{ $employee->name }} ({{ $employee->nik }})
+        </option>
+        @endforeach
+      </select>
+    </div>
 
-      <!-- Option Gap Kompetensi -->
-      <div class="form-group" style="margin-top: 30px;">
-        <label>Gap Kompetensi</label>
-        <select name="gap_kompetensi" class="form-control1 w-full rounded-4xl" required>
-          <option disabled selected value="">TNA/Non TNA</option>
-          <option value="tna">TNA</option>
-          <option value="non_tna">Non TNA</option>
-        </select>
-      </div>
+    <!-- Select Gap Kompetensi -->
+    <div class="mb-4">
+      <label class="block text-sm font-medium">Gap Kompetensi</label>
+      <select id="gapSelect" class="w-full border rounded p-2">
+        <option disabled selected value="">TNA/Non TNA</option>
+        <option value="Financial Control & Monitoring">TNA</option>
+        <option value="Non-TNA">Non TNA</option>
+      </select>
+    </div>
 
-      <div class="flex justify-end gap-2" style="margin-top: 20px;">
-        <button type="button"
-          onclick="closeTambah()"
-          class="px-5 py-2 w-full rounded-lg bg-gray-200 text-gray-700 font-medium hover:bg-gray-300">
-          Cancel
-        </button>
-        <button type="submit"
-          class="px-5 py-2 w-full rounded-lg bg-indigo-600 text-white font-medium hover:bg-indigo-700">
-          Tambah
-        </button>
-      </div>
-    </form>
+    <!-- Tombol -->
+    <div class="flex justify-end gap-2">
+      <button type="button" onclick="closeTambah()"
+        class="px-4 py-2 rounded bg-gray-200 hover:bg-gray-300">Cancel</button>
+      <button type="button" onclick="addPeserta()"
+        class="px-4 py-2 rounded bg-indigo-600 text-white hover:bg-indigo-700">Tambah</button>
+    </div>
   </div>
 </div>
+
 
 </div>
 @endsection
 
 <script>
-  // Mapping Nama Training → Deskripsi Training
-  const trainingDescriptions = {
-    "microsoft_excel_for_data_analyst": "Pelatihan Excel tingkat lanjut untuk analisis data",
-    "data_science_python": "Belajar Data Science menggunakan Python",
-    "project_management": "Dasar-dasar Manajemen Proyek untuk profesional"
-  };
-
   // Event Listener
-  document.getElementById("nama_training").addEventListener("change", function() {
-    const selectedValue = this.value;
+  document.addEventListener("DOMContentLoaded", function() {
+    const select = document.getElementById("nama_training");
     const deskripsiInput = document.getElementById("deskripsi_training");
 
-    if (trainingDescriptions[selectedValue]) {
-      deskripsiInput.value = trainingDescriptions[selectedValue];
-      deskripsiInput.innerText = trainingDescriptions[selectedValue];
-    } else {
-      deskripsiInput.value = "";
-    }
+    const trainingDescriptions = {
+      "microsoft_excel_for_data_analyst": "Pelatihan Excel tingkat lanjut untuk analisis data",
+      "data_science_python": "Belajar Data Science menggunakan Python",
+      "project_management": "Dasar-dasar Manajemen Proyek untuk profesional"
+    };
+
+    select.addEventListener("change", function() {
+      const selectedValue = this.value;
+      if (trainingDescriptions[selectedValue]) {
+        deskripsiInput.value = trainingDescriptions[selectedValue];
+        deskripsiText.textContent = trainingDescriptions[selectedValue];
+      } else {
+        deskripsiInput.value = "";
+        deskripsiText.textContent = "";
+      }
+    });
   });
+
 
 
   function toggleTambah() {
@@ -866,7 +877,59 @@
     document.getElementById('popupModal').classList.remove('block');
   }
 
-  function closeTambah(tabId) {
-    document.getElementById(tabId).classList.add('hidden');
+  function closeTambah() {
+    document.getElementById('popupModal').classList.add('hidden');
+  }
+
+
+
+  let counter = 1;
+
+  function addPeserta() {
+    const empSelect = document.getElementById('employeeSelect');
+    const gapSelect = document.getElementById('gapSelect');
+
+    if (!empSelect.value || !gapSelect.value) {
+      alert("Pilih Nama dan Gap Kompetensi dulu!");
+      return;
+    }
+
+    const selected = empSelect.options[empSelect.selectedIndex];
+    const nik = selected.dataset.nik;
+    const name = selected.dataset.name;
+    const direktorat = selected.dataset.direktorat;
+    const posisi = selected.dataset.posisi;
+    const gap = gapSelect.value;
+    const empId = empSelect.value;
+
+    const tbody = document.getElementById('customerBody');
+    const row = document.createElement('tr');
+
+    row.innerHTML = `
+  <td>${counter++}</td>
+  <td>${nik}</td>
+  <td>${name}</td>
+  <td>${direktorat}</td>
+  <td>${posisi}</td>
+  <td>${gap}</td>
+  <td>
+    <button type="button" class="text-red-500" onclick="this.closest('tr').remove()">Hapus</button>
+    <input type="hidden" name="niks[]" value="${nik}">
+    <input type="hidden" name="names[]" value="${name}">
+    <input type="hidden" name="direktorats[]" value="${direktorat}">
+    <input type="hidden" name="posisis[]" value="${posisi}">
+    <input type="hidden" name="gaps[]" value="${gap}">
+  </td>
+`;
+
+
+    tbody.appendChild(row);
+
+    // reset pilihan
+    empSelect.selectedIndex = 0;
+    gapSelect.selectedIndex = 0;
+
+    // tutup modal
+    closeTambah();
   }
 </script>

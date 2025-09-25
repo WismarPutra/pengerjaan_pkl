@@ -24,7 +24,7 @@ return new class extends Migration
             $table->dateTime('tanggal_selesai');
             $table->string('lokasi');
             $table->string('metode_pelatihan');
-            $table->integer('partisipan');
+            $table->integer('partisipan')->default(0);
             $table->string('status');
             $table->integer('biaya');
             $table->integer('total_biaya');

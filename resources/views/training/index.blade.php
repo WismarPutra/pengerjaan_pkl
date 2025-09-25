@@ -810,9 +810,16 @@
     </div>
     <div class="right-section">
       <div class="search-container">
-        <i class="fas fa-search search-icon"></i>
-        <input type="text" placeholder="Search by Name" class="search-bar" />
+        <form method="GET" action="{{ route('training.index') }}">
+          <i class="fas fa-search search-icon"></i>
+          <input type="text" name="search"
+            value="{{ request('search') }}"
+            placeholder="Search by Training Name"
+            class="search-bar" />
+        </form>
       </div>
+
+
       <button class="export-btn"><i class="fas fa-upload"></i> Export</button>
       <button class="filter-btn" onclick="toggleFilter()"><i class="fas fa-sliders"></i> Filters</button>
 
@@ -835,7 +842,7 @@
       <button class="close-btn" onclick="toggleFilter()">&times;</button>
     </div>
     <div class="filter-section">
-      <label>Filter Name</label>
+      <label>Filter Nama Training</label>
       <a href="#" class="clear-link">Clear</a>
       <select>
         <option>Select one from filter</option>
@@ -908,7 +915,7 @@
     <!-- Tambah Data Berdasarkan TNA -->
 
     <div id="tambahBTNA" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
-      <div class="bg-white w-[150vh] p-6 rounded-lg shadow-lg w-80 text-center">
+      <div class="bg-white w-[90%] max-w-6xl h-[80vh] px-6 py-1 rounded-lg shadow-lg">
         <div class="flex justify-between w-[97%] right-section" style="margin-bottom:20px;">
           <h1 class="font-extrabold text-lg">Tambah Proses Rekrutment</h1>
           <div class="flex w-[59vh] justify-between">
@@ -922,8 +929,8 @@
             </button>
           </div>
 
-          <div class="overflow-x-scroll" style="max-width: 153vh;">
-            <table id="customers" style="min-width: 1100px;">
+          <div style="max-width: 153vh; width:150vh; height:54vh;">
+            <table id="customers" style="min-width: 500px; width:1070px;">
               <tr>
                 <th class="sticky left-0 z-20 bg-gray-100 px-3 py-1 border-b">No</th>
                 <th class="px-3 py-1 text-right whitespace-nowrap">
@@ -988,12 +995,37 @@
                 <!-- Actions sticky kanan -->
                 <td class="sticky right-0 z-20 bg-white px-3 py-1 border-b">
                   <div class="dropdown-action" style="position: relative;">
-                    <button class="bg-blue-700 rounded-md px-4 py-3"><a href="{{ route('training.create')}}" style="color:white;">Pilih</a></button>
+                    <button class="bg-blue-700 rounded-md px-3 py-1"><a href="{{ route('training.create')}}" style="color:white;">Pilih</a></button>
                   </div>
                 </td>
               </tr>
               @endforeach
             </table>
+          </div>
+
+          <!-- MENGHITUNG TOTAL DATA YANG AKAN DITAMPILKAN -->
+          <div class="flex items-center gap-2 mt-5">
+            <span>Menampilkan</span>
+
+            <form method="GET" action="{{ route('training.index') }}">
+              <select
+                name="per_page"
+                id="per_page"
+                class="w-24 border-2 border-black rounded-md px-2 py-1"
+                onchange="this.form.submit()">
+                @for ($i = 1; $i <= 10; $i++)
+                  <option value="{{ $i }}" {{ $totalTraining == $i ? 'selected' : '' }}>
+                  {{ $i }}
+                  </option>
+                  @endfor
+              </select>
+            </form>
+
+            <span>entri dari {{ $jumlahTrainingsNC }} entri</span>
+          </div>
+
+          <div class="flex justify-end mt-4">
+            {{ $trainingss->appends(['tab' => 'tambahBTNA'])->links() }}
           </div>
         </div>
       </div>
@@ -1041,10 +1073,10 @@
           <th class="px-3 py-1 text-right whitespace-nowrap">
             Jumlah Peserta
             <a href="{{ route('training.index', [
-          'sort_by_training'   => 'jumlah_peserta',
+          'sort_by_training'   => 'partisipan',
           'sort_order_training'=> ($sortByTraining == 'jumlah_peserta' && $sortOrderTraining == 'asc') ? 'desc' : 'asc'
       ]) }}#trainings">
-              {!! $sortByTraining == 'jumlah_peserta' ? '⇅' : '⇅' !!}
+              {!! $sortByTraining == 'partisipan' ? '⇅' : '⇅' !!}
           </th>
           <th class="px-3 py-1 text-right whitespace-nowrap">
             Tanggal Mulai
@@ -1182,7 +1214,7 @@
     </div>
 
     <div class="flex justify-end mt-4">
-      {{ $trainings->links() }}
+      {{ $trainings->appends(['tab' => 'sedangBerjalan'])->links() }}
     </div>
 
 
@@ -1467,6 +1499,7 @@
     <span>Menampilkan</span>
 
     <form method="GET" action="{{ route('training.index') }}">
+      <input type="hidden" name="tab" value="tna">
       <select
         name="per_pageND"
         id="per_pageND"
@@ -1484,7 +1517,8 @@
   </div>
 
   <div class="flex justify-end mt-4">
-    {{ $trainingsAnalysis->links() }}
+    {{ $trainingsAnalysis->withQueryString()->appends(['tab' => 'trainingNeedsAnalysis'])->links() }}
+
   </div>
 </div>
 
@@ -1708,11 +1742,11 @@
       <tr>
         <td class="sticky left-0 z-20 bg-gray-100 px-3 py-1 border-b">{{ ($trainingSelesai->currentPage() - 1) * $trainingSelesai->perPage() + $loop->iteration }}</td>
         <td><a href="{{route('training.show', $training->id)}}">{{ $training->nama_training }}</a></td>
-       
+
         @if($training->status === "Completed")
         <td style="color: green;">{{ $training->status }}</td>
         @endif
-        
+
         @if($training->sertifikat === "Not Uploaded")
         <td class="whitespace-nowrap min-w-[110px]" style="color: red;">{{ $training->sertifikat }}</td>
         @elseif($training->sertifikat === "Uploaded")
@@ -1761,11 +1795,11 @@
     <form method="GET" action="{{ route('training.index') }}">
       <select
         name="per_page_selesai"
-        id="per_page"
+        id="per_page_selesai"
         class="w-24 border-2 border-black rounded-md px-2 py-1"
         onchange="this.form.submit()">
         @for ($i = 1; $i <= 10; $i++)
-          <option value="{{ $i }}" {{ $totalTraining == $i ? 'selected' : '' }}>
+          <option value="{{ $i }}" {{ $totalTrainingsSelesai == $i ? 'selected' : '' }}>
           {{ $i }}
           </option>
           @endfor
@@ -1776,7 +1810,7 @@
   </div>
 
   <div class="flex justify-end mt-4">
-    {{ $trainingSelesai->links() }}
+    {{ $trainingSelesai->withQueryString()->appends(['tab' => 'selesai'])->links() }}
   </div>
 </div>
 
@@ -1897,5 +1931,13 @@
         menu.classList.add("hidden");
       });
     });
+  });
+</script>
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    // cek parameter tab di URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const activeTab = urlParams.get('tab') || 'sedangBerjalan';
+    showTab(activeTab);
   });
 </script>
