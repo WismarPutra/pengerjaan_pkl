@@ -919,7 +919,7 @@
 
         <div class="action-buttons">
             <a href="{{ route('recruitment.index') }}" class="btn btn-secondary">Cancel</a>
-            <button type="submit" class="create-btn">Simpan Tanpa Kandidat</button>
+            <button type="submit" id="saveRecruitBtn" class="create-btn">Simpan Tanpa Kandidat</button>
         </div>
 
     </div>
@@ -967,13 +967,26 @@
             const excelDivider = document.getElementById("excelDivider");
             const excelPreview = document.getElementById("excelPreview");
 
-            // default text upload box
-            const defaultText = `
-            <strong>Upload Data Kandidat</strong>
-            <p>Klik atau seret file ke area ini untuk mengunggah</p>
-        `;
+            // Tombol Simpan target spesifik
+            const btnSimpan = document.getElementById("saveRecruitBtn");
 
-            // ========== Modal Open & Close ==========
+            const defaultText = `
+        <strong>Upload Data Kandidat</strong>
+        <p>Klik atau seret file ke area ini untuk mengunggah</p>
+    `;
+
+            // ===== Fungsi update teks tombol =====
+            function updateButtonText() {
+                const hasTable = !!excelPreview && !!excelPreview.querySelector("table");
+                const hasFile = selectedFile !== null && selectedFile !== undefined;
+                if (hasTable || hasFile) {
+                    btnSimpan.textContent = "Simpan";
+                } else {
+                    btnSimpan.textContent = "Simpan Tanpa Kandidat";
+                }
+            }
+
+            // ===== Modal Open & Close =====
             window.openModal = function() {
                 document.getElementById("candidateModal").classList.add("show");
             }
@@ -981,11 +994,14 @@
             window.closeModal = function() {
                 document.getElementById("candidateModal").classList.remove("show");
 
-                // reset input file dan tampilan
+                // reset input file & tampilan upload, tapi JANGAN hapus tabel
                 fileInput.value = "";
                 uploadText.innerHTML = defaultText;
                 fileName.innerText = "Klik atau seret file ke area ini untuk mengunggah";
                 selectedFile = null;
+
+                // update tombol (kalau tabel masih ada, tombol tetap Simpan)
+                updateButtonText();
             }
 
             // klik area luar untuk tutup modal
@@ -996,7 +1012,7 @@
                 }
             });
 
-            // ========== Input File ==========
+            // ===== Input File =====
             fileInput.addEventListener("change", function() {
                 const file = this.files[0];
                 if (!file) return;
@@ -1008,14 +1024,19 @@
                     alert("Hanya boleh upload file Excel (.xls, .xlsx)");
                     this.value = "";
                     uploadText.innerHTML = defaultText;
+                    selectedFile = null;
+                    updateButtonText();
                     return;
                 }
 
                 selectedFile = file;
                 fileName.innerText = file.name;
+
+                // update tombol setiap kali file dipilih
+                updateButtonText();
             });
 
-            // ========== Tombol Tambah ==========
+            // ===== Tombol submit file (proses Excel) =====
             document.querySelector(".btn-submit").addEventListener("click", function() {
                 if (!selectedFile) {
                     alert("Silakan pilih file Excel terlebih dahulu!");
@@ -1060,14 +1081,17 @@
                         makeTableSortable(newTable);
                     }
 
-                    // tutup modal setelah upload
+                    // tutup modal (tidak menghapus tabel)
                     closeModal();
                 };
                 reader.readAsArrayBuffer(selectedFile);
             });
+
+            // cek kondisi awal
+            updateButtonText();
         });
 
-        // ========== Fungsi Sorting + Icon ==========
+        // ===== Fungsi Sorting + Icon =====
         function makeTableSortable(table) {
             const headers = table.querySelectorAll("th");
             headers.forEach((header, index) => {
