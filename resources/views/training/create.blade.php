@@ -828,7 +828,6 @@
       <select id="gapSelect" class="w-full border rounded p-2">
         <option disabled selected value="">TNA/Non TNA</option>
         <option value="Financial Control & Monitoring">TNA</option>
-        <option value="Non-TNA">Non TNA</option>
       </select>
     </div>
 

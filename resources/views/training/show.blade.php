@@ -840,12 +840,6 @@
 
     <h2 class="page-title1">List Partisipan</h2>
 
-    <div class="right-section1">
-      <div class="kehadiran-container">
-        <button type="button" class="kehadiran-btn" data-bs-toggle="modal" data-bs-target="#kehadiranModal"><i class="fas fa-calendar-check"></i>Input Kehadiran</button>
-      </div>
-    </div>
-
     <table id="customers" style="margin-top: 10px; grid-column: 1 / -1">
       <tr>
         <th>No</th>
