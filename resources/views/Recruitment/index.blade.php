@@ -334,7 +334,7 @@
     padding: 7px 12px;
     border-radius: 8px;
     border: 1px solid;
-    background-color: #0000CD;
+    background-color: #3C41E8;
     color: white;
     cursor: pointer;
     font-size: 12px;
@@ -347,7 +347,7 @@
   }
 
   .create-btn:hover {
-    background-color: #191970;
+    background-color: #3C41E8;
   }
 
   .dropdown-container {
@@ -533,14 +533,14 @@
   }
 
   .tab-button:hover {
-    color: #0000CD;
+    color: #191970;
     font-weight: bold;
   }
 
   .tab-button.active {
-    color: #0000CD;
+    color: #191970;
     background-color: white;
-    border-bottom: 3px solid #0000CD;
+    border-bottom: 3px solid #191970;
     font-weight: bold;
 
   }
@@ -696,6 +696,22 @@
     margin-bottom: -13px;
     /* Atur jarak antar baris */
   }
+
+  .pilih-btn {
+    padding: 7px 12px;
+    border-radius: 8px;
+    border: 1px solid;
+    background-color: #3C41E8;
+    color: white;
+    cursor: pointer;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-right: 18px;
+    font-weight: bold;
+    font-family: Poppins, sans-serif;
+  }
 </style>
 
 <div class="navbar">
@@ -772,7 +788,7 @@
       <button class="export-btn"><i class="fas fa-upload"></i> Export</button>
       <button class="filter-btn" onclick="toggleFilter()"><i class="fas fa-sliders"></i> Filters</button>
       <div class="dropdown-container">
-        <button id="btnTambah" class="btn btn-primary">+ Tambah</button>
+        <button id="btnTambah" class="btn create-btn">+ Tambah</button>
       </div>
     </div>
   </div>
@@ -930,15 +946,23 @@
     <div class="modal fade" id="modalRekrutmen" tabindex="-1" aria-hidden="true">
       <div class="modal-dialog modal-xl">
         <div class="modal-content">
+
+          <!-- Header -->
           <div class="modal-header">
             <h5 class="modal-title">Tambah Proses Rekrutmen</h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
           </div>
+
+          <!-- Body -->
           <div class="modal-body">
 
             <!-- Search bar -->
             <div class="d-flex justify-content-end mb-3">
-              <input type="text" id="searchKebutuhan" class="form-control w-50" placeholder="Cari Berdasarkan Nama Posisi...">
+              <input
+                type="text"
+                id="searchKebutuhan"
+                class="form-control w-50"
+                placeholder="Cari Berdasarkan Nama Posisi...">
             </div>
 
             <!-- Table -->
@@ -951,7 +975,7 @@
                   <th>Band Posisi</th>
                   <th>Jumlah Lowongan</th>
                   <th>Target Tanggal Perekrutan</th>
-                  <th>Created by</th>
+                  <th>Created By</th>
                   <th>Actions</th>
                 </tr>
               </thead>
@@ -969,7 +993,10 @@
                     <form action="{{ route('recruitment.store') }}" method="POST">
                       @csrf
                       <input type="hidden" name="kebutuhan_id" value="{{ $k->id }}">
-                      <button type="submit" class="btn btn-primary btn-sm">Pilih</button>
+                      <a href="{{ route('recruitment.show', $k->id) }}"
+                        class="btn btn-primary btn-sm">
+                        Pilih
+                      </a>
                     </form>
                   </td>
                 </tr>
@@ -982,77 +1009,8 @@
       </div>
     </div>
 
-    <!-- MODAL TAMBAH REKRUTMEN -->
-    <div class="modal fade" id="modalRekrutmen" tabindex="-1" aria-hidden="true">
-      <div class="modal-dialog modal-xl">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">Tambah Proses Rekrutmen</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-          </div>
-          <div class="modal-body">
 
-            <!-- Search bar -->
-            <div class="d-flex justify-content-end mb-3">
-              <input type="text" id="searchKebutuhan" class="form-control w-50" placeholder="Cari Berdasarkan Nama Posisi...">
-            </div>
 
-            <!-- Table -->
-            <table class="table table-bordered table-hover align-middle text-center" id="tableKebutuhan">
-              <thead class="table-light">
-  <tr>
-    <th onclick="sortTable(0)" style="cursor:pointer">
-      No <span class="sort-icon">⇅</span>
-    </th>
-    <th onclick="sortTable(1)" style="cursor:pointer">
-      Nama Posisi <span class="sort-icon">⇅</span>
-    </th>
-    <th onclick="sortTable(2)" style="cursor:pointer">
-      Regional/Direktorat <span class="sort-icon">⇅</span>
-    </th>
-    <th onclick="sortTable(3)" style="cursor:pointer">
-      Band Posisi <span class="sort-icon">⇅</span>
-    </th>
-    <th onclick="sortTable(4)" style="cursor:pointer">
-      Jumlah Lowongan <span class="sort-icon">⇅</span>
-    </th>
-    <th onclick="sortTable(5)" style="cursor:pointer">
-      Target Tanggal Perekrutan <span class="sort-icon">⇅</span>
-    </th>
-    <th onclick="sortTable(6)" style="cursor:pointer">
-      Created By <span class="sort-icon">⇅</span>
-    </th>
-    <th>Actions</th>
-  </tr>
-</thead>
-              <tbody>
-                @foreach($kebutuhan as $i => $k)
-                <tr>
-                  <td>{{ $i+1 }}</td>
-                  <td>{{ $k->namaPosisi }}</td>
-                  <td>{{ $k->regionalDirektorat }}</td>
-                  <td>{{ $k->band_posisi }}</td>
-                  <td>{{ $k->jumlah_lowongan }} Orang</td>
-                  <td>{{ \Carbon\Carbon::parse($k->target_tanggal)->format('d F Y') }}</td>
-                  <td>{{ $k->created_by ?? '-' }}</td>
-                  <td>
-                    <form action="{{ route('recruitment.store') }}" method="POST">
-                      @csrf
-                      <input type="hidden" name="kebutuhan_id" value="{{ $k->id }}">
-                      <button type="submit" class="btn btn-primary btn-sm">Pilih</button>
-                    </form>
-                  </td>
-                </tr>
-                @endforeach
-              </tbody>
-            </table>
-
-          </div>
-        </div>
-      </div>
-    </div>
-
-    
 
 
 
@@ -1085,64 +1043,94 @@
 </div>
 @endsection
 <script>
-document.addEventListener("DOMContentLoaded", function () {
-  const table = document.getElementById("tableKebutuhan");
-  const headers = table.querySelectorAll("th");
-  let sortDirection = {};
+  document.addEventListener("DOMContentLoaded", function() {
+    document.querySelectorAll(".pilih-btn").forEach(btn => {
+      btn.addEventListener("click", function() {
+        // Isi detail
+        document.getElementById("detailNamaPosisi").textContent = this.dataset.namaposisi;
+        document.getElementById("detailDirektorat").textContent = this.dataset.direktorat;
+        document.getElementById("detailUnit").textContent = this.dataset.unit;
+        document.getElementById("detailBand").textContent = this.dataset.band;
+        document.getElementById("detailStatus").textContent = this.dataset.status;
+        document.getElementById("detailLokasi").textContent = this.dataset.lokasi;
+        document.getElementById("detailLowongan").textContent = this.dataset.lowongan;
+        document.getElementById("detailManager").textContent = this.dataset.manager;
+        document.getElementById("detailTanggal").textContent = this.dataset.tanggal;
+        document.getElementById("detailPendidikan").textContent = this.dataset.pendidikan;
+        document.getElementById("detailPengalaman").textContent = this.dataset.pengalaman;
 
-  headers.forEach((header, index) => {
-    // skip kolom "No" (0) dan "Actions" (terakhir)
-    if (index === 0 || index === headers.length - 1) return;
+        // Link NDE
+        let ndeLink = document.getElementById("detailNde");
+        ndeLink.href = this.dataset.nde;
+        ndeLink.textContent = this.dataset.nde !== "#" ? "Click to Download" : "-";
 
-    // kasih cursor pointer
-    header.style.cursor = "pointer";
-
-    // bikin span untuk icon sort
-    const icon = document.createElement("span");
-    icon.textContent = " ⇅";
-    icon.classList.add("sort-icon");
-    header.appendChild(icon);
-
-    header.addEventListener("click", () => {
-      const tbody = table.querySelector("tbody");
-      const rows = Array.from(tbody.querySelectorAll("tr"));
-      const dir = sortDirection[index] === "asc" ? "desc" : "asc";
-
-      rows.sort((a, b) => {
-        const cellA = a.children[index].innerText.trim();
-        const cellB = b.children[index].innerText.trim();
-
-        // cek angka dulu
-        const numA = parseFloat(cellA.replace(/[^0-9.-]+/g,""));
-        const numB = parseFloat(cellB.replace(/[^0-9.-]+/g,""));
-        if (!isNaN(numA) && !isNaN(numB)) {
-          return dir === "asc" ? numA - numB : numB - numA;
-        }
-
-        // cek tanggal
-        const dateA = Date.parse(cellA);
-        const dateB = Date.parse(cellB);
-        if (!isNaN(dateA) && !isNaN(dateB)) {
-          return dir === "asc" ? dateA - dateB : dateB - dateA;
-        }
-
-        // default string compare
-        return dir === "asc"
-          ? cellA.localeCompare(cellB)
-          : cellB.localeCompare(cellA);
+        // Tutup modal
+        let modal = bootstrap.Modal.getInstance(document.getElementById('modalKebutuhan'));
+        modal.hide();
       });
-
-      // reset ikon
-      table.querySelectorAll(".sort-icon").forEach(el => el.textContent = " ⇅");
-      header.querySelector(".sort-icon").textContent = dir === "asc" ? " ↑" : " ↓";
-
-      // update rows
-      rows.forEach(row => tbody.appendChild(row));
-
-      sortDirection[index] = dir;
     });
   });
-});
+</script>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    const table = document.getElementById("tableKebutuhan");
+    const headers = table.querySelectorAll("th");
+    let sortDirection = {};
+
+    headers.forEach((header, index) => {
+      // skip kolom "No" (0) dan "Actions" (terakhir)
+      if (index === 0 || index === headers.length - 1) return;
+
+      // kasih cursor pointer
+      header.style.cursor = "pointer";
+
+      // bikin span untuk icon sort
+      const icon = document.createElement("span");
+      icon.textContent = " ⇅";
+      icon.classList.add("sort-icon");
+      header.appendChild(icon);
+
+      header.addEventListener("click", () => {
+        const tbody = table.querySelector("tbody");
+        const rows = Array.from(tbody.querySelectorAll("tr"));
+        const dir = sortDirection[index] === "asc" ? "desc" : "asc";
+
+        rows.sort((a, b) => {
+          const cellA = a.children[index].innerText.trim();
+          const cellB = b.children[index].innerText.trim();
+
+          // cek angka dulu
+          const numA = parseFloat(cellA.replace(/[^0-9.-]+/g, ""));
+          const numB = parseFloat(cellB.replace(/[^0-9.-]+/g, ""));
+          if (!isNaN(numA) && !isNaN(numB)) {
+            return dir === "asc" ? numA - numB : numB - numA;
+          }
+
+          // cek tanggal
+          const dateA = Date.parse(cellA);
+          const dateB = Date.parse(cellB);
+          if (!isNaN(dateA) && !isNaN(dateB)) {
+            return dir === "asc" ? dateA - dateB : dateB - dateA;
+          }
+
+          // default string compare
+          return dir === "asc" ?
+            cellA.localeCompare(cellB) :
+            cellB.localeCompare(cellA);
+        });
+
+        // reset ikon
+        table.querySelectorAll(".sort-icon").forEach(el => el.textContent = " ⇅");
+        header.querySelector(".sort-icon").textContent = dir === "asc" ? " ↑" : " ↓";
+
+        // update rows
+        rows.forEach(row => tbody.appendChild(row));
+
+        sortDirection[index] = dir;
+      });
+    });
+  });
 </script>
 
 <script>

@@ -135,6 +135,7 @@ Route::post('/recruitment/save-step', [RecruitmentController::class, 'saveStep']
 Route::post('/recruitment/submit', [RecruitmentController::class, 'submit'])->name('recruitment.submit');
 Route::post('/recruitment/next-step', [RecruitmentController::class, 'nextStep'])->name('recruitment.nextStep');
 Route::post('/recruitment/previous-step', [RecruitmentController::class, 'previousStep'])->name('recruitment.previousStep');
+Route::resource('recruitment', RecruitmentController::class);
 
 
 /* DASHBOARD OUTSOURCE */
