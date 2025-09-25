@@ -31,16 +31,16 @@ class Employee extends Model
         'institusi_pendidikan',
         'tahun_lulus',
         // tambahkan kolom dokumen
-    'ktp',
-    'kartu_keluarga',
-    'npwp',
-    'bpjs_ketenagakerjaan',
-    'bpjs_kesehatan',
-    'nota_dinas',
-    'psikotest',
-    'assessment_01',
-    'assessment_02',
-    'assessment_03',
+        'ktp',
+        'kartu_keluarga',
+        'npwp',
+        'bpjs_ketenagakerjaan',
+        'bpjs_kesehatan',
+        'nota_dinas',
+        'psikotest',
+        'assessment_01',
+        'assessment_02',
+        'assessment_03',
     ];
 
     public function families()
@@ -54,39 +54,39 @@ class Employee extends Model
         return $this->hasMany(TalentCluster::class, 'employee_id');
     }
 
-   public function documents()
-{
-    return $this->hasMany(EmployeeDocument::class);
-}
+    public function documents()
+    {
+        return $this->hasMany(EmployeeDocument::class);
+    }
 
-public function personalDocuments()
-{
-    return $this->documents()->where('kategori', 'personal');
-}
+    public function personalDocuments()
+    {
+        return $this->documents()->where('kategori', 'personal');
+    }
 
-public function otherDocuments()
-{
-    return $this->documents()->where('kategori', 'lainnya');
-}
-
-
-public function careerActivities()
-{
-    return $this->hasMany(CareerActivity::class, 'employee_id');
-}
-
-public function jobHistories()
-{
-    return $this->hasMany(JobHistory::class, 'employee_id');
-}
-
-public function payslips()
-{
-    return $this->hasMany(EmployeePayslip::class);
-}
+    public function otherDocuments()
+    {
+        return $this->documents()->where('kategori', 'lainnya');
+    }
 
 
+    public function careerActivities()
+    {
+        return $this->hasMany(CareerActivity::class, 'employee_id');
+    }
 
+    public function jobHistories()
+    {
+        return $this->hasMany(JobHistory::class, 'employee_id');
+    }
 
+    public function payslips()
+    {
+        return $this->hasMany(EmployeePayslip::class);
+    }
 
+    public function training()
+    {
+        return $this->belongsTo(Training::class);
+    }
 }

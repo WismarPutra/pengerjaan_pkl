@@ -3,247 +3,267 @@
 @section('content')
 
 <style>
-/* SIDEBAR STYLE */
-body {
-  margin: 0;
-  background-color: #E6E6FA;
-}
+  /* SIDEBAR STYLE */
+  body {
+    margin: 0;
+    background-color: #E6E6FA;
+  }
 
-.navbar {
-  position: fixed;
-  top: 0;
-  left: 300px;
-  width: calc(100% - 300px); 
-  background-color: #FFFFFF;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 20px 25px;
-  z-index: 1000;
-  box-shadow: 0 0 2px var(--grey-color-light);
-  height: 80px;
-}
+  .navbar {
+    position: fixed;
+    top: 0;
+    left: 300px;
+    width: calc(100% - 300px);
+    background-color: #FFFFFF;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 25px;
+    z-index: 1000;
+    box-shadow: 0 0 2px var(--grey-color-light);
+    height: 80px;
+  }
 
-.left-info {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-}
+  .left-info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
 
-.navbar-name {
-  font-size: 13px; 
-  font-family: Poppins, sans-serif;
-  color: #080808;
-}
+  .navbar-name {
+    font-size: 13px;
+    font-family: Poppins, sans-serif;
+    color: #080808;
+  }
 
-.navbar-date {
-  font-size: 0.7em; /* Memperkecil ukuran email */
-  color: #2F4F4F; /* Mengubah warna email */
-}
+  .navbar-date {
+    font-size: 0.7em;
+    /* Memperkecil ukuran email */
+    color: #2F4F4F;
+    /* Mengubah warna email */
+  }
 
-.sidebar {
-  width: 300px;
-  background-color: #FFFFFF;
-  position: fixed;
-  top: 0;
-  left: 0;
-  padding: 20px;
-  height: 100%
-}
+  .sidebar {
+    width: 300px;
+    background-color: #FFFFFF;
+    position: fixed;
+    top: 0;
+    left: 0;
+    padding: 20px;
+    height: 100%
+  }
 
-.sidebar ul {
-  font-family: Poppins, sans-serif;
-  font-size: 12px;
-  padding: 9px;
-  list-style-type: none;
-  margin: 0;
-  width: 250px;
-  overflow: auto;
-}
+  .sidebar ul {
+    font-family: Poppins, sans-serif;
+    font-size: 12px;
+    padding: 9px;
+    list-style-type: none;
+    margin: 0;
+    width: 250px;
+    overflow: auto;
+  }
 
-.sidebar ul li a {
-  font-size: 12px;
-  display: block;
-  color: #2F4F4F;
-  padding: 10px 16px;
-  margin-bottom: 7px;
-  text-decoration: none;
-}
+  .sidebar ul li a {
+    font-size: 12px;
+    display: block;
+    color: #2F4F4F;
+    padding: 10px 16px;
+    margin-bottom: 7px;
+    text-decoration: none;
+  }
 
-.sidebar ul li a.active {
-  border-radius: 10px;
-  background-color: rgba(38, 130, 255, 0.15);
-  color: mediumblue;
-  font-weight: bold;
-}
+  .sidebar ul li a.active {
+    border-radius: 10px;
+    background-color: rgba(38, 130, 255, 0.15);
+    color: mediumblue;
+    font-weight: bold;
+  }
 
-ul li a:hover:not(.active) {
-  border-radius: 10px;
-  background-color: rgba(38, 130, 255, 0.15);
-  color: mediumblue;
-  font-weight: bold;
-}
+  ul li a:hover:not(.active) {
+    border-radius: 10px;
+    background-color: rgba(38, 130, 255, 0.15);
+    color: mediumblue;
+    font-weight: bold;
+  }
 
-.main {
-  margin-top: 25px;
-  margin-bottom: 10px;
-  color: #080808;
-  font-size: 12px;
-  font-weight: bold;
-}
+  .main {
+    margin-top: 25px;
+    margin-bottom: 10px;
+    color: #080808;
+    font-size: 12px;
+    font-weight: bold;
+  }
 
-.config {
-  margin-top: 25px;
-  margin-bottom: 10px;
-  color: #080808;
-  font-size: 12px;
-  font-weight: bold;
-}
+  .config {
+    margin-top: 25px;
+    margin-bottom: 10px;
+    color: #080808;
+    font-size: 12px;
+    font-weight: bold;
+  }
 
-.menu i {
-  margin-right: 8px;
-}
+  .menu i {
+    margin-right: 8px;
+  }
 
-.home-profile {
-  border-bottom: 1px solid #A9A9A9;
+  .home-profile {
+    border-bottom: 1px solid #A9A9A9;
 
-}
+  }
 
-.home-profile i {
-  margin-right: 8px;
-}
+  .home-profile i {
+    margin-right: 8px;
+  }
 
-.sidebar .logo {
-  display: flex; /* Mengaktifkan flexbox */
-  align-items: center; /* Menyelaraskan elemen secara vertikal */
-  gap: 20px;
-  margin-bottom: 20px;
-  border-bottom: 1px solid #A9A9A9;
-  padding: 9px;
-}
+  .sidebar .logo {
+    display: flex;
+    /* Mengaktifkan flexbox */
+    align-items: center;
+    /* Menyelaraskan elemen secara vertikal */
+    gap: 20px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #A9A9A9;
+    padding: 9px;
+  }
 
-.sidebar .logo img {
-  width: 45px; /* Atur lebar foto */
-  height: 45px; /* Atur tinggi foto */
-  border-radius: 10%;
-}
+  .sidebar .logo img {
+    width: 45px;
+    /* Atur lebar foto */
+    height: 45px;
+    /* Atur tinggi foto */
+    border-radius: 10%;
+  }
 
-.logo-info {
-  display: flex;
-}
+  .logo-info {
+    display: flex;
+  }
 
-.logo-name {
-  font-size: 16px; 
-  font-weight: bolder;
-  font-family: Poppins, sans-serif;
-  color: #2F4F4F;
-}
+  .logo-name {
+    font-size: 16px;
+    font-weight: bolder;
+    font-family: Poppins, sans-serif;
+    color: #2F4F4F;
+  }
 
-.sidebar .profile {
-  display: flex; /* Mengaktifkan flexbox */
-  align-items: center; /* Menyelaraskan elemen secara vertikal */
-  gap: 20px;
-  margin-bottom: 10px;
-  border-bottom: 1px solid #A9A9A9;
-  padding: 9px;
-}
+  .sidebar .profile {
+    display: flex;
+    /* Mengaktifkan flexbox */
+    align-items: center;
+    /* Menyelaraskan elemen secara vertikal */
+    gap: 20px;
+    margin-bottom: 10px;
+    border-bottom: 1px solid #A9A9A9;
+    padding: 9px;
+  }
 
-.sidebar .profile img {
-  width: 45px; /* Atur lebar foto */
-  height: 45px; /* Atur tinggi foto */
-  border-radius: 10%;
-}
+  .sidebar .profile img {
+    width: 45px;
+    /* Atur lebar foto */
+    height: 45px;
+    /* Atur tinggi foto */
+    border-radius: 10%;
+  }
 
-.profile-info {
-  display: flex;
-  flex-direction: column; /* Mengatur nama dan email menjadi kolom */
-}
+  .profile-info {
+    display: flex;
+    flex-direction: column;
+    /* Mengatur nama dan email menjadi kolom */
+  }
 
-.profile-name {
-  font-size: 13px; /* Membuat nama lebih tebal */
-  font-family: Poppins, sans-serif;
-  color: #080808;
-}
+  .profile-name {
+    font-size: 13px;
+    /* Membuat nama lebih tebal */
+    font-family: Poppins, sans-serif;
+    color: #080808;
+  }
 
-.profile-email {
-  font-size: 0.7em; /* Memperkecil ukuran email */
-  color: #2F4F4F; /* Mengubah warna email */
-}
+  .profile-email {
+    font-size: 0.7em;
+    /* Memperkecil ukuran email */
+    color: #2F4F4F;
+    /* Mengubah warna email */
+  }
 
-/* TALENT MANAGEMENT STYLES */
-#customers {
-  font-family: Poppins, sans-serif;  
-  border-collapse: collapse;
-  width: 100%;
-  margin-top: 10px;
-}
+  /* TALENT MANAGEMENT STYLES */
+  #customers {
+    font-family: Poppins, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+    margin-top: 10px;
+  }
 
-#customers td, #customers th {
-  border: none;
-  font-size: 12px;
-}
+  #customers td,
+  #customers th {
+    border: none;
+    font-size: 12px;
+  }
 
-#customers tr:nth-child(even){background-color: #f2f2f2;}
-#customers tr:hover {background-color: #ddd;}
+  #customers tr:nth-child(even) {
+    background-color: #f2f2f2;
+  }
 
-#customers th {
-  border-bottom: 1px solid #A9A9A9;
-  padding-top: 12px;
-  padding-bottom: 12px;
-  padding-left: 15px;
-  padding-right: 12px;
-  text-align: left;
-  background-color: #E6E6FA;
-  color: #080808;
-}
+  #customers tr:hover {
+    background-color: #ddd;
+  }
 
-#customers td {
-  border-bottom: 1px solid #A9A9A9;
-  padding: 1px;
-  padding-left: 15px;
-  padding-right: 12px;
-  color: #2F4F4F;
-  background-color: white;
-}
+  #customers th {
+    border-bottom: 1px solid #A9A9A9;
+    padding-top: 12px;
+    padding-bottom: 12px;
+    padding-left: 15px;
+    padding-right: 12px;
+    text-align: left;
+    background-color: #E6E6FA;
+    color: #080808;
+  }
 
-.horizontal-dots {
+  #customers td {
+    border-bottom: 1px solid #A9A9A9;
+    padding: 1px;
+    padding-left: 15px;
+    padding-right: 12px;
+    color: #2F4F4F;
+    background-color: white;
+  }
+
+  .horizontal-dots {
     background: none;
     border: none;
     font-size: 30px;
     cursor: pointer;
     color: mediumblue;
     font-weight: bold;
-}
+  }
 
-.dropdown-action {
+  .dropdown-action {
     position: relative;
     display: inline-block;
-}
+  }
 
-.dropdown-action-content {
+  .dropdown-action-content {
     display: none;
     position: absolute;
     background-color: white;
     min-width: 100px;
-    box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
     z-index: 1;
     border: 1px solid #ccc;
     padding: 5px;
-}
+  }
 
-.dropdown-action-detail {
-  font-family: Poppins, sans-serif;
-  font-weight: normal;
-  font-size: 12px;
-  color: #555;
-  text-decoration: none;
-}
+  .dropdown-action-detail {
+    font-family: Poppins, sans-serif;
+    font-weight: normal;
+    font-size: 12px;
+    color: #555;
+    text-decoration: none;
+  }
 
-.dropdown-action:hover .dropdown-action-content {
+  .dropdown-action:hover .dropdown-action-content {
     display: block;
-}
+  }
 
-.page-title {
+  .page-title {
     font-size: 16px;
     margin-bottom: 20px;
     margin-top: 10px;
@@ -251,9 +271,11 @@ ul li a:hover:not(.active) {
     font-weight: bolder;
     margin-right: 20px;
     margin-left: 1px;
-}
+  }
 
-.first, .sec, .third {
+  .first,
+  .sec,
+  .third {
     display: inline-block;
     font-weight: bold;
     padding: 4px 12px;
@@ -261,23 +283,26 @@ ul li a:hover:not(.active) {
     font-size: 12px;
     min-width: 120px;
     text-align: center;
-}
-.first {
+  }
+
+  .first {
     background-color: rgba(245, 40, 145, 0.1);
     color: deeppink;
-}
-.sec {
+  }
+
+  .sec {
     background-color: rgba(39, 238, 245, 0.15);
     color: mediumturquoise;
-}
-.third {
+  }
+
+  .third {
     background-color: rgba(38, 130, 255, 0.15);
     color: mediumblue;
-}
+  }
 
 
-/* OFFSET UNTUK KONTEN */
-.content-header-flex {
+  /* OFFSET UNTUK KONTEN */
+  .content-header-flex {
     background-color: white;
     padding: 24px 32px;
     padding-top: 40px;
@@ -285,19 +310,23 @@ ul li a:hover:not(.active) {
     margin-right: 1px;
     border-radius: 20px;
     margin-top: 100px;
-    min-height: unset; /* Biar tetap tinggi meski tanpa isi */
+    min-height: unset;
+    /* Biar tetap tinggi meski tanpa isi */
     position: relative;
-    display: flex; 
+    display: flex;
     flex-direction: column;
-    justify-content: flex-start; /* Memberi jarak antara konten dan tombol */
-    align-items: flex-start; /* Menyelaraskan elemen di bagian atas */
+    justify-content: flex-start;
+    /* Memberi jarak antara konten dan tombol */
+    align-items: flex-start;
+    /* Menyelaraskan elemen di bagian atas */
     max-width: 100%;
-    width: 1100px; /* Sidebar width + padding */
+    width: 1100px;
+    /* Sidebar width + padding */
     box-sizing: border-box;
     flex-wrap: wrap;
-}
+  }
 
-.btn-home {
+  .btn-home {
     padding: 6px 12px;
     border-radius: 6px;
     display: flex;
@@ -306,105 +335,105 @@ ul li a:hover:not(.active) {
     width: fit-content;
     margin-bottom: 8px;
     color: #696969;
-}
+  }
 
-.btn-home:hover {
+  .btn-home:hover {
     color: #808080;
-}
+  }
 
-.breadcrumb-row {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
+  .breadcrumb-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
 
-.breadcrumb-arrow {
-  margin-bottom: 8px;
-  padding: 2px 6px;
-  color: #696969;
-  font-size: 14px;
-  gap: 8px;
-  margin-left: 8px;
-}
+  .breadcrumb-arrow {
+    margin-bottom: 8px;
+    padding: 2px 6px;
+    color: #696969;
+    font-size: 14px;
+    gap: 8px;
+    margin-left: 8px;
+  }
 
-.breadcrumb-text {
-  font-family: Poppins, sans-serif;
-  font-weight: normal;
-  font-size: 14px;
-  color: #555;
-  text-decoration: none;
-  margin-bottom: 4px;
-  padding: 2px 6px;
-}
+  .breadcrumb-text {
+    font-family: Poppins, sans-serif;
+    font-weight: normal;
+    font-size: 14px;
+    color: #555;
+    text-decoration: none;
+    margin-bottom: 4px;
+    padding: 2px 6px;
+  }
 
-.breadcrumb-text:hover {
-  color: #808080;
-}
+  .breadcrumb-text:hover {
+    color: #808080;
+  }
 
-.form-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 500px);
-  gap: 24px;
-  font-family: Poppins, sans-serif;
-  font-weight: normal;
-  font-size: 14px;
-}
+  .form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 500px);
+    gap: 24px;
+    font-family: Poppins, sans-serif;
+    font-weight: normal;
+    font-size: 14px;
+  }
 
-.form-group {
-  display: flex;
-  flex-direction: column;
-}
+  .form-group {
+    display: flex;
+    flex-direction: column;
+  }
 
-label {
-  font-size: 14px;
-  margin-bottom: 6px;
-}
+  label {
+    font-size: 14px;
+    margin-bottom: 6px;
+  }
 
-.form-control {
-  padding: 12px;
-  font-size: 14px;
-  border-radius: 8px;
-  border: 1px solid #ccc;
-  background-color: white;
-}
+  .form-control {
+    padding: 12px;
+    font-size: 14px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    background-color: white;
+  }
 
-.form-control1 {
-  padding: 12px;
-  font-size: 14px;
-  border-radius: 8px;
-  border: 1px solid #ccc;
-  background-color: white;
-}
+  .form-control1 {
+    padding: 12px;
+    font-size: 14px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    background-color: white;
+  }
 
-.form-control-read {
-  padding: 12px;
-  font-size: 14px;
-  border-radius: 8px;
-  border: 1px solid #ccc;
-  background-color: #eaeaea;
-}
+  .form-control-read {
+    padding: 12px;
+    font-size: 14px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    background-color: #eaeaea;
+  }
 
-.form-control:read-only {
-  background-color: white;
-}
+  .form-control:read-only {
+    background-color: white;
+  }
 
-textarea.form-control {
-  resize: vertical;
-  min-height: 100px;
-}
+  textarea.form-control {
+    resize: vertical;
+    min-height: 100px;
+  }
 
-.divider {
-  margin: 30px 0;
-  border-top: 3px solid #A9A9A9;
-}
+  .divider {
+    margin: 30px 0;
+    border-top: 3px solid #A9A9A9;
+  }
 
-.full-width {
-  grid-column: span 2;
-  gap: 6px; 
-  margin-bottom: 10px;
-}
+  .full-width {
+    grid-column: span 2;
+    gap: 6px;
+    margin-bottom: 10px;
+  }
 
-.left-section {
+  .left-section {
     font-size: 16px;
     margin-bottom: 20px;
     margin-top: 10px;
@@ -412,134 +441,137 @@ textarea.form-control {
     font-weight: bolder;
     margin-right: 20px;
     margin-left: 1px;
-}
+  }
 
-.right-section1 {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  flex-wrap: wrap;
-  padding-left: 400px;
-}
+  .right-section1 {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    padding-left: 400px;
+  }
 
-.right-section2 {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  padding-left: 800px;
-  margin-top: 40px;
-}
+  .right-section2 {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    padding-left: 800px;
+    margin-top: 40px;
+  }
 
-.create-btn {
-  padding: 14px 30px;
-  border-radius: 8px;
-  border: 1px solid;
-  background-color: #0000CD;
-  color: white;
-  cursor: pointer;
-  font-size: 12px;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-weight: bold;
-  font-family: Poppins, sans-serif;
-  text-decoration: none;
-}
+  .create-btn {
+    padding: 14px 30px;
+    border-radius: 8px;
+    border: 1px solid;
+    background-color: #0000CD;
+    color: white;
+    cursor: pointer;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: bold;
+    font-family: Poppins, sans-serif;
+    text-decoration: none;
+  }
 
-.cancel-btn {
-  padding: 14px 30px;
-  border-radius: 8px;
-  border: 1px solid #eaeaea;
-  background-color: #eaeaea;
-  color: #696969;
-  cursor: pointer;
-  font-size: 12px;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  margin-right: 18px;
-  font-weight: bold;
-  font-family: Poppins, sans-serif;
-  text-decoration: none;
-}
+  .cancel-btn {
+    padding: 14px 30px;
+    border-radius: 8px;
+    border: 1px solid #eaeaea;
+    background-color: #eaeaea;
+    color: #696969;
+    cursor: pointer;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-right: 18px;
+    font-weight: bold;
+    font-family: Poppins, sans-serif;
+    text-decoration: none;
+  }
 
-.add-btn {
-  padding: 7px 12px;
-  border-radius: 8px;
-  border: 1px solid;
-  background-color: #0000CD;
-  color: white;
-  cursor: pointer;
-  font-size: 12px;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  margin-right: 18px;
-  font-weight: bold;
-  font-family: Poppins, sans-serif;
-}
+  .add-btn {
+    padding: 7px 12px;
+    border-radius: 8px;
+    border: 1px solid;
+    background-color: #0000CD;
+    color: white;
+    cursor: pointer;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-right: 18px;
+    font-weight: bold;
+    font-family: Poppins, sans-serif;
+  }
 
-#customers {
-  font-family: Poppins, sans-serif;  
-  border-collapse: collapse;
-  width: 100%;
-  margin-top: 10px;
-}
+  #customers {
+    font-family: Poppins, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+    margin-top: 10px;
+  }
 
-#customers td, #customers th {
-  border: none;
-  font-size: 12px;
-}
+  #customers td,
+  #customers th {
+    border: none;
+    font-size: 12px;
+  }
 
-#customers tr:nth-child(even){background-color: #f2f2f2;}
-#customers tr:hover {background-color: #ddd;}
+  #customers tr:nth-child(even) {
+    background-color: #f2f2f2;
+  }
 
-#customers th {
-  border-bottom: 1px solid #A9A9A9;
-  padding-top: 14px;
-  padding-bottom: 14px;
-  padding-left: 15px;
-  padding-right: 12px;
-  text-align: left;
-  background-color: #E6E6FA;
-  color: #080808;
-}
+  #customers tr:hover {
+    background-color: #ddd;
+  }
 
-#customers td {
-  border-bottom: 1px solid #A9A9A9;
-  padding: 1px;
-  padding-left: 15px;
-  padding-right: 12px;
-  padding-bottom: 14px;
-  color: #2F4F4F;
-  background-color: white;
-  padding-top: 14px;
+  #customers th {
+    border-bottom: 1px solid #A9A9A9;
+    padding-top: 14px;
+    padding-bottom: 14px;
+    padding-left: 15px;
+    padding-right: 12px;
+    text-align: left;
+    background-color: #E6E6FA;
+    color: #080808;
+  }
 
-}
+  #customers td {
+    border-bottom: 1px solid #A9A9A9;
+    padding: 1px;
+    padding-left: 15px;
+    padding-right: 12px;
+    padding-bottom: 14px;
+    color: #2F4F4F;
+    background-color: white;
+    padding-top: 14px;
 
-.trash-btn {
-  border: none;
-  background: none;
-  padding: 0;
-  margin: 0;
-  cursor: pointer;
-}
+  }
 
-.trash-btn i {
-  color: red;
-  font-size: 18px;
-  text-align: center;
-}
+  .trash-btn {
+    border: none;
+    background: none;
+    padding: 0;
+    margin: 0;
+    cursor: pointer;
+  }
 
-
-
+  .trash-btn i {
+    color: red;
+    font-size: 18px;
+    text-align: center;
+  }
 </style>
 
 <div class="navbar">
-    <div class="left-info">
-        <div class="navbar-name" >Hello, Satria Hadi!</div>
-        <div class="navbar-date">{{ \Carbon\Carbon::now()->translatedFormat('l, d F Y') }}</div>
-    </div>
+  <div class="left-info">
+    <div class="navbar-name">Hello, Satria Hadi!</div>
+    <div class="navbar-date">{{ \Carbon\Carbon::now()->translatedFormat('l, d F Y') }}</div>
+  </div>
 </div>
 
 
@@ -586,7 +618,7 @@ textarea.form-control {
 
 
 <!-- KONTEN UTAMA -->
-<div class="content-header-flex">
+<div class="content-header-flex" style="margin-left: 45vh;">
   <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; flex-wrap: wrap;">
     <div style="display: flex; flex-direction: column; gap: 6px;">
       <!-- Baris 1: Home & Breadcrumb -->
@@ -599,153 +631,305 @@ textarea.form-control {
           <a href="{{ route('training.index') }}" class="breadcrumb-text">Training Management</a>
           <i class="fas fa-chevron-right breadcrumb-arrow"></i>
           <a href="{{ url()->current() }}" class="breadcrumb-text">Edit</a>
-        </div> 
+        </div>
       </div>
       <h2 class="page-title">Edit Training</h2>
     </div>
   </div>
 
   @if ($errors->any())
-    <div class="alert alert-danger">
-        <strong>Error:</strong>
-        <ul>
-          @foreach ($errors->all() as $error)
-            <li>{{ $error }}</li>
-          @endforeach
-        </ul>
-    </div>
+  <div class="alert alert-danger">
+    <strong>Error:</strong>
+    <ul>
+      @foreach ($errors->all() as $error)
+      <li>{{ $error }}</li>
+      @endforeach
+    </ul>
+  </div>
   @endif
-  <form action="{{ route('training.store') }}" method="POST">
+  <form action="{{ route('training.update', $training->id) }}" method="POST">
     @csrf
-        <div class="form-grid">
-        <div class="form-group">
-            <label>ID Training *</label>
-            <input type="text" name="id_training" class="form-control-read" required>
+    @method('PUT')
+    <div class="form-grid">
+
+      <div class="form-group">
+        <label>Nama Training (Learning Solution)*</label>
+        <input type="text" name="nama_training" id="nama_training" class="form-control1" value="{{old('nama_training', $training->nama_training)}}">
+      </div>
+
+
+      <div class="form-group">
+        <label>Deskripsi Training *</label>
+        <input type="text" name="deskripsi_training" id="deskripsi_training" class="form-control" value="{{old('deskripsi_training', $training->deskripsi_training)}}" readonly>
+      </div>
+
+      <div class="form-group">
+        <label>Stream *</label>
+        <select name="stream" class="form-control1" required>
+          <option disabled selected value=""></option>
+          <option value="Health" {{ old('stream', $training->stream) == 'Health' ? 'selected' : '' }}>Health</option>
+          <option value="Investment" {{ old('stream', $training->stream) == 'Investment' ? 'selected' : '' }}>Investment</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Keterangan *</label>
+        <select name="keterangan" class="form-control1" required>
+          <option disabled value="">-- Pilih Keterangan --</option>
+          <option value="Technical" {{ old('keterangan', $training->keterangan) == 'Technical' ? 'selected' : '' }}>Technical</option>
+          <option value="digital_platform" {{ old('keterangan', $training->keterangan) == 'digital_platform' ? 'selected' : '' }}>Digital Platform & IT</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Sertifikat Partisipasi</label>
+        <select name="sertifikat_partisipasi" class="form-control1" required>
+          <option disabled value="">-- Pilih --</option>
+          <option value="Ada" {{ old('sertifikat_partisipasi', $training->sertifikat_partisipasi) == 'Ada' ? 'selected' : '' }}>Ada</option>
+          <option value="Tidak" {{ old('sertifikat_partisipasi', $training->sertifikat_partisipasi) == 'Tidak' ? 'selected' : '' }}>Tidak Ada</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Sertifikat Kelulusan</label>
+        <select name="sertifikat_kelulusan" class="form-control1" required>
+          <option disabled value="">-- Pilih --</option>
+          <option value="Ada" {{ old('sertifikat_kelulusan', $training->sertifikat_kelulusan) == 'Ada' ? 'selected' : '' }}>Ada</option>
+          <option value="Tidak" {{ old('sertifikat_kelulusan', $training->sertifikat_kelulusan) == 'Tidak' ? 'selected' : '' }}>Tidak Ada</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Penyelenggara</label>
+        <select name="penyelenggara" class="form-control1" required>
+          <option disabled value="">-- Pilih Penyelenggara --</option>
+          <option value="Learning Center" {{ old('penyelenggara', $training->penyelenggara) == 'Learning Center' ? 'selected' : '' }}>Learning Center</option>
+          <option value="Tidak Ada" {{ old('penyelenggara', $training->penyelenggara) == 'Tidak Ada' ? 'selected' : '' }}>Tidak Ada</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Tipe Training *</label>
+        <select name="tipe_training" class="form-control1" required>
+          <option disabled value="">-- Pilih Tipe --</option>
+          <option value="in-house" {{ old('tipe_training', $training->tipe_training) == 'in-house' ? 'selected' : '' }}>In-house</option>
+          <option value="Eksternal" {{ old('tipe_training', $training->tipe_training) == 'Eksternal' ? 'selected' : '' }}>Eksternal</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Tanggal Mulai *</label>
+        <input type="datetime-local" name="tanggal_mulai" class="form-control"
+          value="{{ old('tanggal_mulai', \Carbon\Carbon::parse($training->tanggal_mulai)->format('Y-m-d\TH:i')) }}" required>
+      </div>
+
+      <div class="form-group">
+        <label>Tanggal Selesai *</label>
+        <input type="datetime-local" name="tanggal_selesai" class="form-control"
+          value="{{ old('tanggal_selesai', \Carbon\Carbon::parse($training->tanggal_selesai)->format('Y-m-d\TH:i')) }}" required>
+      </div>
+
+      <div class="form-group">
+        <label>Metode Pelatihan *</label>
+        <select name="metode_pelatihan" class="form-control1" required>
+          <option disabled value="">-- Pilih Metode --</option>
+          <option value="Online" {{ old('metode_pelatihan', $training->metode_pelatihan) == 'Online' ? 'selected' : '' }}>Online</option>
+          <option value="Offline" {{ old('metode_pelatihan', $training->metode_pelatihan) == 'Offline' ? 'selected' : '' }}>Offline</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Lokasi *</label>
+        <input type="text" name="lokasi" class="form-control"
+          value="{{ old('lokasi', $training->lokasi) }}" required>
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <div class="form-grid">
+      <div class="form-group">
+        <label>Biaya per Orang *</label>
+        <input type="text" name="biaya" class="form-control"
+          value="{{ old('biaya', $training->biaya) }}" required>
+      </div>
+
+      <div class="form-group">
+        <label>Total Biaya *</label>
+        <input type="text" name="total_biaya" class="form-control-read"
+          value="{{ old('total_biaya', $training->total_biaya) }}" required>
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; flex-wrap: wrap;">
+      <h2 class="left-section">List Of Participants</h2>
+      <div class="right-section1">
+        <button type="button" class="add-btn" onclick="toggleTambah()"><i class="fas fa-plus"></i>Tambah</button>
+      </div>
+    </div>
+
+    <div id="popupModal" class="fixed inset-0 hidden bg-gray-900 bg-opacity-50 flex items-center justify-center">
+      <div class="bg-white rounded-lg shadow-lg w-[562px] h-[448px] p-[32px] gap[24px]" style="border-radius: 16px;">
+        <div class="flex justify-between items-center mb-4">
+          <h2 class="text-lg font-semibold w-[136px] h-[24px]">Tambah Peserta</h2>
+          <button onclick="closeTambah()" class="w-[24px] h-[24px] text-gray-500 hover:text-gray-700">&times;</button>
         </div>
 
-        <div class="form-group">
-            <label>Nama Training *</label>
-            <input type="text" name="nama_training" class="form-control" required>
+        <!-- Select Nama -->
+        <div class="mb-4 w-[498px] h-[72px]">
+          <label class="block text-sm font-medium">Nama</label>
+          <select id="employeeSelect" class="w-full border rounded p-2">
+            <option disabled selected value="">Nama Lengkap (NIK)</option>
+            @foreach($employee as $employe)
+            <option value="{{ $employe->id }}"
+              data-nik="{{ $employe->nik }}"
+              data-name="{{ $employe->name }}"
+              data-direktorat="{{ $employe->direktorat }}"
+              data-posisi="{{ $employe->posisi }}">
+              {{ $employe->name }} ({{ $employe->nik }})
+            </option>
+            @endforeach
+          </select>
         </div>
 
-        <div class="form-group">
-            <label>Deskripsi Training *</label>
-            <input type="text" name="deskripsi_training" class="form-control" required>
+        <!-- Select Gap Kompetensi -->
+        <div class="mb-4 w-[498px] h-[72px]">
+          <label class="block text-sm font-medium">Gap Kompetensi</label>
+          <select id="ketSelect" class="w-full border rounded p-2">
+            <option disabled selected value="">Gap Kompetensi</option>
+            <option value="financialMonitoring">Financial Monitoring</option>
+            <option value="financialControlMonitoring">Financial Control & Monitoring</option>
+          </select>
         </div>
 
-        <div class="form-group">
-            <label>Tipe Training *</label>
-            <select name="tipe_training" class="form-control1" required>
-                <option disabled selected value=""></option>
-                <option value="Internal">Internal</option>
-                <option value="Eksternal">Eksternal</option>
-            </select>
+        <!-- Select Keterangan -->
+        <div class="mb-4 w-[498px] h-[72px]">
+          <label class="block text-sm font-medium">Keterangan</label>
+          <select id="gapSelect" class="w-full border rounded p-2">
+            <option disabled selected value="">TNA/Non TNA</option>
+            <option value="TNA">TNA</option>
+            <option value="Non-TNA">Non TNA</option>
+          </select>
         </div>
 
-        <div class="form-group">
-            <label>Penyelenggara *</label>
-            <input type="text" name="penyelenggara" class="form-control" required>
+        <!-- Tombol -->
+        <div class="flex justify-end gap-2">
+          <button type="button" onclick="closeTambah()"
+            class="w-full px-4 py-2 rounded bg-gray-200 hover:bg-gray-300">Cancel</button>
+          <button type="button" onclick="addPeserta()"
+            class="w-full px-4 py-2 rounded bg-indigo-600 text-white hover:bg-indigo-700">Tambah</button>
         </div>
+      </div>
+    </div>
 
-        <div class="form-group">
-            <label>Durasi *</label>
-            <input type="text" name="durasi" class="form-control-read" required>
-        </div>
+    <table id="customers" class="w-full border mt-4">
+      <thead class="bg-gray-100">
+        <tr>
+          <th>No</th>
+          <th>NIK</th>
+          <th>Nama</th>
+          <th>Regional/Direktorat</th>
+          <th>Nama Posisi</th>
+          <th>Gap Kompetensi</th>
+          <th>Keterangan</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody id="customerBody">
+        @forelse($training->participants as $i => $p)
+        <tr>
+          <td>{{ $i+1 }}</td>
+          <td>{{ $p->nik }}</td>
+          <td>{{ $p->nama }}</td>
+          <td>{{ $p->direktorat }}</td>
+          <td>{{ $p->nama_posisi }}</td>
+          <td>{{ $p->gap_kompetensi }}</td>
+          <td>{{ $p->keterangan }}</td>
+        </tr>
+        @empty
+        <tr>
+          <td colspan="8" id="text" class="text-center text-gray-500">Belum ada peserta</td>
+        </tr>
+        @endforelse
+      </tbody>
+    </table>
 
-        <div class="form-group">
-            <label>Sertifikat Partisipasi</label>
-            <select name="sertifikat_partisipasi" class="form-control1" required>
-                <option disabled selected value=""></option>
-                <option value="Ada">Ada</option>
-                <option value="Tidak">Tidak Ada</option>
-            </select>
-        </div>
-
-        <div class="form-group">
-            <label>Sertifikat Pelatihan</label>
-            <select name="sertifikat_pelatihan" class="form-control1" required>
-                <option disabled selected value=""></option>
-                <option value="Ada">Ada</option>
-                <option value="Tidak">Tidak Ada</option>
-            </select>
-        </div>
-        
-        <div class="form-group">
-            <label>Tanggal Mulai *</label>
-            <input type="datetime-local" name="tanggal_mulai" class="form-control" required>
-        </div>
-
-        <div class="form-group">
-            <label>Tanggal Selesai *</label>
-            <input type="datetime-local" name="tanggal_selesai" class="form-control" required>
-        </div>
-
-        <div class="form-group">
-            <label>Lokasi *</label>
-            <input type="text" name="lokasi" class="form-control" required>
-        </div>
-
-        <div class="form-group">
-            <label>Metode Pelatihan *</label>
-            <select name="metode_pelatihan" class="form-control1" required>
-                <option disabled selected value=""></option>
-                <option value="Online"> Online </option>
-                <option value="Offline"> Offline </option>
-            </select>
-        </div>
-
-        <div class="form-group">
-            <label>Partisipan *</label>
-            <input type="int" name="partisipan" class="form-control" required>
-        </div>
-
-        <div class="form-group">
-            <label>Status *</label>
-            <input type="text" name="status" class="form-control-read" required>
-        </div>
-        </div>
-
-        <hr class="divider">
-
-        <div class="form-grid">
-            <div class="form-group">
-                <label>Biaya per Orang *</label>
-                <input type="text" name="biaya" class="form-control" required>
-            </div>
-
-            <div class="form-group">
-                <label>Total Biaya *</label>
-                <input type="text" name="total_biaya" class="form-control-read" required>
-            </div>
-        </div>
-    
-        <hr class="divider">
-
-        <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; flex-wrap: wrap;">
-            <h2 class="left-section">List Of Participants</h2>
-            <div class="right-section1">
-                <button class="add-btn"><i class="fas fa-plus"></i> Add</button>
-            </div>
-        </div>
-        <table id="customers" style="margin-top: 10px;">
-            <tr>
-                <th>No</th>
-                <th>NIK</th>
-                <th>Nama</th>
-                <th>Regional/Direktorat</th>
-                <th>Nama Posisi</th>
-                <th>Email</th>
-                <th>No Telepon</th>
-                <th>Actions</th>
-            </tr>
-        </table>
-        <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; flex-wrap: wrap;">
-            <div class="right-section2">
-                <a href="{{ route('training.index') }}" class="cancel-btn">Cancel</a>
-                <button type="submit" class="btn create-btn">Create</button>
-            </div>
-        </div>
+    <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; flex-wrap: wrap;">
+      <div class="right-section2">
+        <a href="{{ route('training.index') }}" class="cancel-btn">Cancel</a>
+        <button type="submit" class="btn create-btn">Simpan</button>
+      </div>
+    </div>
   </form>
-        
+
 </div>
 @endsection
+
+<script>
+  function toggleTambah() {
+    document.getElementById('popupModal').classList.remove('hidden');
+    document.getElementById('popupModal').classList.remove('block');
+  }
+
+  function closeTambah() {
+    document.getElementById('popupModal').classList.add('hidden');
+  }
+
+
+  let counter = 1;
+
+  function addPeserta() {
+    const empSelect = document.getElementById('employeeSelect');
+    const ketSelect = document.getElementById('ketSelect');
+    const gapSelect = document.getElementById('gapSelect');
+
+    if (!empSelect.value || !gapSelect.value) {
+      alert("Pilih Nama dan Gap Kompetensi dulu!");
+      return;
+    }
+
+    const selected = empSelect.options[empSelect.selectedIndex];
+    const nik = selected.dataset.nik;
+    const name = selected.dataset.name;
+    const direktorat = selected.dataset.direktorat;
+    const posisi = selected.dataset.posisi;
+    const ket = ketSelect.value;
+    const gap = gapSelect.value;
+    const empId = empSelect.value;
+
+    const tbody = document.getElementById('customerBody');
+    const row = document.createElement('tr');
+
+    row.innerHTML = `
+  <td>${counter++}</td>
+  <td>${nik}</td>
+  <td>${name}</td>
+  <td>${direktorat}</td>
+  <td>${posisi}</td>
+  <td>${ket}</td>
+  <td>${gap}</td>
+  <td>
+    <button type="button" class="text-red-500" onclick="this.closest('tr').remove()">Hapus</button>
+    <input type="hidden" name="niks[]" value="${nik}">
+    <input type="hidden" name="names[]" value="${name}">
+    <input type="hidden" name="direktorats[]" value="${direktorat}">
+    <input type="hidden" name="posisis[]" value="${posisi}">
+    <input type="hidden" name="kets[]" value="${ket}">
+    <input type="hidden" name="gaps[]" value="${gap}">
+  </td>
+`;
+
+
+    tbody.appendChild(row);
+
+    // reset pilihan
+    empSelect.selectedIndex = 0;
+    ketSelect.selectedIndex = 0;
+    gapSelect.selectedIndex = 0;
+
+    // tutup modal
+    closeTambah();
+  }
+</script>

@@ -16,10 +16,7 @@ class Training extends Model
         'nama_training',
         'deskripsi_training',
         'tipe_training',
-        'sertifikat_partisipasi',
-        'sertifikat_pelatihan',
         'penyelenggara',
-        'durasi',
         'tanggal_mulai',
         'tanggal_selesai',
         'waktu_Pelaksanaan',
@@ -30,6 +27,7 @@ class Training extends Model
         'stream',
         'keterangan',
         'sertifikat',
+        'kelulusan',
         'tna',
         'nama',
         'nama_posisi',
@@ -49,8 +47,11 @@ class Training extends Model
     // 🔑 Relasi Many-to-Many dengan Employee
     public function employees()
     {
-        return $this->belongsToMany(Employee::class, 'id')
-                    ->withPivot(['tanggal_mulai', 'tanggal_selesai', 'status'])
-                    ->withTimestamps();
+        return $this->hasMany(Employee::class);
+    }
+
+    public function participants()
+    {
+        return $this->hasMany(TrainingParticipant::class, 'training_id');
     }
 }

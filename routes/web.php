@@ -9,6 +9,7 @@ use App\Http\Controllers\FamilyController;
 use App\Http\Controllers\TMController;
 use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\TrainingController;
+use App\Http\Controllers\TrainingParticipantController;
 use App\Http\Controllers\KehadiranController;
 use App\Http\Controllers\RecruitmentController;
 use App\Http\Controllers\WorkforceController;
@@ -103,8 +104,14 @@ Route::get('/training/create', [TrainingController::class, 'create'])->name('tra
 Route::post('/training', [TrainingController::class, 'store'])->name('training.store');
 Route::get('training/{id}', [TrainingController::class, 'show'])->name('training.show');
 Route::get('/training/{id}/edit', [TrainingController::class, 'edit'])->name('training.edit');
-Route::delete('/training/{id}/destroy', [TrainingController::class, 'destroy'])->name('training.destroy');
+Route::put('/training/{id}/update', [TrainingController::class, 'update'])->name('training.update');
+Route::delete('/training/{id}', [TrainingController::class, 'destroy'])->name('training.destroy');
 Route::post('/training/upload',[TrainingController::class, 'upload'])->name('training.upload');
+
+
+/* PARTICIPANTS TRAINING */
+Route::delete('/participants/{id}', [TrainingParticipantController::class, 'destroy'])->name('participants.destroy');
+
 
 /* PAYROLL */
 Route::prefix('employees/{employee}')->group(function () {
