@@ -9,133 +9,141 @@ use Illuminate\Support\Facades\Auth;
 class RecruitmentController extends Controller
 {
     public function index(Request $request)
-{
-    // Ambil parameter sort & direction dari URL
-    $sort = $request->get('sort', 'id');             // default sort by id
-    $direction = $request->get('direction', 'desc'); // default desc
-    $perPage = $request->get('per_page', 10);        // default 10
+    {
+        // Ambil parameter sort & direction dari URL
+        $sort = $request->get('sort', 'id');             // default sort by id
+        $direction = $request->get('direction', 'desc'); // default desc
+        $perPage = $request->get('per_page', 10);        // default 10
 
-    // Daftar kolom yang boleh di-sort
-    $allowedSorts = [
-        'namaPosisi',
-        'regionalDirektorat',
-        'unitSub',
-        'band_posisi',
-        'status_kepegawaian',
-        'lokasi_pekerjaan',
-        'medis_non_medis',
-        'jumlah_lowongan',
-        'target_tanggal',
-        'hiring_manager',
-        'pendidikan_terakhir',
-        'jurusan_relevan',
-        'pengalaman_minimum',
-        'domisili_preferensi',
-        'jenis_kelamin',
-        'batasan_usia',
-        'created_by',
-    ];
+        // Daftar kolom yang boleh di-sort
+        $allowedSorts = [
+            'namaPosisi',
+            'regionalDirektorat',
+            'unitSub',
+            'band_posisi',
+            'status_kepegawaian',
+            'lokasi_pekerjaan',
+            'medis_non_medis',
+            'jumlah_lowongan',
+            'target_tanggal',
+            'hiring_manager',
+            'pendidikan_terakhir',
+            'jurusan_relevan',
+            'pengalaman_minimum',
+            'domisili_preferensi',
+            'jenis_kelamin',
+            'batasan_usia',
+            'created_by',
+        ];
 
-    if (! in_array($sort, $allowedSorts)) {
-        $sort = 'id';
+        if (! in_array($sort, $allowedSorts)) {
+            $sort = 'id';
+        }
+
+        // === Filter data sesuai status ===
+        $kebutuhan = Recruitment::where('status', 'kebutuhan')
+            ->orderBy($sort, $direction)
+            ->paginate($perPage, ['*'], 'kebutuhan_page')
+            ->appends(compact('sort', 'direction', 'perPage'));
+
+        $berjalan = Recruitment::where('status', 'berjalan')
+            ->orderBy($sort, $direction)
+            ->paginate($perPage, ['*'], 'berjalan_page')
+            ->appends(compact('sort', 'direction', 'perPage'));
+
+        $selesai = Recruitment::where('status', 'selesai')
+            ->orderBy($sort, $direction)
+            ->paginate($perPage, ['*'], 'selesai_page')
+            ->appends(compact('sort', 'direction', 'perPage'));
+
+        $draft = Recruitment::where('status', 'draft')
+            ->orderBy($sort, $direction)
+            ->paginate($perPage, ['*'], 'draft_page')
+            ->appends(compact('sort', 'direction', 'perPage'));
+
+        // --- Box statistik ---
+        $jumlahKebutuhan = Recruitment::sum('jumlah_lowongan');
+        $direktoratAktif = Recruitment::distinct('regionalDirektorat')->count('regionalDirektorat');
+        $targetBulanIni  = Recruitment::whereMonth('target_tanggal', now()->month)
+                                      ->whereYear('target_tanggal', now()->year)
+                                      ->count();
+
+        // Kirim ke view
+        return view('recruitment.index', compact(
+            'kebutuhan',
+            'berjalan',
+            'selesai',
+            'draft',
+            'sort',
+            'direction',
+            'jumlahKebutuhan',
+            'direktoratAktif',
+            'targetBulanIni',
+            'perPage'
+        ));
     }
 
-    // === Filter data sesuai status ===
-    $kebutuhan = Recruitment::where('status', 'kebutuhan')
-        ->orderBy($sort, $direction)
-        ->paginate($perPage, ['*'], 'kebutuhan_page')
-        ->appends(compact('sort', 'direction', 'perPage'));
-
-    $berjalan = Recruitment::where('status', 'berjalan')
-        ->orderBy($sort, $direction)
-        ->paginate($perPage, ['*'], 'berjalan_page')
-        ->appends(compact('sort', 'direction', 'perPage'));
-
-    $selesai = Recruitment::where('status', 'selesai')
-        ->orderBy($sort, $direction)
-        ->paginate($perPage, ['*'], 'selesai_page')
-        ->appends(compact('sort', 'direction', 'perPage'));
-
-    $draft = Recruitment::where('status', 'draft')
-        ->orderBy($sort, $direction)
-        ->paginate($perPage, ['*'], 'draft_page')
-        ->appends(compact('sort', 'direction', 'perPage'));
-
-    // --- Box statistik ---
-    $jumlahKebutuhan = Recruitment::sum('jumlah_lowongan');
-    $direktoratAktif = Recruitment::distinct('regionalDirektorat')->count('regionalDirektorat');
-    $targetBulanIni  = Recruitment::whereMonth('target_tanggal', now()->month)
-                                  ->whereYear('target_tanggal', now()->year)
-                                  ->count();
-
-    // Kirim ke view
-    return view('recruitment.index', compact(
-        'kebutuhan',
-        'berjalan',
-        'selesai',
-        'draft',
-        'sort',
-        'direction',
-        'jumlahKebutuhan',
-        'direktoratAktif',
-        'targetBulanIni',
-        'perPage'
-    ));
-}
 
 
-
-    public function create() {
-
+    public function create(Request $request)
+    {
         // Ambil step sekarang dari session (default = 1)
-    $currentStep = session('currentStep', 1);
-    return view('recruitment.create', compact('currentStep'));
+        $currentStep = session('currentStep', 1);
 
+        // Kalau datang dari modal "Pilih Kebutuhan"
+        $kebutuhan = null;
+        if ($request->has('kebutuhan_id')) {
+            $kebutuhan = Recruitment::findOrFail($request->kebutuhan_id);
+        }
+
+        return view('recruitment.create', compact('currentStep', 'kebutuhan'));
     }
 
-    public function store(Request $request) {
-        $request->validate([
 
-            'namaPosisi' => 'required|string|max:255',
-            'regionalDirektorat' => 'required|string',
-            'unitSub' => 'required|string',
-            'band_posisi' => 'required|string',
-            'status_kepegawaian' => 'required|string',
-            'lokasi_pekerjaan' => 'required|string',
-            'medis_non_medis' => 'required|string',
-            'jumlah_lowongan' => 'required|string',
-            'target_tanggal' => 'required|date',
-            'hiring_manager' => 'required|string',
-            'nde' => 'required|file|mimes:pdf,doc,docx|max:2048',
-            'pendidikan_terakhir' => 'nullable|string',
-            'jurusan_relevan' => 'nullable|string',
-            'pengalaman_minimum' => 'nullable|string',
-            'domisili_preferensi' => 'nullable|string',
-            'jenis_kelamin' => 'nullable|string',
-            'batasan_usia' => 'nullable|string'
+    public function store(Request $request)
+    {
+        $request->validate([
+            'namaPosisi'           => 'required|string|max:255',
+            'regionalDirektorat'   => 'required|string',
+            'unitSub'              => 'required|string',
+            'band_posisi'          => 'required|string',
+            'status_kepegawaian'   => 'required|string',
+            'lokasi_pekerjaan'     => 'required|string',
+            'medis_non_medis'      => 'required|string',
+            'jumlah_lowongan'      => 'required|string',
+            'target_tanggal'       => 'required|date',
+            'hiring_manager'       => 'required|string',
+            'nde'                  => 'required|file|mimes:pdf,doc,docx|max:2048',
+            'pendidikan_terakhir'  => 'nullable|string',
+            'jurusan_relevan'      => 'nullable|string',
+            'pengalaman_minimum'   => 'nullable|string',
+            'domisili_preferensi'  => 'nullable|string',
+            'jenis_kelamin'        => 'nullable|string',
+            'batasan_usia'         => 'nullable|string',
         ]);
 
-
         $data = $request->all();
-        
 
-        //handle file upload
+        // Handle file upload
         if ($request->hasFile('nde')) {
             $data['nde'] = $request->file('nde')->store('uploads','public');
         }
 
         // isi otomatis created_by pakai user login
-    $data['created_by'] = Auth::id();
+        $data['created_by'] = Auth::id();
 
         Recruitment::create($data);
 
-        return redirect()->route('recruitment.index')->with('success', 'Posisi berhasil ditambahkan');
+        return redirect()->route('recruitment.index')
+                         ->with('success', 'Posisi berhasil ditambahkan');
     }
 
-    public function show($id) {
-        $recruitments = Recruitment::findOrFail($id);
-        return view('recruitment.show', compact('recruitments'));
-    }
+    public function show($id)
+{
+    $recruitment = Recruitment::findOrFail($id);
+    return view('recruitment.show', compact('recruitment'));
+}
+
 
     public function edit($id) {
         $recruitments = Recruitment::findOrFail($id);

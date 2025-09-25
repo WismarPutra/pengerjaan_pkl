@@ -91,7 +91,7 @@ Route::get('/employees/{employee}/clusters/{cluster}/edit', [TalentClusterContro
 Route::put('/employees/{employee}/clusters/{cluster}', [TalentClusterController::class, 'update'])->name('clusters.update');
 Route::delete('/employees/{employee}/clusters/{cluster}', [TalentClusterController::class, 'delete'])->name('clusters.delete');
 Route::put('/employees/{employee}/clusters/{cluster}', [TalentClusterController::class, 'update'])
-     ->name('clusters.update');
+    ->name('clusters.update');
 // web.php
 Route::resource('employees.clusters', TalentClusterController::class);
 
@@ -107,6 +107,7 @@ Route::get('/training/{id}/edit', [TrainingController::class, 'edit'])->name('tr
 Route::put('/training/{id}/update', [TrainingController::class, 'update'])->name('training.update');
 Route::delete('/training/{id}', [TrainingController::class, 'destroy'])->name('training.destroy');
 Route::post('/training/upload',[TrainingController::class, 'upload'])->name('training.upload');
+
 
 
 /* PARTICIPANTS TRAINING */
@@ -142,6 +143,7 @@ Route::post('/recruitment/save-step', [RecruitmentController::class, 'saveStep']
 Route::post('/recruitment/submit', [RecruitmentController::class, 'submit'])->name('recruitment.submit');
 Route::post('/recruitment/next-step', [RecruitmentController::class, 'nextStep'])->name('recruitment.nextStep');
 Route::post('/recruitment/previous-step', [RecruitmentController::class, 'previousStep'])->name('recruitment.previousStep');
+Route::resource('recruitment', RecruitmentController::class);
 
 
 /* DASHBOARD OUTSOURCE */
@@ -186,4 +188,11 @@ Route::prefix('employees/{employee}')->group(function () {
     Route::delete('careers/{career}', [CareerActivityController::class, 'destroy'])->name('career_activities.destroy');
 });
 
+/* EVALUASI PESERTA */
+Route::post('employees/{employee}', [TMController::class, 'storeEvaluasiPeserta'])
+    ->name('evaluasi.peserta.store');
 
+Route::prefix('employees/{employee}')->group(function () {
+    Route::post('evaluasi-atasan', [TMController::class, 'storeEvaluasiAtasan'])
+        ->name('evaluasi.atasan.store');
+});
