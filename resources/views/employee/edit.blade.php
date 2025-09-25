@@ -3279,6 +3279,7 @@
   <!-- ======================= MODAL TAMBAH ANAK (DILUAR TAB-CONTENT) ======================= -->
   <div id="addModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
     <div class="bg-white rounded-2xl shadow-lg w-full max-w-3xl p-6 relative">
+
       <!-- Header -->
       <div class="flex justify-between items-center mb-6">
         <h3 class="text-xl font-semibold text-gray-800">Tambah Informasi Anak</h3>
@@ -3295,9 +3296,12 @@
         <div class="grid grid-cols-1 md:grid-cols-2 gap-7">
           <!-- Nama Lengkap -->
           <div>
-            <label class="block text-sm font-medium text-gray-700">Nama Lengkap <span class="text-red-600">*</span></label>
+            <label class="block text-sm font-medium text-gray-700">
+              Nama Lengkap <span class="text-red-600">*</span>
+            </label>
             <input type="text" name="nama_lengkap" value="{{ old('nama_lengkap') }}"
-              class="mt-1 block w-full px-2 py-3 rounded-lg border border-black shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+              class="mt-1 block w-full px-2 py-3 rounded-lg border border-black shadow-sm 
+                    focus:border-indigo-500 focus:ring-indigo-500"
               required>
           </div>
 
@@ -3305,7 +3309,8 @@
           <div>
             <label class="block text-sm font-medium text-gray-700">Jenis Kelamin <span class="text-red-600">*</span></label>
             <select name="jenis_kelamin"
-              class="mt-1 block w-full px-2 py-3 rounded-lg border border-black shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+              class="mt-1 block w-full px-2 py-3 rounded-lg border border-black shadow-sm 
+                    focus:border-indigo-500 focus:ring-indigo-500"
               required>
               <option disabled selected value=""></option>
               <option value="Laki-Laki" {{ old('jenis_kelamin') === 'Laki-Laki' ? 'selected' : '' }}>Laki-Laki</option>
@@ -3315,17 +3320,21 @@
 
           <!-- Tempat, Tanggal Lahir -->
           <div>
-            <label class="block text-sm font-medium text-gray-700">Tempat, Tanggal Lahir <span class="text-red-600">*</span></label>
+            <label class="block text-sm font-medium text-gray-700">
+              Tempat, Tanggal Lahir <span class="text-red-600">*</span>
+            </label>
             <input type="text" name="ttl" placeholder="Contoh: Jakarta, 18 Agustus 2009"
               value="{{ old('ttl') }}"
-              class="mt-1 block w-full px-2 py-3 rounded-lg border border-black shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+              class="mt-1 block w-full px-2 py-3 rounded-lg border border-black shadow-sm 
+                    focus:border-indigo-500 focus:ring-indigo-500">
           </div>
 
           <!-- Pendidikan -->
           <div>
             <label class="block text-sm font-medium text-gray-700">Pendidikan Saat Ini <span class="text-red-600">*</span></label>
             <select name="pendidikan"
-              class="mt-1 block w-full px-2 py-3 rounded-lg border border-black shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+              class="mt-1 block w-full px-2 py-3 rounded-lg border border-black shadow-sm 
+                    focus:border-indigo-500 focus:ring-indigo-500">
               <option disabled selected value=""></option>
               <option value="SD" {{ old('pendidikan') === 'SD' ? 'selected' : '' }}>SD</option>
               <option value="SMP" {{ old('pendidikan') === 'SMP' ? 'selected' : '' }}>SMP</option>
@@ -3334,12 +3343,12 @@
             </select>
           </div>
 
-
           <!-- Status Anak -->
           <div>
             <label class="block text-sm font-medium text-gray-700">Status Anak <span class="text-red-600">*</span></label>
             <select name="status_anak"
-              class="mt-1 block w-full px-2 py-3 rounded-lg border border-black shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+              class="mt-1 block w-full px-2 py-3 rounded-lg border border-black shadow-sm 
+                    focus:border-indigo-500 focus:ring-indigo-500">
               <option disabled selected value=""></option>
               <option value="Kandung" {{ old('status_anak') === 'Kandung' ? 'selected' : '' }}>Kandung</option>
               <option value="Tidak Kandung" {{ old('status_anak') === 'Tidak Kandung' ? 'selected' : '' }}>Tidak Kandung</option>
@@ -3351,14 +3360,18 @@
             <label class="block text-sm font-medium text-gray-700">Urutan Anak <span class="text-red-600">*</span></label>
             <input type="text" name="urutan_anak" placeholder="Contoh: 1, 2, 3 atau Anak ke-1"
               value="{{ old('urutan_anak') }}"
-              class="mt-1 block w-full px-2 py-3 rounded-lg border border-black shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+              class="mt-1 block w-full px-2 py-3 rounded-lg border border-black shadow-sm 
+                    focus:border-indigo-500 focus:ring-indigo-500">
           </div>
 
           <!-- Keterangan -->
-          <div class="md:col-span-2">
-            <label class="block text-sm font-medium text-gray-700">Keterangan <span class="text-red-600">*</span></label>
+          <div class="md:col-span-2 flex flex-col gap-6 pt-4 w-[321px]">
+            <label class="block text-sm font-medium text-gray-700">
+              Keterangan <span class="text-red-600">*</span>
+            </label>
             <select name="keterangan"
-              class="mt-1 block w-full px-2 py-3 rounded-lg border border-black shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+              class="h-[72px] w-[321px] px-2 py-3 rounded-lg border border-black shadow-sm 
+           focus:border-indigo-500 focus:ring-indigo-500">
               <option disabled selected value=""></option>
               <option value="Ditanggung" {{ old('keterangan') === 'Ditanggung' ? 'selected' : '' }}>Ditanggung</option>
               <option value="Tidak Ditanggung" {{ old('keterangan') === 'Tidak Ditanggung' ? 'selected' : '' }}>Tidak Ditanggung</option>
@@ -3368,12 +3381,13 @@
 
         <!-- Tombol -->
         <div class="flex justify-center gap-3 pt-4">
-          <button type="button" onclick="closeAddModal()"
-            class="w-full py-2 rounded-lg bg-gray-200 text-gray-700 font-medium hover:bg-gray-300">
+          <button type="button"
+            class="cancel bg-gray-200 text-black w-[333px] h-12 rounded-lg"
+            onclick="closeAddModal()">
             Cancel
           </button>
           <button type="submit"
-            class="px-4 py-2 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700">
+            class="bg-blue-600 text-white w-[333px] h-12 text-sm rounded-lg hover:bg-blue-700">
             Tambah
           </button>
         </div>
@@ -3909,10 +3923,26 @@
   </script>
   <script>
     function openAddModal() {
-      document.getElementById('popup-edit').style.display = 'flex';
+      let modal = document.getElementById('addModal');
+      modal.classList.remove("hidden");
+      modal.style.display = 'flex';
     }
 
     function closeAddModal() {
-      document.getElementById("addModal").classList.add("hidden");
+      let modal = document.getElementById("addModal");
+      modal.classList.add("hidden");
+      modal.style.display = "none";
+    }
+    // === Modal Edit Anak ===
+    function openEditModal() {
+      let modal = document.getElementById('popup-edit');
+      modal.classList.remove("hidden");
+      modal.style.display = 'flex';
+    }
+
+    function closeEditModal() {
+      let modal = document.getElementById("popup-edit");
+      modal.classList.add("hidden");
+      modal.style.display = "none";
     }
   </script>
