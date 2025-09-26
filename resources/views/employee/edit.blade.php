@@ -2654,55 +2654,48 @@
               <td>{{ $cluster->periodeCluster }}</td>
               <td>{{ $cluster->tahunCluster }}</td>
               <td>{{ $cluster->talentCluster }}</td>
-              <td>
+              <td class="relative">
                 <div class="relative inline-block text-left dropdown-action">
+                  <!-- Tombol titik 3 -->
                   <button type="button"
-                    onclick="toggleActions('{{ $cluster->id }}')"
+                    onclick="toggleActions('{{ $cluster->id ?? $index }}')"
                     class="p-1 text-blue-600 hover:text-cyan text-xl">
                     &#x22EF;
                   </button>
-                  <div id="dropdownActions-{{ $cluster->id }}"
+
+                  <!-- Dropdown Menu -->
+                  <div id="dropdownActions-{{ $cluster->id ?? $index }}"
                     class="hidden absolute right-0 mt-2 w-32 bg-white rounded-lg shadow-md border border-gray-200 z-50">
-                    <!-- Tombol baru -->
-                    <div class="relative inline-block text-left">
-                      <!-- Tombol Action -->
-                      <button type="button"
-                        onclick="toggleDropdown('actionMenuCluster{{ $cluster->id }}')"
-                        class="px-3 py-2 bg-gray-200 rounded">
-                        Action
+
+
+                    <!-- Edit -->
+                    <button type="button"
+                      onclick="openEditClusterPopup('{{ $cluster->id }}', '{{ $cluster->periodeCluster }}', '{{ $cluster->tahunCluster }}', '{{ $cluster->talentCluster }}')"
+                      class="block w-full text-left px-4 py-2 text-sm hover:bg-gray-100">
+                      Edit
+                    </button>
+
+                    <!-- Delete -->
+                    <form action="{{ route('employees.clusters.destroy', [$employee->id, $cluster->id]) }}"
+                      method="POST"
+                      onsubmit="return confirm('Yakin ingin menghapus cluster ini?')">
+                      @csrf
+                      @method('DELETE')
+                      <button type="submit"
+                        class="block w-full text-left px-4 py-2 text-sm hover:bg-gray-100 text-red-600">
+                        Delete
                       </button>
-
-                      <!-- Dropdown Menu -->
-                      <div id="actionMenuCluster{{ $cluster->id }}"
-                        class="hidden absolute right-0 mt-2 w-48 bg-white rounded shadow-lg z-50">
-
-                        <!-- Edit -->
-                        <button type="button"
-                          onclick="openEditClusterPopup('{{ $cluster->id }}', '{{ $cluster->periodeCluster }}', '{{ $cluster->tahunCluster }}', '{{ $cluster->talentCluster }}')"
-                          class="block w-full text-left px-4 py-2 text-sm hover:bg-gray-100">
-                          Edit
-                        </button>
-
-                        <!-- Delete -->
-                        <form action="{{ route('employees.clusters.destroy', [$employee->id, $cluster->id]) }}"
-                          method="POST"
-                          onsubmit="return confirm('Yakin ingin menghapus cluster ini?')">
-                          @csrf
-                          @method('DELETE')
-                          <button type="submit"
-                            class="block w-full text-left px-4 py-2 text-sm hover:bg-gray-100">
-                            Delete
-                          </button>
-                        </form>
-                      </div>
-                    </div>
+                    </form>
+                  </div>
+                </div>
               </td>
             </tr>
             @empty
             <tr>
-              <td colspan="5" class="text-center">Belum ada data Talent Cluster</td>
+              <td colspan="5" class="text-center text-gray-500">Tidak ada data</td>
             </tr>
             @endforelse
+
           </tbody>
         </table>
         <div class="flex justify-end gap-2 mt-6">
