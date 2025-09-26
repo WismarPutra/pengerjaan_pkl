@@ -254,7 +254,7 @@ class TMController extends Controller
 
         $employee->save();
 
-        return redirect()->route('employee.show', $employee->id)
+        return redirect()->route('employees.show', $employee->id)
             ->with('success', 'Data berhasil diupdate!');
     }
 
