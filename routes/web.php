@@ -144,7 +144,8 @@ Route::post('/recruitment/submit', [RecruitmentController::class, 'submit'])->na
 Route::post('/recruitment/next-step', [RecruitmentController::class, 'nextStep'])->name('recruitment.nextStep');
 Route::post('/recruitment/previous-step', [RecruitmentController::class, 'previousStep'])->name('recruitment.previousStep');
 Route::resource('recruitment', RecruitmentController::class);
-
+Route::post('/recruitments/{id}/candidates', [RecruitmentController::class, 'storeCandidates'])
+    ->name('recruitments.candidates.store');
 
 /* DASHBOARD OUTSOURCE */
 
