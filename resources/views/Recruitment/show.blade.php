@@ -955,181 +955,228 @@
 
     @endsection
     <!-- SheetJS -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js">
+        </script>
 
-    <script>
-        let selectedFile = null;
+        <script>
+            let selectedFile = null;
 
-        document.addEventListener("DOMContentLoaded", function() {
-            const fileInput = document.getElementById("fileInput");
-            const uploadText = document.getElementById("uploadText");
-            const fileName = document.getElementById("fileName");
-            const excelDivider = document.getElementById("excelDivider");
-            const excelPreview = document.getElementById("excelPreview");
+            document.addEventListener("DOMContentLoaded", function() {
+                const fileInput = document.getElementById("fileInput");
+                const uploadText = document.getElementById("uploadText");
+                const fileName = document.getElementById("fileName");
+                const excelDivider = document.getElementById("excelDivider");
+                const excelPreview = document.getElementById("excelPreview");
 
-            // Tombol Simpan target spesifik
-            const btnSimpan = document.getElementById("saveRecruitBtn");
+                // Tombol Simpan target spesifik
+                const btnSimpan = document.getElementById("saveRecruitBtn");
 
-            const defaultText = `
-        <strong>Upload Data Kandidat</strong>
-        <p>Klik atau seret file ke area ini untuk mengunggah</p>
-    `;
+                const defaultText = `
+            <strong>Upload Data Kandidat</strong>
+            <p>Klik atau seret file ke area ini untuk mengunggah</p>
+        `;
 
-            // ===== Fungsi update teks tombol =====
-            function updateButtonText() {
-                const hasTable = !!excelPreview && !!excelPreview.querySelector("table");
-                const hasFile = selectedFile !== null && selectedFile !== undefined;
-                if (hasTable || hasFile) {
-                    btnSimpan.textContent = "Simpan";
-                } else {
-                    btnSimpan.textContent = "Simpan Tanpa Kandidat";
+                // ===== Fungsi update teks tombol =====
+                function updateButtonText() {
+                    const hasTable = !!excelPreview && !!excelPreview.querySelector("table");
+                    const hasFile = selectedFile !== null && selectedFile !== undefined;
+                    if (hasTable || hasFile) {
+                        btnSimpan.textContent = "Simpan";
+                    } else {
+                        btnSimpan.textContent = "Simpan Tanpa Kandidat";
+                    }
                 }
-            }
 
-            // ===== Modal Open & Close =====
-            window.openModal = function() {
-                document.getElementById("candidateModal").classList.add("show");
-            }
-
-            window.closeModal = function() {
-                document.getElementById("candidateModal").classList.remove("show");
-
-                // reset input file & tampilan upload, tapi JANGAN hapus tabel
-                fileInput.value = "";
-                uploadText.innerHTML = defaultText;
-                fileName.innerText = "Klik atau seret file ke area ini untuk mengunggah";
-                selectedFile = null;
-
-                // update tombol (kalau tabel masih ada, tombol tetap Simpan)
-                updateButtonText();
-            }
-
-            // klik area luar untuk tutup modal
-            window.addEventListener("click", function(e) {
-                const modal = document.getElementById("candidateModal");
-                if (e.target === modal) {
-                    closeModal();
+                // ===== Modal Open & Close =====
+                window.openModal = function() {
+                    document.getElementById("candidateModal").classList.add("show");
                 }
-            });
 
-            // ===== Input File =====
-            fileInput.addEventListener("change", function() {
-                const file = this.files[0];
-                if (!file) return;
+                window.closeModal = function() {
+                    document.getElementById("candidateModal").classList.remove("show");
 
-                const allowedExtensions = ["xls", "xlsx"];
-                const fileExt = file.name.split(".").pop().toLowerCase();
-
-                if (!allowedExtensions.includes(fileExt)) {
-                    alert("Hanya boleh upload file Excel (.xls, .xlsx)");
-                    this.value = "";
+                    // reset input file & tampilan upload, tapi JANGAN hapus tabel
+                    fileInput.value = "";
                     uploadText.innerHTML = defaultText;
+                    fileName.innerText = "Klik atau seret file ke area ini untuk mengunggah";
                     selectedFile = null;
+
+                    // update tombol (kalau tabel masih ada, tombol tetap Simpan)
                     updateButtonText();
-                    return;
                 }
 
-                selectedFile = file;
-                fileName.innerText = file.name;
+                // klik area luar untuk tutup modal
+                window.addEventListener("click", function(e) {
+                    const modal = document.getElementById("candidateModal");
+                    if (e.target === modal) {
+                        closeModal();
+                    }
+                });
 
-                // update tombol setiap kali file dipilih
+                // ===== Input File =====
+                fileInput.addEventListener("change", function() {
+                    const file = this.files[0];
+                    if (!file) return;
+
+                    const allowedExtensions = ["xls", "xlsx"];
+                    const fileExt = file.name.split(".").pop().toLowerCase();
+
+                    if (!allowedExtensions.includes(fileExt)) {
+                        alert("Hanya boleh upload file Excel (.xls, .xlsx)");
+                        this.value = "";
+                        uploadText.innerHTML = defaultText;
+                        selectedFile = null;
+                        updateButtonText();
+                        return;
+                    }
+
+                    selectedFile = file;
+                    fileName.innerText = file.name;
+
+                    // update tombol setiap kali file dipilih
+                    updateButtonText();
+                });
+
+                // ===== Tombol submit file (proses Excel) =====
+                document.querySelector(".btn-submit").addEventListener("click", function() {
+                    if (!selectedFile) {
+                        alert("Silakan pilih file Excel terlebih dahulu!");
+                        return;
+                    }
+
+                    const reader = new FileReader();
+                    reader.onload = function(event) {
+                        const data = new Uint8Array(event.target.result);
+                        const workbook = XLSX.read(data, {
+                            type: "array"
+                        });
+
+                        const sheetName = workbook.SheetNames[0];
+                        const sheet = workbook.Sheets[sheetName];
+                        const json = XLSX.utils.sheet_to_json(sheet, {
+                            header: 1
+                        });
+
+                        // Buat tabel polos
+                        let table = "<table border='1' style='border-collapse:collapse; width:100%; text-align:center; font-family:Poppins;'>";
+                        json.forEach((row, i) => {
+                            table += "<tr>";
+                            row.forEach(cell => {
+                                if (i === 0) {
+                                    table += `<th style="padding:8px; background:#f2f2f2; font-weight:bold; cursor:pointer; position:relative;">${cell ?? ""} <span class="sort-icon"></span></th>`;
+                                } else {
+                                    table += `<td style="padding:8px;">${cell ?? ""}</td>`;
+                                }
+                            });
+                            table += "</tr>";
+                        });
+                        table += "</table>";
+
+                        // tampilkan divider + tabel
+                        excelDivider.style.display = "block";
+                        excelPreview.innerHTML = table;
+
+                        // ambil tabel yang baru dibuat
+                        const newTable = excelPreview.querySelector("table");
+                        if (newTable) {
+                            makeTableSortable(newTable);
+                        }
+
+                        // tutup modal (tidak menghapus tabel)
+                        closeModal();
+                    };
+                    reader.readAsArrayBuffer(selectedFile);
+                });
+
+                // ===== Simpan ke DB lewat AJAX =====
+                btnSimpan.addEventListener("click", function() {
+                    const table = excelPreview.querySelector("table");
+                    if (!table) {
+                        alert("Tidak ada data kandidat untuk disimpan!");
+                        return;
+                    }
+
+                    // Ambil header & rows
+                    const headers = Array.from(table.querySelectorAll("th")).map(th => th.innerText.trim());
+                    const rows = Array.from(table.querySelectorAll("tr"))
+                        .slice(1) // skip header
+                        .map(tr => Array.from(tr.querySelectorAll("td")).map(td => td.innerText.trim()));
+
+                    const candidates = rows.map(row => {
+                        let obj = {};
+                        headers.forEach((h, i) => {
+                            obj[h] = row[i] || null;
+                        });
+                        return obj;
+                    });
+
+                    // Kirim AJAX ke backend
+                    fetch("{{ route('recruitments.candidates.store', $kebutuhan->id ?? 0) }}", {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json",
+                                "X-CSRF-TOKEN": "{{ csrf_token() }}"
+                            },
+                            body: JSON.stringify({
+                                candidates
+                            })
+                        })
+                        .then(res => res.json())
+                        .then(data => {
+                            if (data.success) {
+                                alert("Data kandidat berhasil disimpan!");
+                                location.reload();
+                            } else {
+                                alert("Gagal menyimpan kandidat!");
+                            }
+                        })
+                        .catch(err => {
+                            console.error(err);
+                            alert("Terjadi kesalahan saat menyimpan data kandidat!");
+                        });
+                });
+
+                // cek kondisi awal
                 updateButtonText();
             });
 
-            // ===== Tombol submit file (proses Excel) =====
-            document.querySelector(".btn-submit").addEventListener("click", function() {
-                if (!selectedFile) {
-                    alert("Silakan pilih file Excel terlebih dahulu!");
-                    return;
-                }
+            // ===== Fungsi Sorting + Icon =====
+            function makeTableSortable(table) {
+                const headers = table.querySelectorAll("th");
+                headers.forEach((header, index) => {
+                    header.addEventListener("click", () => {
+                        const rows = Array.from(table.querySelectorAll("tr")).slice(1);
+                        const isAsc = header.classList.contains("asc");
 
-                const reader = new FileReader();
-                reader.onload = function(event) {
-                    const data = new Uint8Array(event.target.result);
-                    const workbook = XLSX.read(data, {
-                        type: "array"
-                    });
+                        rows.sort((a, b) => {
+                            const cellA = a.cells[index].innerText.trim();
+                            const cellB = b.cells[index].innerText.trim();
 
-                    const sheetName = workbook.SheetNames[0];
-                    const sheet = workbook.Sheets[sheetName];
-                    const json = XLSX.utils.sheet_to_json(sheet, {
-                        header: 1
-                    });
-
-                    // Buat tabel polos
-                    let table = "<table border='1' style='border-collapse:collapse; width:100%; text-align:center; font-family:Poppins;'>";
-                    json.forEach((row, i) => {
-                        table += "<tr>";
-                        row.forEach(cell => {
-                            if (i === 0) {
-                                table += `<th style="padding:8px; background:#f2f2f2; font-weight:bold; cursor:pointer; position:relative;">${cell ?? ""} <span class="sort-icon"></span></th>`;
-                            } else {
-                                table += `<td style="padding:8px;">${cell ?? ""}</td>`;
+                            if (!isNaN(cellA) && !isNaN(cellB)) {
+                                return isAsc ? cellB - cellA : cellA - cellB;
                             }
+                            return isAsc ? cellB.localeCompare(cellA) : cellA.localeCompare(cellB);
                         });
-                        table += "</tr>";
-                    });
-                    table += "</table>";
 
-                    // tampilkan divider + tabel
-                    excelDivider.style.display = "block";
-                    excelPreview.innerHTML = table;
+                        // reset semua header
+                        headers.forEach(h => {
+                            h.classList.remove("asc", "desc");
+                            const icon = h.querySelector(".sort-icon");
+                            if (icon) icon.innerText = "";
+                        });
 
-                    // ambil tabel yang baru dibuat
-                    const newTable = excelPreview.querySelector("table");
-                    if (newTable) {
-                        makeTableSortable(newTable);
-                    }
+                        // kasih class + icon
+                        header.classList.toggle("asc", !isAsc);
+                        header.classList.toggle("desc", isAsc);
 
-                    // tutup modal (tidak menghapus tabel)
-                    closeModal();
-                };
-                reader.readAsArrayBuffer(selectedFile);
-            });
-
-            // cek kondisi awal
-            updateButtonText();
-        });
-
-        // ===== Fungsi Sorting + Icon =====
-        function makeTableSortable(table) {
-            const headers = table.querySelectorAll("th");
-            headers.forEach((header, index) => {
-                header.addEventListener("click", () => {
-                    const rows = Array.from(table.querySelectorAll("tr")).slice(1);
-                    const isAsc = header.classList.contains("asc");
-
-                    rows.sort((a, b) => {
-                        const cellA = a.cells[index].innerText.trim();
-                        const cellB = b.cells[index].innerText.trim();
-
-                        if (!isNaN(cellA) && !isNaN(cellB)) {
-                            return isAsc ? cellB - cellA : cellA - cellB;
+                        const icon = header.querySelector(".sort-icon");
+                        if (icon) {
+                            icon.innerText = isAsc ? " ↓" : " ↑";
                         }
-                        return isAsc ?
-                            cellB.localeCompare(cellA) :
-                            cellA.localeCompare(cellB);
+
+                        // append ulang row sesuai hasil sort
+                        rows.forEach(row => table.appendChild(row));
                     });
-
-                    // reset semua header
-                    headers.forEach(h => {
-                        h.classList.remove("asc", "desc");
-                        const icon = h.querySelector(".sort-icon");
-                        if (icon) icon.innerText = "";
-                    });
-
-                    // kasih class + icon
-                    header.classList.toggle("asc", !isAsc);
-                    header.classList.toggle("desc", isAsc);
-
-                    const icon = header.querySelector(".sort-icon");
-                    if (icon) {
-                        icon.innerText = isAsc ? " ↓" : " ↑";
-                    }
-
-                    // append ulang row sesuai hasil sort
-                    rows.forEach(row => table.appendChild(row));
                 });
-            });
-        }
-    </script>
+            }
+        </script>

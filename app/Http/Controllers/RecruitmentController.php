@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Recruitment;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Candidate;
 
 class RecruitmentController extends Controller
 {
@@ -65,8 +66,8 @@ class RecruitmentController extends Controller
         $jumlahKebutuhan = Recruitment::sum('jumlah_lowongan');
         $direktoratAktif = Recruitment::distinct('regionalDirektorat')->count('regionalDirektorat');
         $targetBulanIni  = Recruitment::whereMonth('target_tanggal', now()->month)
-                                      ->whereYear('target_tanggal', now()->year)
-                                      ->count();
+            ->whereYear('target_tanggal', now()->year)
+            ->count();
 
         // Kirim ke view
         return view('recruitment.index', compact(
@@ -126,7 +127,7 @@ class RecruitmentController extends Controller
 
         // Handle file upload
         if ($request->hasFile('nde')) {
-            $data['nde'] = $request->file('nde')->store('uploads','public');
+            $data['nde'] = $request->file('nde')->store('uploads', 'public');
         }
 
         // isi otomatis created_by pakai user login
@@ -135,22 +136,24 @@ class RecruitmentController extends Controller
         Recruitment::create($data);
 
         return redirect()->route('recruitment.index')
-                         ->with('success', 'Posisi berhasil ditambahkan');
+            ->with('success', 'Posisi berhasil ditambahkan');
     }
 
     public function show($id)
-{
-    $recruitment = Recruitment::findOrFail($id);
-    return view('recruitment.show', compact('recruitment'));
-}
+    {
+        $recruitment = Recruitment::findOrFail($id);
+        return view('recruitment.show', compact('recruitment'));
+    }
 
 
-    public function edit($id) {
+    public function edit($id)
+    {
         $recruitments = Recruitment::findOrFail($id);
         return view('recruitment.edit', compact('recruitments'));
     }
 
-    public function update(Request $request, $id) {
+    public function update(Request $request, $id)
+    {
         $request->validate([
             'namaPosisi' => 'required|string|max:255',
             'regionalDirektorat' => 'required|string',
@@ -175,7 +178,7 @@ class RecruitmentController extends Controller
 
         $data = $request->all();
 
-        if ($request->hasFile('nde')){
+        if ($request->hasFile('nde')) {
             $data['nde'] = $request->file('nde')->store('uploads', 'public');
         }
         $recruitments->update($data);
@@ -184,14 +187,16 @@ class RecruitmentController extends Controller
         return redirect()->route('recruitment.index')->with('success', 'Posisi berhasil diperbarui');
     }
 
-    public function destroy($id) {
+    public function destroy($id)
+    {
         $recruitments = Recruitment::findOrFail($id);
         $recruitments->delete();
 
         return redirect()->route('recruitment.index')->with('success', 'Posisi berhasil dihapus');
     }
 
-    public function saveStep(Request $request) {
+    public function saveStep(Request $request)
+    {
         $step = $request->input('step');
         $data = $request->except('step');
 
@@ -206,73 +211,103 @@ class RecruitmentController extends Controller
 
 
 
-public function nextStep(Request $request) 
-{
-    $step = $request->input('step', 1);
+    public function nextStep(Request $request)
+    {
+        $step = $request->input('step', 1);
 
-    // Validasi sesuai step
-    if ($step == 1) {
-        $request->validate([
-            'namaPosisi' => 'required|string|max:255',
-            'regionalDirektorat' => 'required|string',
-            'unitSub' => 'required|string',
-            'band_posisi' => 'required|string',
-            'status_kepegawaian' => 'required|string',
-            'lokasi_pekerjaan' => 'required|string',
-            'medis_non_medis' => 'required|string',
-            'jumlah_lowongan' => 'required|string',
-            'target_tanggal' => 'required|date',
-            'hiring_manager' => 'required|string',
-            'nde' => 'required|file|mimes:pdf,doc,docx|max:2048',
-        ]);
+        // Validasi sesuai step
+        if ($step == 1) {
+            $request->validate([
+                'namaPosisi' => 'required|string|max:255',
+                'regionalDirektorat' => 'required|string',
+                'unitSub' => 'required|string',
+                'band_posisi' => 'required|string',
+                'status_kepegawaian' => 'required|string',
+                'lokasi_pekerjaan' => 'required|string',
+                'medis_non_medis' => 'required|string',
+                'jumlah_lowongan' => 'required|string',
+                'target_tanggal' => 'required|date',
+                'hiring_manager' => 'required|string',
+                'nde' => 'required|file|mimes:pdf,doc,docx|max:2048',
+            ]);
+        }
+
+        if ($step == 2) {
+            $request->validate([
+                'pendidikan_terakhir' => 'required|string',
+                'jurusan_relevan' => 'required|string',
+                'pengalaman_minimum' => 'required|string',
+            ]);
+        }
+
+        // Simpan input step ini ke session
+        session()->put("recruitment.step{$step}", $request->except('_token', 'step'));
+
+        // Pindah ke step berikutnya
+        $nextStep = $step + 1;
+        session(['currentStep' => $nextStep]);
+
+        return redirect()->route('recruitment.create');
     }
 
-    if ($step == 2) {
-        $request->validate([
-            'pendidikan_terakhir' => 'required|string',
-            'jurusan_relevan' => 'required|string',
-            'pengalaman_minimum' => 'required|string',
-        ]);
+    public function previousStep(Request $request)
+    {
+        $step = $request->input('step', 1);
+
+        $prevStep = max(1, $step - 1);
+        session(['currentStep' => $prevStep]);
+
+        return redirect()->route('recruitment.create');
     }
-
-    // Simpan input step ini ke session
-    session()->put("recruitment.step{$step}", $request->except('_token','step'));
-
-    // Pindah ke step berikutnya
-    $nextStep = $step + 1;
-    session(['currentStep' => $nextStep]);
-
-    return redirect()->route('recruitment.create');
-}
-
-public function previousStep(Request $request)
-{
-    $step = $request->input('step', 1);
-
-    $prevStep = max(1, $step - 1);
-    session(['currentStep' => $prevStep]);
-
-    return redirect()->route('recruitment.create');
-}
 
     public function submit(Request $request)
     {
-    // Gabungkan semua step yang sudah disimpan di session
-    $step1 = session('recruitment.step1', []);
-    $step2 = session('recruitment.step2', []);
+        // Gabungkan semua step yang sudah disimpan di session
+        $step1 = session('recruitment.step1', []);
+        $step2 = session('recruitment.step2', []);
 
-    $finalData = array_merge($step1, $step2);
+        $finalData = array_merge($step1, $step2);
 
-    // Tambahan data otomatis
-    $finalData['created_by'] = Auth::id();
+        // Tambahan data otomatis
+        $finalData['created_by'] = Auth::id();
 
-    // Simpan ke database
-    Recruitment::create($finalData);
+        // Simpan ke database
+        Recruitment::create($finalData);
 
-    // Bersihkan session
-    session()->forget('recruitment');
-    session()->forget('currentStep');
+        // Bersihkan session
+        session()->forget('recruitment');
+        session()->forget('currentStep');
 
-    return redirect()->route('recruitment.index')->with('success', 'Data berhasil disimpan');
-}
+        return redirect()->route('recruitment.index')->with('success', 'Data berhasil disimpan');
+    }
+    
+    public function storeCandidates(Request $request, $id)
+    {
+        $request->validate([
+            'candidates' => 'required|array',
+        ]);
+
+        foreach ($request->candidates as $row) {
+            Candidate::create([
+                'recruitment_id' => $id,
+                'nama'           => $row['Nama'] ?? null,
+                'email'          => $row['Email'] ?? null,
+                'telepon'        => $row['Telepon'] ?? null,
+                'pendidikan'     => $row['Pendidikan'] ?? null,
+                'institusi'      => $row['Institusi'] ?? null,
+                'jurusan'        => $row['Jurusan'] ?? null,
+                'pengalaman'     => $row['Pengalaman'] ?? null,
+            ]);
+        }
+
+        // Ubah status recruitment jadi 'berjalan'
+        $recruitment = Recruitment::findOrFail($id);
+        $recruitment->status = 'berjalan';
+        $recruitment->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Kandidat berhasil disimpan!'
+        ]);
+    }
 }
